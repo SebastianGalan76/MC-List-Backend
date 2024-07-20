@@ -1,0 +1,240 @@
+@import "base";
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+body {
+    background:
+        url(../img/background.png),
+        #000000 no-repeat;
+    color: #f5f5f5;
+    font-family: "Roboto", sans-serif;
+}
+
+.divider-line-vertical {
+    background: linear-gradient(
+        180deg,
+        hsla(36, 100%, 55%, 0.1),
+        hsla(44, 100%, 65%, 0.5) 47.92%,
+        hsla(36, 100%, 55%, 0.1)
+    );
+    width: 2px;
+    height: 100vh;
+}
+
+.divider-line-horizontal {
+    background: linear-gradient(
+        90deg,
+        hsla(36, 100%, 55%, 0.1),
+        hsla(44, 100%, 65%, 0.5) 47.92%,
+        hsla(36, 100%, 55%, 0.1)
+    );
+    width: 2px;
+    height: 100vh;
+}
+
+.popup {
+    visibility: hidden;
+
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.8);
+        z-index: 1000;
+    }
+
+    .content {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        background-color: $color-white;
+        width: 400px;
+        z-index: 1001;
+        padding: 25px;
+        border-radius: 10px;
+        color: #1a1a1a;
+        transition: transform 0.25s ease-in-out;
+
+        .header-icon {
+            color: $color-theme;
+            position: absolute;
+            left: 50%;
+            transform: translate(-50%, -70%);
+            font-size: 4em;
+        }
+
+        .action-btn {
+            font-size: 1.2em;
+            background-color: $color-theme;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 25px;
+            box-shadow: 0px 2px 10px #10161d25;
+            color: $color-white;
+            font-weight: 700;
+        }
+
+        .action-btn:hover {
+            cursor: pointer;
+            background-color: $color-theme-dark;
+        }
+
+        .close-btn {
+            position: absolute;
+            right: 25px;
+            top: 20px;
+            font-size: 2em;
+        }
+
+        .close-btn:hover {
+            cursor: pointer;
+        }
+
+        .text {
+            margin-top: 50px;
+            display: block;
+            text-align: center;
+        }
+
+        @media (max-width: 400px) {
+            width: 100%;
+        }
+    }
+}
+
+.popup.active {
+    visibility: visible;
+
+    .content {
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+.input-area {
+    position: relative;
+
+    width: 100%;
+    height: 50px;
+    border-radius: 10px;
+    overflow: hidden;
+
+    background-color: $color-dark;
+    border: 2px solid $color-theme;
+
+    input {
+        width: 100%;
+        height: 100%;
+        padding: 0 50px 0 20px;
+
+        border: none;
+        outline: none;
+        background-color: transparent;
+        color: $color-theme;
+        font-weight: 600;
+    }
+
+    input.incorrect {
+        background-color: $color-incorrect;
+        color: $color-white;
+    }
+
+    .icon {
+        color: $color-theme;
+
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translate(0, -50%);
+    }
+}
+
+.select-area {
+    position: relative;
+
+    width: 100%;
+    height: 50px;
+    border-radius: 10px;
+    overflow: hidden;
+
+    padding-right: 20px;
+
+    background-color: $color-dark;
+    border: 2px solid $color-theme;
+
+    select {
+        width: 100%;
+        height: 100%;
+        padding: 0 50px 0 20px;
+
+        border: none;
+        outline: none;
+        background-color: transparent;
+        color: $color-theme;
+        font-weight: 600;
+    }
+
+    select::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 10px;
+        bottom: 0;
+        width: 10px;
+        pointer-events: none;
+    }
+
+    .icon {
+        color: $color-theme;
+
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translate(0, -50%);
+    }
+}
+
+.checkbox-area {
+    position: relative;
+
+    height: 50px;
+    border-radius: 10px;
+    overflow: hidden;
+
+    background-color: $color-dark;
+    border: 2px solid $color-theme;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0px 20px 0 10px;
+
+    input {
+        width: 30px;
+        height: 30px;
+
+        border: none;
+        outline: none;
+        background-color: transparent;
+        color: $color-theme;
+        font-weight: 600;
+    }
+
+    label {
+        font-weight: 800;
+    }
+}

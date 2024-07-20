@@ -30,6 +30,15 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+
+	implementation 'com.github.vladimir-bukhtoyarov:bucket4j-core:6.2.0'
+	implementation 'com.github.vladimir-bukhtoyarov:bucket4j-jcache:6.2.0'
+	implementation 'javax.cache:cache-api:1.1.1'
+
+	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.12.5'
+	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.12.5'
+	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.12.5'
+
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
