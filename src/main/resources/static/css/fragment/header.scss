@@ -1,0 +1,85 @@
+@import "../base";
+
+header {
+    width: 100%;
+    background-color: $color-dark;
+    
+    padding: 0 60px;
+
+    .wrapper{
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        
+        .left-panel{
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+
+            .logo {
+                width: 200px;
+                height: 30px;
+                background-color: rebeccapurple;
+            }
+
+            .button-container{
+                margin-left: 25px;
+
+                ul{
+                    display: flex;
+                    gap: 10px;
+
+                    li{
+                        list-style-type: none;
+                        font-weight: 600;
+                        padding: 0 5px;
+                    }
+
+                    li.add-server-button{
+                        color: $color-green;
+                    }
+                    li.add-server-button:hover{
+                        color: $color-green-dark;
+                    }
+
+                    li.buy-banner-button{
+                        color: $color-yellow;
+                    }
+                    li.buy-banner-button:hover{
+                        color: $color-yellow-dark;
+                    }
+
+                    li:hover{
+                        cursor: pointer;
+                        color: rgb(226, 221, 186);
+                    }
+                }
+
+            }
+        }
+
+        .right-panel {
+            .user-logged-in{
+                font-weight: 800;
+            }
+
+            .user-not-logged-in{
+                .sign-in{
+                    display: block;
+                    background-color: $color-theme;
+                    padding: 8px 30px;
+                    border-radius: 15px;
+                    font-weight: 700;
+        
+                    border: 2px solid $color-white;
+                }
+        
+                .sign-in:hover{
+                    cursor: pointer;
+                    background-color: $color-theme-dark;
+                }
+            }
+        }
+    }
+}

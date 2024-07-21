@@ -15,8 +15,14 @@ body {
     background:
         url(../img/background.png),
         #000000 no-repeat;
-    color: #f5f5f5;
+    color: rgb(255, 253, 240);
     font-family: "Roboto", sans-serif;
+    min-width: 360px;
+}
+
+.center {
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .divider-line-vertical {
@@ -37,8 +43,8 @@ body {
         hsla(44, 100%, 65%, 0.5) 47.92%,
         hsla(36, 100%, 55%, 0.1)
     );
-    width: 2px;
-    height: 100vh;
+    width: 100%;
+    height: 2px;
 }
 
 .popup {
@@ -123,118 +129,36 @@ body {
     }
 }
 
-.input-area {
-    position: relative;
-
+.scrollable-horizontal::-webkit-scrollbar {
     width: 100%;
-    height: 50px;
-    border-radius: 10px;
-    overflow: hidden;
-
-    background-color: $color-dark;
-    border: 2px solid $color-theme;
-
-    input {
-        width: 100%;
-        height: 100%;
-        padding: 0 50px 0 20px;
-
-        border: none;
-        outline: none;
-        background-color: transparent;
-        color: $color-theme;
-        font-weight: 600;
-    }
-
-    input.incorrect {
-        background-color: $color-incorrect;
-        color: $color-white;
-    }
-
-    .icon {
-        color: $color-theme;
-
-        position: absolute;
-        right: 20px;
-        top: 50%;
-        transform: translate(0, -50%);
-    }
+    height: 10px;
+}
+.scrollable-vertical::-webkit-scrollbar {
+    width: 10px;
+    height: 100%;
+}
+.scrollable::-webkit-scrollbar-track {
+    background: #ffd6a7;
+}
+.scrollable::-webkit-scrollbar-thumb {
+    background-color: #e2a258;
+}
+.scrollable::-webkit-scrollbar-thumb:hover {
+    background-color: #ce8e45;
 }
 
-.select-area {
-    position: relative;
-
-    width: 100%;
-    height: 50px;
-    border-radius: 10px;
-    overflow: hidden;
-
-    padding-right: 20px;
-
-    background-color: $color-dark;
-    border: 2px solid $color-theme;
-
-    select {
-        width: 100%;
-        height: 100%;
-        padding: 0 50px 0 20px;
-
-        border: none;
-        outline: none;
-        background-color: transparent;
-        color: $color-theme;
-        font-weight: 600;
-    }
-
-    select::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        right: 10px;
-        bottom: 0;
-        width: 10px;
-        pointer-events: none;
-    }
-
-    .icon {
-        color: $color-theme;
-
-        position: absolute;
-        right: 20px;
-        top: 50%;
-        transform: translate(0, -50%);
-    }
+.error{
+    color: $color-red;
+    text-align: center;
+    font-weight: 500;
 }
 
-.checkbox-area {
-    position: relative;
+.red {
+    color: $color-red;
+}
 
-    height: 50px;
-    border-radius: 10px;
-    overflow: hidden;
-
-    background-color: $color-dark;
-    border: 2px solid $color-theme;
-
-    flex-shrink: 0;
-
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 0px 20px 0 10px;
-
-    input {
-        width: 30px;
-        height: 30px;
-
-        border: none;
-        outline: none;
-        background-color: transparent;
-        color: $color-theme;
-        font-weight: 600;
-    }
-
-    label {
-        font-weight: 800;
-    }
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
