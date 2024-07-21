@@ -100,6 +100,8 @@ public class NewServerService {
         serverDetail = serverDetailRepository.save(serverDetail);
         server.setDetail(serverDetail);
 
+        System.out.println(newServerDto.getVersions());
+
         if(server.getVersions() == null){
             server.setVersions(newServerDto.getVersions());
         }
@@ -114,7 +116,7 @@ public class NewServerService {
                 server.setMode(modes.get(0));
             }
             else{
-                server.setMode(modeRepository.getReferenceById(0L));
+                server.setMode(modeRepository.getReferenceById(1L));
             }
         }
         else{

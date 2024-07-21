@@ -2,9 +2,10 @@ package com.coresaken.mcserverlist.service.server;
 
 import com.coresaken.mcserverlist.database.model.server.Mode;
 import com.coresaken.mcserverlist.database.repository.server.ModeRepository;
-import jakarta.annotation.PostConstruct;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,13 +13,14 @@ import java.util.List;
 @Data
 @Service
 @RequiredArgsConstructor
-public class ModeService {
+@Order(2)
+public class ModeService implements CommandLineRunner {
     final ModeRepository modeRepository;
 
     List<Mode> modeList;
 
-    @PostConstruct
-    public void initialize(){
+    @Override
+    public void run(String... args) throws Exception {
         modeList = modeRepository.findAll();
     }
 }

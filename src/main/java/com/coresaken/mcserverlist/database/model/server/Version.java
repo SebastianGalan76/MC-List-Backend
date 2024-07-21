@@ -14,7 +14,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Version {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
     String name;

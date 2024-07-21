@@ -10,9 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Mode {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
     String name;

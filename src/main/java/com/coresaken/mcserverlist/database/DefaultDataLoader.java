@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import java.util.List;
 @Data
 @Component
 @RequiredArgsConstructor
+@Order(1)
 public class DefaultDataLoader implements CommandLineRunner {
     final VersionRepository versionRepository;
     final ModeRepository modeRepository;
@@ -44,10 +46,10 @@ public class DefaultDataLoader implements CommandLineRunner {
 
     private void saveModes(){
         List<Mode> modes = new ArrayList<>();
-        modes.add(new Mode(0L, "Sieć serwerów"));
-        modes.add(new Mode(1L, "Survival"));
-        modes.add(new Mode(2L, "Hardcore"));
-        modes.add(new Mode(3L, "Survival + Gildie"));
+        modes.add(new Mode(1L, "Sieć serwerów"));
+        modes.add(new Mode(2L, "Survival"));
+        modes.add(new Mode(3L, "Hardcore"));
+        modes.add(new Mode(4L, "Survival + Gildie"));
 
         modeRepository.saveAll(modes);
     }

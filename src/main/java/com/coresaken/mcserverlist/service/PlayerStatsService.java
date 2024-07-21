@@ -24,10 +24,10 @@ import java.util.concurrent.TimeUnit;
 public class PlayerStatsService {
     final int REFRESH_INTERVAL_MINUTE = 30;
 
-    ServerRepository serverRepository;
-    ServerDetailRepository serverDetailRepository;
-    HourlyPlayerCountRepository hourlyPlayerCountRepository;
-    ServerStatusService serverStatusService;
+    final ServerRepository serverRepository;
+    final ServerDetailRepository serverDetailRepository;
+    final HourlyPlayerCountRepository hourlyPlayerCountRepository;
+    final ServerStatusService serverStatusService;
 
     ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(5);
 
