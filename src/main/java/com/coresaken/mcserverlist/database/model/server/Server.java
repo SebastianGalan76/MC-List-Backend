@@ -15,7 +15,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "server")
-@Inheritance(strategy = InheritanceType.JOINED)
 public class Server {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,6 +45,14 @@ public class Server {
     int onlinePlayers;
 
     LocalDateTime nextRefreshAt;
+
+    @ManyToMany
+    @JoinTable(
+            name = "server_subserver",
+            joinColumns = @JoinColumn(name = "server_id"),
+            inverseJoinColumns = @JoinColumn(name = "subserver_id")
+    )
+    List<SubServer> subServers;
 
     @OneToMany(mappedBy = "server", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("index ASC")

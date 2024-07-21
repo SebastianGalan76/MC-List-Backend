@@ -1,22 +1,34 @@
 package com.coresaken.mcserverlist.database.model.server;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-public class SubServer extends Server{
-    @ManyToOne
-    @JoinColumn(name = "parent_id")
-    Server parent;
+public class SubServer {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
 
-    int index;
+    @ManyToOne
+    @JoinColumn(name = "name_id")
+    Name name;
+
+    @ManyToOne
+    @JoinColumn(name = "mode_id")
+    Mode mode;
+
+    @ManyToMany
+    @JoinTable(
+            name = "subserver_version",
+            joinColumns = @JoinColumn(name = "subserver_id"),
+            inverseJoinColumns = @JoinColumn(name = "version_id")
+    )
+    List<Version> versions;
 }

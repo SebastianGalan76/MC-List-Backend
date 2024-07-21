@@ -20,7 +20,6 @@ public class NewServerService {
     final ServerStatusService serverStatusService;
 
     final ServerRepository serverRepository;
-    final SubServerRepository subServerRepository;
 
     final ServerDetailRepository serverDetailRepository;
     final NameRepository nameRepository;
@@ -51,23 +50,24 @@ public class NewServerService {
         hourlyPlayerCountRepository.save(hourlyPlayerCount);
 
         List<Mode> modes = newServerDto.getModes();
-        if(!modes.isEmpty()){
-            if(modes.size()> 1){
-                int index = 0;
-                for(Mode mode: newServerDto.getModes()){
+        if(modes != null){
+            if(modes.size() == 1){
+                server.setMode(modes.get(0));
+            }
+            else{
+                server.setMode(modeRepository.getReferenceById(1L));
+
+                for(Mode mode:modes){
+                    if(mode.getId() == 1){
+                        continue;
+                    }
+
                     SubServer subServer = new SubServer();
-
-                    subServer.setParent(server);
                     subServer.setMode(mode);
-                    subServer.setDetail(server.getDetail());
+                    subServer.setName(new Name(mode.getName(), "#ffffff"));
+                    subServer.setVersions(newServerDto.getVersions());
 
-                    Name subServerName = nameRepository.save(new Name(mode.getName(), "ffffff"));
-                    subServer.setName(subServerName);
-
-                    subServer.setIndex(index);
-                    index++;
-
-                    subServerRepository.save(subServer);
+                    server.getSubServers().add(subServer);
                 }
             }
         }
@@ -91,7 +91,7 @@ public class NewServerService {
         server.setIp(newServerDto.getIp().toLowerCase());
         server.setPort(newServerDto.getPort());
         server.setOnline(serverStatus.isOnline());
-        server.setOnlinePlayers(server.getOnlinePlayers());
+        server.setOnlinePlayers(serverStatus.getPlayers().getOnline());
 
         ServerDetail serverDetail = new ServerDetail();
         serverDetail.setMotdHtml(serverStatus.getMotd().getHtml());
@@ -99,8 +99,6 @@ public class NewServerService {
         serverDetail.setIcon(serverStatus.getIcon());
         serverDetail = serverDetailRepository.save(serverDetail);
         server.setDetail(serverDetail);
-
-        System.out.println(newServerDto.getVersions());
 
         if(server.getVersions() == null){
             server.setVersions(newServerDto.getVersions());
@@ -111,7 +109,7 @@ public class NewServerService {
         }
 
         List<Mode> modes = newServerDto.getModes();
-        if(!modes.isEmpty()){
+        if(modes != null){
             if(modes.size()==1){
                 server.setMode(modes.get(0));
             }
