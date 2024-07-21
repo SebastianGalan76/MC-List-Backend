@@ -68,6 +68,10 @@ body{
             font-size: 1.3em;
             font-weight: 600;
         }
+        .submit-button:hover{
+            background-color: $color-theme-dark;
+            cursor: pointer;
+        }
     }
 
     @media (max-height: 800px){

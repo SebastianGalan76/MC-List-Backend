@@ -72,12 +72,16 @@ async function addServer() {
         }
         else {
             const responseJson = await response.json();
-            
-            serverStatusResponseError.style.display = "block";
             loadingStatusAnimation.style.display = "none";
 
             if (responseJson.status == "BAD_REQUEST") {
                 errorMessage.innerHTML = responseJson.message;
+            }
+            if (responseJson.status == "NOT_FOUND") {
+                serverStatusResponseError.style.display = "block";
+            }
+            if (responseJson.status == "PERMANENT_REDIRECT") {
+                window.location.href = responseJson.redirect;
             }
         }
     } catch (error) {

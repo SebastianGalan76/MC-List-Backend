@@ -24,7 +24,7 @@ public class Rank {
     String name;
     String color;
 
-    @OneToMany(mappedBy = "staffRank", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "rank", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("index ASC")
     List<Player> players;
 

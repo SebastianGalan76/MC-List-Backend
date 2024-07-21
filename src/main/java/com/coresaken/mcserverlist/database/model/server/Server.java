@@ -41,7 +41,9 @@ public class Server {
     @JoinColumn(name = "mode_id")
     Mode mode;
 
-    int online;
+    boolean online;
+
+    int onlinePlayers;
 
     LocalDateTime nextRefreshAt;
 

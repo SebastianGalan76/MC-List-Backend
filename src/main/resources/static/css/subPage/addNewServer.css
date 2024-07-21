@@ -60,6 +60,10 @@ body {
   font-size: 1.3em;
   font-weight: 600;
 }
+#container .footer .submit-button:hover {
+  background-color: #ce8e45;
+  cursor: pointer;
+}
 @media (max-height: 800px) {
   #container {
     padding: 50px 100px;
