@@ -205,3 +205,11 @@ input[type=number]::-webkit-inner-spin-button {
         top: 10px
     }
 }
+
+.panel{
+    border: 2px solid #79797971;
+    background-color: #ffffff0e;
+    backdrop-filter: blur(5px);
+    padding: 10px;
+    border-radius: 10px;
+}

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pl">
+
+<head>
+    <title>Rejestracja - Lista serwerów minecraft</title>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- <base href="http://localhost:8080/"> -->
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../../static/css/global.css">
+    <link rel="stylesheet" href="../../static/css/subPage/server.css">
+
+    <!-- Font Roboto -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/2282473dfd.js" crossorigin="anonymous"></script>
+
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
+    <script src="../../static/js/server/panelManager.js" defer></script>
+    <script src="../../static/js/copyToClipboard.js" defer></script>
+</head>
+
+<body>
+    <div id="page-wrapper" class="center">
+        <section id="container">
+            <div id="server-preview" class="panel">
+                <div class="logo">
+                    <img class="logo-src"
+                        src="data:image/png;base64,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">
+                </div>
+                <div class="middle-panel">
+                    <div class="address-value">
+                        CraftMc.pl
+                    </div>
+                    <div class="motd">
+                        <div class="motd">
+                            <span><span> </span><span style="font-weight: bold;color: #ffffff;">Craft</span><span
+                                    style="color: #ffaa00;font-weight: bold;">MC.PL </span><span
+                                    style="color: #aaaaaa;font-weight: bold;">➟</span><span style="color: #ffffff;">
+                                </span><span style="color: #aaaaaa;">Strona WWW: </span><span
+                                    style="color: #ffaa00;">www.craftmc.pl</span><span><br>
+                                </span><span> </span><span style="color: #ffffff;">Nowa edycja </span><span
+                                    style="color: #55ffff;">SkyBlock 1.12.2 </span><span style="color: #ffffff;">już
+                                </span><span style="color: #ffff55;">WYSTARTOWAŁA!</span></span>
+                        </div>
+                    </div>
+                    <div class="tag-container">
+                        <div class="tag mode-tag">
+                            <div class="icon">
+                                <i class="fa-solid fa-dice-d6"></i>
+                            </div>
+                            <div class="content">
+                                Sieć serwerów
+                            </div>
+                        </div>
+
+                        <div class="tag version-tag">
+                            <div class="icon">
+                                <i class="fa-solid fa-code-branch"></i>
+                            </div>
+                            <div class="content">
+                                1.8-1.21
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="statistic-container">
+                    <div class="online statistic">
+                        <div class="icon">🟢</div><span class="online-value">0</span>
+                    </div>
+                    <div class="votes statistic">
+                        <div class="icon">❤️</div>0
+                    </div>
+                </div>
+            </div>
+
+            <div id="main-container" class="panel">
+                <div id="button-container">
+                    <div class="button selected" onclick='showContent(this, "description-main-container")' th:if="${server.description.length > 0}">Opis</div>
+                    <div class="button" onclick='showContent(this, "staff-main-container")' th:if="${server.staff != null}">Administracja</div>
+                    <div class="button" onclick='showContent(this, "statistic-main-container")'>Statystyki</div>
+                    <div class="button" onclick='showContent(this, "ratings-main-container")'>Oceny</div>
+                </div>
+
+                <div class="main-container-content" id="description-main-container">
+                    <article id="server-description" class="ql-editor">
+
+                    </article>
+                </div>
+
+                <div class="main-container-content" id="staff-main-container">
+                    <h1 class="title">Administracja</h1>
+                    
+                    <div class="staff-rank" th:each="entry: ${server.staff}">
+                        <div class="name" th:text="${entry.name}" th:style="'color: ' + ${entry.color} + ';'"></div>
+
+                        <div class="players-container scrollable-horizontal">
+                            <div class="player" th:each="player: ${entry.players}">
+                                <div class="head">
+                                    <img th:src="'https://minotar.net/avatar/' + ${player.nick}">
+                                </div>
+                                <div class="nick" th:text="${player.nick}">
+
+                                </div>
+                                <div class="links">
+                                    <div th:if="${player.discord.length() > 0}">
+                                        <a href="javascript:void(0)" th:attr="data-copy=${player.discord}"
+                                            onclick="copyToClipboard(this)">
+                                            <i class="fa-brands fa-discord"></i>
+                                        </a>
+                                    </div>
+                                    <div th:if="${player.tiktok.length > 0}">
+                                        <a th:href="${player.tiktok}" target="_blank">
+                                            <i class="fa-brands fa-tiktok"></i>
+                                        </a>
+                                    </div>
+                                    <div th:if="${player.instagram.length > 0}">
+                                        <a th:href="${player.instagram}" target="_blank">
+                                            <i class="fa-brands fa-instagram"></i>
+                                        </a>
+                                    </div>
+                                    <div th:if="${player.youtube.length > 0}">
+                                        <a th:href="${player.youtube}" target="_blank">
+                                            <i class="fa-brands fa-youtube"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="main-container-content" id="statistic-main-container">
+
+                </div>
+
+                <div class="main-container-content" id="ratings-main-container">
+
+                </div>
+            </div>
+        </section>
+        <aside>
+            <div class="panel" id="ip-panel">
+                <div class="ip-address">Grajkownia.com</div>
+                <div class="copy-info">Kliknij, aby skopiować</div>
+            </div>
+            <div class="panel" id="button-panel">
+                <div class="button vote">Zagłosuj</div>
+                <div class="button promote">Promuj</div>
+                <div class="button manage">Przejmij</div>
+            </div>
+            <div class="panel" id="link-panel">
+                <div class="title">Linki</div>
+
+                <div class="link">
+                    <div class="icon">
+                        <i class="fa-solid fa-cookie"></i>
+                    </div>
+                    <div class="name">
+                        Strona główna
+                    </div>
+                </div>
+                <div class="link shop">
+                    <div class="icon">
+                        <i class="fa-solid fa-cookie"></i>
+                    </div>
+                    <div class="name">
+                        Strona główna
+                    </div>
+                </div>
+                <div class="link">
+                    <div class="icon">
+                        <i class="fa-solid fa-cookie"></i>
+                    </div>
+                    <div class="name">
+                        Strona główna
+                    </div>
+                </div>
+            </div>
+            <div id="report-button" class="center">
+                Zgłoś serwer
+            </div>
+        </aside>
+    </div>
+</body>
+</html>
