@@ -9,11 +9,11 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- <base href="http://localhost:8080/"> -->
+    <base href="http://localhost:8080/">
 
     <!-- Styles -->
-    <link rel="stylesheet" href="../../static/css/global.css">
-    <link rel="stylesheet" href="../../static/css/subPage/server.css">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/subPage/server.css">
 
     <!-- Font Roboto -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,8 +27,8 @@
 
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 
-    <script src="../../static/js/server/panelManager.js" defer></script>
-    <script src="../../static/js/copyToClipboard.js" defer></script>
+    <script src="/js/server/panelManager.js" defer></script>
+    <script src="/js/copyToClipboard.js" defer></script>
 </head>
 
 <body>
@@ -88,7 +88,7 @@
 
             <div id="main-container" class="panel">
                 <div id="button-container">
-                    <div class="button selected" onclick='showContent(this, "description-main-container")' th:if="${server.description.length > 0}">Opis</div>
+                    <div class="button selected" onclick='showContent(this, "description-main-container")' th:if="${server.description != null and server.description.length > 0}">Opis</div>
                     <div class="button" onclick='showContent(this, "staff-main-container")' th:if="${server.staff != null}">Administracja</div>
                     <div class="button" onclick='showContent(this, "statistic-main-container")'>Statystyki</div>
                     <div class="button" onclick='showContent(this, "ratings-main-container")'>Oceny</div>
@@ -106,7 +106,7 @@
                     <div class="staff-rank" th:each="entry: ${server.staff}">
                         <div class="name" th:text="${entry.name}" th:style="'color: ' + ${entry.color} + ';'"></div>
 
-                        <div class="players-container scrollable-horizontal">
+                        <div class="players-container scrollable scrollable-horizontal center">
                             <div class="player" th:each="player: ${entry.players}">
                                 <div class="head">
                                     <img th:src="'https://minotar.net/avatar/' + ${player.nick}">

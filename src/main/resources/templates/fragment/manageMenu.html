@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pl">
+
+<body>
+    <div th:fragment="menuFragment">
+        <div id="aside-menu">
+            <a th:href="'/server/' + ${server.id} + '/manage/info'">
+                <li>Podstawowe informacje</li>
+            </a>
+            <a th:href="'/server/' + ${server.id} + '/manage/description'"><li>Opis serwera</li></a>
+            <a href=""><li>Linki</li></a>
+            <a th:href="'/server/' + ${server.id} + '/manage/staff'"><li>Administracja</li></a>
+        </div>
+    </div>
+</body>
+</html>

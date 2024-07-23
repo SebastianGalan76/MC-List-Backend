@@ -161,11 +161,12 @@
             
                     .players-container {
                         display: flex;
-                        justify-content: center;
                         gap: 20px;
-            
+                        
+                        width: fit-content;
+                        max-width: 100%;
+
                         padding-bottom: 30px;
-                        width: 1000px;
             
                         overflow: hidden;
                         overflow-x: auto;

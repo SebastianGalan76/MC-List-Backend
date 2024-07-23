@@ -13,6 +13,7 @@
 #main-container aside .divider-line-vertical {
   position: absolute;
   right: 0;
+  top: 0;
 }
 #main-container #container {
   width: calc(100% - 250px);

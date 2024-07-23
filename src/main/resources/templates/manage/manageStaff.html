@@ -9,13 +9,14 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- <base href="http://localhost:8080/"> -->
+    <base href="http://localhost:8080/">
 
     <!-- Styles -->
-    <link rel="stylesheet" href="../../static/css/global.css">
-    <link rel="stylesheet" href="../../static/css/formElement.css">
-    <link rel="stylesheet" href="../../static/css/manage/manageStaff.css">
-    <link rel="stylesheet" href="../../static/css/manage/manageServer.css">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/formElement.css">
+    <link rel="stylesheet" href="/css/manage/manageStaff.css">
+    <link rel="stylesheet" href="/css/manage/manageServer.css">
+    <link rel="stylesheet" href="/css/fragment/manageMenu.css">
 
     <!-- Font Roboto -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,20 +28,136 @@
     <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/2282473dfd.js" crossorigin="anonymous"></script>
 
-    <script type="module" src="/js/manage/staffManager.js" defer></script>
-    <script type="module" src="/js/manage/rankEditor.js" defer></script>
+    <script type="module" src="/js/manage/staff/staffManager.js" defer></script>
+    <script type="module" src="/js/manage/staff/rankEditor.js" defer></script>
 </head>
 
 <body>
-    <div class="popup">
+    <div id="rank-editor-popup">
         <div class="overlay"></div>
         <div class="content">
-            
+            <div id="staff-panel">
+                <div id="rank-name-preview">Właściciel</div>
+                <div class="form-container">
+                    <div class="input-area">
+                        <input id="rank-name-input" type="text" maxlength="60" placeholder="Nazwa rangi"
+                            autocomplete="off">
+                        <div class="icon">
+                            <i class="fa-solid fa-server"></i>
+                        </div>
+                        <div class="required">*</div>
+                    </div>
+
+                    <div class="input-area color-input-area">
+                        <input id="rank-color-input" class="color-input" type="color" value="#ffffff"
+                            autocomplete="off">
+                    </div>
+                    <div id="remove-rank-button" class="remove-button" title="Usuń całą rangę">
+                        <i class="fa-solid fa-trash"></i>
+                    </div>
+                </div>
+
+                <div id="staff-editor">
+                    <div class="player-panel">
+                        <div class="player-form-container center">
+                            <div class="input-area">
+                                <input id="nick-input" type="text" maxlength="60" placeholder="Nick gracza"
+                                    autocomplete="off">
+                                <div class="icon">
+                                    <i class="fa-solid fa-server"></i>
+                                </div>
+                                <div class="required">*</div>
+                            </div>
+
+                            <div id="create-new-player" class="add-button">
+                                Dodaj
+                            </div>
+                        </div>
+                        <span class="add-player-error error"></span>
+                        <div class="down-panel">
+                            <div class="selected-player-wrapper">
+                                <div class="selected-player" style="visibility: hidden;">
+                                    <div class="player">
+                                        <div class="head">
+                                            <img class="head-src" src="" draggable="false">
+                                        </div>
+                                        <div class="nick">
+
+                                        </div>
+                                    </div>
+
+                                    <div class="edit-button button">
+                                        Zapisz
+                                    </div>
+                                    <div class="remove-button button" id="remove-player-button">
+                                        <i class="fa-solid fa-trash center"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="social-links-form-container scrollable">
+                                <div class="header">Sociale</div>
+                                <div class="input-area">
+                                    <input id="discord-input" type="text" autocomplete="off" placeholder="Discord">
+                                    <div class="icon">
+                                        <i class="fa-brands fa-discord"></i>
+                                    </div>
+                                </div>
+                                <div class="input-area">
+                                    <input id="tiktok-input" type="text" autocomplete="off" placeholder="TikTok">
+                                    <div class="icon">
+                                        <i class="fa-brands fa-tiktok"></i>
+                                    </div>
+                                </div>
+                                <div class="input-area">
+                                    <input id="youtube-input" type="text" autocomplete="off" placeholder="YouTube">
+                                    <div class="icon">
+                                        <i class="fa-brands fa-youtube"></i>
+                                    </div>
+                                </div>
+                                <div class="input-area">
+                                    <input id="instagram-input" type="text" autocomplete="off" placeholder="Instagram">
+                                    <div class="icon">
+                                        <i class="fa-brands fa-instagram"></i>
+                                    </div>
+                                </div>
+
+                                <div id="social-link-error" class="error"></div>
+                            </div>
+                        </div>
+
+                        <ul class="players-container scrollable-horizontal scrollable sortable-list">
+
+                        </ul>
+                    </div>
+
+                    <span id="error-message" class="error center"></span>
+                </div>
+                <div class="save action-button center margin-30" id="save-rank-changes-button">Zapisz</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="popup" id="remove-rank-confirmation-popup">
+        <div class="overlay"></div>
+        <div class="content">
+            <i class="fa-solid fa-circle-check header-icon"></i>
+            <div class="close-btn"><i class="fa-solid fa-xmark"></i></div>
+            <span class="text">
+                Czy na pewno chcesz usunąć rangę<br>
+                <span id="remove-rank-confirmation-name">Właściciel</span>?
+            </span>
+
+            <div class="double-button">
+                <div class="action-btn yes-button">Tak</div>
+                <div class="action-btn no-button">Nie</div>
+            </div>
         </div>
     </div>
 
     <div id="main-container">
         <aside>
+            <div th:replace="~{fragment/manageMenu :: menuFragment}"></div>
             <div class="divider-line-vertical">
             </div>
         </aside>
@@ -77,116 +194,15 @@
 
                 <div id="rank-wrapper">
                     <div class="title">Rangi</div>
-                    
+
                     <ul id="rank-container" class="sortable-list-rank">
-                        
-                        <div id="staff-panel">
-                            <div class="form-container center">
-                                <div class="input-area">
-                                    <input id="rank-name-input" type="text" maxlength="60" placeholder="Nazwa rangi"
-                                        autocomplete="off">
-                                    <div class="icon">
-                                        <i class="fa-solid fa-server"></i>
-                                    </div>
-                                    <div class="required">*</div>
-                                </div>
-
-                                <div class="input-area color-input-area">
-                                    <input id="rank-color-input" class="color-input" type="color" value="#ffffff"
-                                        autocomplete="off">
-                                </div>
-                                <div id="remove-rank-button" class="remove-button" title="Usuń całą rangę">
-                                    <i class="fa-solid fa-trash"></i>
-                                </div>
-                            </div>
 
 
-                            <div id="staff-editor">
-                                <div class="player-panel">
-                                    <div class="player-form-container center">
-                                        <div class="input-area">
-                                            <input id="nick-input" type="text" maxlength="60" placeholder="Nick gracza"
-                                                autocomplete="off">
-                                            <div class="icon">
-                                                <i class="fa-solid fa-server"></i>
-                                            </div>
-                                            <div class="required">*</div>
-                                        </div>
-
-                                        <div id="create-new-player" class="add-button">
-                                            Dodaj
-                                        </div>
-                                    </div>
-                                    <span class="add-player-error error"></span>
-                                    <div class="down-panel">
-                                        <div class="selected-player-wrapper">
-                                            <div class="selected-player" style="visibility: hidden;">
-                                                <div class="player">
-                                                    <div class="head">
-                                                        <img class="head-src" src="" draggable="false">
-                                                    </div>
-                                                    <div class="nick">
-                                                        DreaMPL
-                                                    </div>
-                                                </div>
-
-                                                <div class="edit-button button">
-                                                    Zapisz
-                                                </div>
-                                                <div class="remove-button button" id="remove-player-button">
-                                                    <i class="fa-solid fa-trash"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="social-links-form-container scrollable">
-                                            <div class="header">Sociale</div>
-                                            <div class="input-area">
-                                                <input id="discord-input" type="text" autocomplete="off"
-                                                    placeholder="Discord">
-                                                <div class="icon">
-                                                    <i class="fa-brands fa-discord"></i>
-                                                </div>
-                                            </div>
-                                            <div class="input-area">
-                                                <input id="tiktok-input" type="text" autocomplete="off"
-                                                    placeholder="TikTok">
-                                                <div class="icon">
-                                                    <i class="fa-brands fa-tiktok"></i>
-                                                </div>
-                                            </div>
-                                            <div class="input-area">
-                                                <input id="youtube-input" type="text" autocomplete="off"
-                                                    placeholder="YouTube">
-                                                <div class="icon">
-                                                    <i class="fa-brands fa-youtube"></i>
-                                                </div>
-                                            </div>
-                                            <div class="input-area">
-                                                <input id="instagram-input" type="text" autocomplete="off"
-                                                    placeholder="Instagram">
-                                                <div class="icon">
-                                                    <i class="fa-brands fa-instagram"></i>
-                                                </div>
-                                            </div>
-
-                                            <div id="social-link-error" class="error"></div>
-                                        </div>
-                                    </div>
-
-                                    <ul class="players-container scrollable sortable-list">
-
-                                    </ul>
-                                </div>
-
-                                <span id="error-message" class="error center"></span>
-                            </div>
-                        </div>
                     </ul>
                 </div>
 
-
-                <div id="save-staff-button" class="center action-button">
+                <span class="error center" id="response-error"></span>
+                <div id="save-staff-button" class="center action-button margin-50-150">
                     Zapisz zmiany
                 </div>
             </div>
@@ -211,7 +227,7 @@
 </template>
 <template id="rank-template">
     <li class="rank item" draggable="true">
-        <div class="rank-name-preview"></div>
+        <div class="rank-name"></div>
 
         <div class="click-to-edit">Kliknij, aby edytować <i class="fa-solid fa-grip-vertical"></i></div>
     </li>
@@ -222,20 +238,22 @@
     const loadedStaff = /*[[${server.staff}]]*/[];
     const sortedloadedStaff = loadedStaff.sort((a, b) => a.index - b.index);
 
+    const responseError = document.getElementById("response-error");
+
     document.getElementById("save-staff-button").addEventListener("click", () => {
         saveStaff();
     });
 
-    import { staffRanks, loadStaff, getSortedStaffRanks } from "./js/manage/staffManager.js";
+    import { staffRanks, loadStaff, getSortedStaffRanks } from "./js/manage/staff/staffManager.js";
     loadStaff(sortedloadedStaff);
 
     async function saveStaff() {
         const staffDto = {
-            staffRankList: getSortedStaffRanks()
+            rankList: getSortedStaffRanks()
         }
 
         try {
-            const response = await fetch('/server/' + serverId + '/manage/save-staff', {
+            const response = await fetch('/server/' + serverId + '/manage/staff/save', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -249,9 +267,13 @@
             }
             else {
                 const responseJson = await response.json();
+                console.log(responseJson);
 
                 if (responseJson.status == "BAD_REQUEST") {
-                    console.log(responseJson.message);
+                   responseError.innerHTML = responseJson.message;
+                }
+                else if (responseJson.status == "OK"){
+                    responseError.innerHTML = "Zmiany zostały zapisane";
                 }
             }
         } catch (error) {

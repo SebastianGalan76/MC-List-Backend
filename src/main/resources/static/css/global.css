@@ -56,7 +56,7 @@ body {
   padding: 25px;
   border-radius: 10px;
   color: #1a1a1a;
-  transition: transform 0.25s ease-in-out;
+  transition: transform 0.15s ease-in-out;
 }
 .popup .content .header-icon {
   color: #e2a258;
@@ -93,6 +93,13 @@ body {
   margin-top: 50px;
   display: block;
   text-align: center;
+}
+.popup .content .double-button {
+  display: flex;
+  gap: 10px;
+}
+.popup .content .double-button .action-btn {
+  flex-grow: 1;
 }
 @media (max-width: 400px) {
   .popup .content {
@@ -133,6 +140,7 @@ body {
   color: rgb(252, 99, 107);
   text-align: center;
   font-weight: 500;
+  display: block;
 }
 
 .red {
@@ -187,4 +195,8 @@ input[type=number]::-webkit-inner-spin-button {
           backdrop-filter: blur(5px);
   padding: 10px;
   border-radius: 10px;
+}
+
+.dragging {
+  opacity: 0.1;
 }/*# sourceMappingURL=global.css.map */

@@ -274,9 +274,6 @@ input[type="color"]::-webkit-color-swatch {
 }
 
 .action-button{
-    margin-top: 50px;
-    margin-bottom: 150px;
-
     background-color: $color-theme;
     font-weight: 700;
     padding: 15px 0;
@@ -290,4 +287,14 @@ input[type="color"]::-webkit-color-swatch {
 .action-button:hover{
     cursor: pointer;
     background-color: $color-theme-dark;
+}
+
+.margin-50-150{
+    margin-top: 50px;
+    margin-bottom: 150px;
+}
+
+.margin-30{
+    margin-top: 30px;
+    margin-bottom: 30px;
 }

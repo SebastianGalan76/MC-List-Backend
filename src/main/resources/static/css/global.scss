@@ -71,7 +71,7 @@ body {
         padding: 25px;
         border-radius: 10px;
         color: #1a1a1a;
-        transition: transform 0.25s ease-in-out;
+        transition: transform 0.15s ease-in-out;
 
         .header-icon {
             color: $color-theme;
@@ -115,6 +115,15 @@ body {
             text-align: center;
         }
 
+        .double-button{
+            display: flex;
+            gap: 10px;
+
+            .action-btn{
+                flex-grow: 1;
+            }
+        }
+
         @media (max-width: 400px) {
             width: 100%;
         }
@@ -151,6 +160,7 @@ body {
     color: $color-red;
     text-align: center;
     font-weight: 500;
+    display: block;
 }
 
 .red {
@@ -212,4 +222,8 @@ input[type=number]::-webkit-inner-spin-button {
     backdrop-filter: blur(5px);
     padding: 10px;
     border-radius: 10px;
+}
+
+.dragging{
+    opacity: 0.1;
 }

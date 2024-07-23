@@ -131,10 +131,11 @@
 }
 #page-wrapper #container #main-container #staff-main-container .staff-rank .players-container {
   display: flex;
-  justify-content: center;
   gap: 20px;
+  width: -moz-fit-content;
+  width: fit-content;
+  max-width: 100%;
   padding-bottom: 30px;
-  width: 1000px;
   overflow: hidden;
   overflow-x: auto;
   margin-left: auto;
