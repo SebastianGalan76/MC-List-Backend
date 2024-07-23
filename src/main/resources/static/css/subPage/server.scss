@@ -286,7 +286,7 @@
             }
         }
 
-        #link-panel{
+        #link-panel-aside{
             display: flex;
             flex-direction: column;
 
@@ -350,5 +350,16 @@
                 padding: 10px 0;
             }
         }
+    }
+}
+
+#statistic-main{
+    width: 100%;
+
+    .header{
+        padding: 10px;
+        text-align: center;
+        font-size: 1.2em;
+        font-weight: 600;
     }
 }

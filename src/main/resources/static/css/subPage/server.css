@@ -228,12 +228,12 @@
 #page-wrapper aside #button-panel .button.manage:hover {
   background-color: rgb(63, 63, 63);
 }
-#page-wrapper aside #link-panel {
+#page-wrapper aside #link-panel-aside {
   display: flex;
   flex-direction: column;
   gap: 5px;
 }
-#page-wrapper aside #link-panel .link {
+#page-wrapper aside #link-panel-aside .link {
   display: flex;
   align-items: center;
   font-weight: 500;
@@ -244,23 +244,23 @@
   border-radius: 10px;
   transition: scale 0.2s ease;
 }
-#page-wrapper aside #link-panel .link .icon {
+#page-wrapper aside #link-panel-aside .link .icon {
   font-size: 1.7em;
 }
-#page-wrapper aside #link-panel .link:hover {
+#page-wrapper aside #link-panel-aside .link:hover {
   scale: 1.05;
   cursor: pointer;
 }
-#page-wrapper aside #link-panel .link.shop {
+#page-wrapper aside #link-panel-aside .link.shop {
   background-color: rgb(146, 236, 44);
 }
-#page-wrapper aside #link-panel .link.discord {
+#page-wrapper aside #link-panel-aside .link.discord {
   background-color: #7289DA;
 }
-#page-wrapper aside #link-panel .link.facebook {
+#page-wrapper aside #link-panel-aside .link.facebook {
   background-color: #4267B2;
 }
-#page-wrapper aside #link-panel .link.tiktok {
+#page-wrapper aside #link-panel-aside .link.tiktok {
   background-color: #ff0050;
 }
 #page-wrapper aside #report-button {
@@ -278,4 +278,14 @@
   font-weight: 700;
   font-size: 1.25em;
   padding: 10px 0;
+}
+
+#statistic-main {
+  width: 100%;
+}
+#statistic-main .header {
+  padding: 10px;
+  text-align: center;
+  font-size: 1.2em;
+  font-weight: 600;
 }/*# sourceMappingURL=server.css.map */
