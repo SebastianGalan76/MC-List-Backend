@@ -1,0 +1,46 @@
+@import "../base";
+
+#main-container {
+    position: relative;
+    width: 100%;
+    display: flex;
+
+    aside {
+        width: 250px;
+        height: 100vh;
+        flex-shrink: 0;
+
+        position: sticky;
+        top: 0;
+
+        .divider-line-vertical {
+            position: absolute;
+            right: 0;
+        }
+    }
+
+    #container {
+        width: calc(100% - 250px);
+        padding: 10px;
+    }
+}
+
+.add-button{
+    flex-shrink: 0;
+
+    padding: 0 30px;
+    display: flex;
+    align-items: center;
+
+    border-radius: 10px;
+    background-color: rgba(51, 153, 51, 0.404);
+    border: 2px solid $color-green;
+    font-weight: 800;
+
+    transition: all 0.2s ease;
+}
+
+.add-button:hover{
+    cursor: pointer;
+    background-color: rgb(51, 153, 51);
+}

@@ -252,3 +252,42 @@
         }
     }
 }
+
+input[type="color"] {
+	-webkit-appearance: none;
+	border: none;
+}
+input[type="color"]::-webkit-color-swatch-wrapper {
+	padding: 0;
+}
+input[type="color"]::-webkit-color-swatch {
+	border: none;
+}
+
+.color-input{
+    padding: 0 !important;
+}
+
+.color-input-area{
+    width: 120px;
+    flex-shrink: 0;
+}
+
+.action-button{
+    margin-top: 50px;
+    margin-bottom: 150px;
+
+    background-color: $color-theme;
+    font-weight: 700;
+    padding: 15px 0;
+    border-radius: 20px;
+    text-align: center;
+    font-size: 1.2em;
+    width: 80%;
+    transition: all 0.2s ease;
+}
+
+.action-button:hover{
+    cursor: pointer;
+    background-color: $color-theme-dark;
+}

@@ -9,9 +9,11 @@ import com.coresaken.mcserverlist.database.repository.server.ModeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.beans.Transient;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,6 +22,7 @@ public class NewServerService {
     final ServerStatusService serverStatusService;
 
     final ServerRepository serverRepository;
+    final SubServerRepository subServerRepository;
 
     final ServerDetailRepository serverDetailRepository;
     final NameRepository nameRepository;
@@ -27,7 +30,7 @@ public class NewServerService {
     final BlockedServerRepository blockedServerRepository;
     final HourlyPlayerCountRepository hourlyPlayerCountRepository;
 
-    @Transient
+    @Transactional
     public Response addNewServer(NewServerDto newServerDto){
         Response response = checkServerData(newServerDto, null);
         if(response.getStatus() != HttpStatus.OK){
@@ -64,9 +67,13 @@ public class NewServerService {
 
                     SubServer subServer = new SubServer();
                     subServer.setMode(mode);
-                    subServer.setName(new Name(mode.getName(), "#ffffff"));
+                    subServer.setName(nameRepository.save(new Name(mode.getName(), "#ffffff")));
                     subServer.setVersions(newServerDto.getVersions());
 
+                    subServerRepository.save(subServer);
+                    if(server.getSubServers() == null){
+                        server.setSubServers(new ArrayList<>());
+                    }
                     server.getSubServers().add(subServer);
                 }
             }
@@ -84,8 +91,7 @@ public class NewServerService {
             nameRepository.save(name);
         }
         else{
-            name = nameRepository.save(new Name(newServerDto.getIp(), "ffffff"));
-            server.setName(name);
+            server.setName(nameRepository.save(new Name(newServerDto.getIp(), "ffffff")));
         }
 
         server.setIp(newServerDto.getIp().toLowerCase());
