@@ -1,6 +1,7 @@
 package com.coresaken.mcserverlist.service.server;
 
 import com.coresaken.mcserverlist.data.dto.StaffDto;
+import com.coresaken.mcserverlist.data.dto.StringDto;
 import com.coresaken.mcserverlist.data.response.Response;
 import com.coresaken.mcserverlist.database.model.server.Server;
 import com.coresaken.mcserverlist.database.model.server.staff.Player;
@@ -43,7 +44,11 @@ public class ManageServerService {
         return Response.builder().status(HttpStatus.OK).build();
     }
 
-    public Server getServerById(Long id){
-        return serverRepository.findById(id).orElse(null);
+
+    public Response saveServerDescription(Server server, StringDto stringDto) {
+        server.setDescription(stringDto.getText());
+        serverRepository.save(server);
+
+        return Response.builder().status(HttpStatus.OK).build();
     }
 }

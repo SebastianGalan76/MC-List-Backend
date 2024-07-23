@@ -19,6 +19,12 @@
   width: calc(100% - 250px);
   padding: 10px;
 }
+#main-container #container .header {
+  font-size: 2em;
+  text-align: center;
+  padding: 25px;
+  font-weight: 700;
+}
 
 .add-button {
   flex-shrink: 0;

@@ -1,12 +1,6 @@
 #staff-container {
   width: 800px;
 }
-#staff-container .header {
-  font-size: 2em;
-  text-align: center;
-  padding: 25px;
-  font-weight: 700;
-}
 #staff-container #rank-wrapper {
   background-color: rgba(0, 0, 0, 0.2588235294);
   padding: 20px 10px;
@@ -107,6 +101,16 @@
   gap: 10px;
   display: flex;
 }
+@media (max-width: 1100px) {
+  #staff-container #create-new-rank-panel .form-container .color-input-area {
+    width: 50px;
+  }
+}
+@media (max-width: 1100px) {
+  #staff-container {
+    width: 100%;
+  }
+}
 
 #rank-editor-popup {
   visibility: hidden;
@@ -135,6 +139,11 @@
   -webkit-backdrop-filter: blur(10px);
           backdrop-filter: blur(10px);
   border-radius: 25px;
+}
+@media (max-width: 1100px) {
+  #rank-editor-popup .content #staff-panel .color-input-area {
+    width: 50px;
+  }
 }
 #rank-editor-popup .content #staff-panel #rank-name-preview {
   background-color: rgba(0, 0, 0, 0.2588235294);
@@ -178,6 +187,11 @@
   background-color: rgba(0, 0, 0, 0.2588235294);
   border-radius: 20px;
 }
+@media (max-width: 1100px) {
+  #rank-editor-popup .content #staff-panel .player-panel .down-panel .selected-player-wrapper {
+    padding: 15px 15px;
+  }
+}
 #rank-editor-popup .content #staff-panel .player-panel .down-panel .selected-player .button {
   width: 100%;
   text-align: center;
@@ -195,6 +209,12 @@
 }
 #rank-editor-popup .content #staff-panel .player-panel .down-panel .selected-player .player {
   background-color: transparent;
+}
+@media (max-width: 1100px) {
+  #rank-editor-popup .content #staff-panel .player-panel .down-panel .selected-player .player .head-src {
+    width: 80px;
+    height: 80px;
+  }
 }
 #rank-editor-popup .content #staff-panel .player-panel .players-container {
   padding: 10px;
@@ -274,6 +294,11 @@
 }
 #rank-editor-popup .content #staff-panel #remove-player-button {
   transition: none !important;
+}
+@media (max-width: 1100px) {
+  #rank-editor-popup .content {
+    width: 100%;
+  }
 }
 
 #rank-editor-popup.active {
