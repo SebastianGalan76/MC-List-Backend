@@ -2,9 +2,10 @@ package com.coresaken.mcserverlist.database;
 
 import com.coresaken.mcserverlist.database.model.server.Mode;
 import com.coresaken.mcserverlist.database.model.server.Version;
+import com.coresaken.mcserverlist.database.model.server.ratings.RatingCategory;
+import com.coresaken.mcserverlist.database.repository.RatingCategoryRepository;
 import com.coresaken.mcserverlist.database.repository.server.ModeRepository;
 import com.coresaken.mcserverlist.database.repository.server.VersionRepository;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
@@ -21,7 +22,7 @@ import java.util.List;
 public class DefaultDataLoader implements CommandLineRunner {
     final VersionRepository versionRepository;
     final ModeRepository modeRepository;
-    //final RatingCategoryRepository ratingCategoryRepository;
+    final RatingCategoryRepository ratingCategoryRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -31,7 +32,7 @@ public class DefaultDataLoader implements CommandLineRunner {
     private void loadDefaultData(){
         saveVersions();
         saveModes();
-        //saveRatingCategories();
+        saveRatingCategories();
     }
 
     private void saveVersions(){
@@ -54,7 +55,7 @@ public class DefaultDataLoader implements CommandLineRunner {
         modeRepository.saveAll(modes);
     }
 
-    /*private void saveRatingCategories(){
+    private void saveRatingCategories(){
         List<RatingCategory> categories = new ArrayList<>();
         categories.add(new RatingCategory(1L, "Atmosfera gry", "Jak oceniasz ogólny klimat na serwerze?"));
         categories.add(new RatingCategory(2L, "Unikalne funkcje", "Jak oceniasz serwer pod względem unikalnych funkcji, trybów i dodatków?"));
@@ -63,5 +64,5 @@ public class DefaultDataLoader implements CommandLineRunner {
         categories.add(new RatingCategory(5L, "Administracja", "Jak oceniasz pracę administracji, jej zaangażowanie w pomoc oraz łatwość kontaktu?"));
 
         ratingCategoryRepository.saveAll(categories);
-    }*/
+    }
 }

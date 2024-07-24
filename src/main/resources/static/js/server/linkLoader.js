@@ -66,7 +66,6 @@ function getLinkElement(link){
             const iconClass = linkElement.querySelector('.icon');
             const classArray = data.iconClass.split(' ');
             if(classArray.length > 0){
-                console.log(classArray);
                 iconClass.classList.add(...classArray);
             }
 

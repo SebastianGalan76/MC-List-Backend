@@ -36,6 +36,51 @@
 </head>
 
 <body>
+    <div class="popup" id="rated-successfully-popup">
+        <div class="overlay"></div>
+        <div class="content">
+            <i class="fa-solid fa-circle-check header-icon"></i>
+
+            <span class="text">
+                Dziękujemy za przesłanie swojej oceny naszego serwera.<br>
+                Twoja ocena jest dla nas niezwykle ważna.
+            </span>
+
+            <a th:href="@{/server/{ip}(ip=${server.ip})}">
+                <div class="action-btn">OK</div>
+            </a>
+        </div>
+    </div>
+
+    <div id="rate-server-popup">
+        <div class="overlay"></div>
+        <div class="content">
+            <div class="header">
+                <div class="title">
+                    Oceń serwer
+                </div>
+                <span>
+                    Twoja opinia dla Administracji serwera jest niezwykle ważna! Aby mogli ciągle doskonalić swoje
+                    usługi, prosimy o uczciwe i rzetelne ocenienie serwera.
+                </span>
+
+                <div id="close-rate-server-popup"><i class="fa-solid fa-xmark"></i></div>
+            </div>
+
+            <div id="rating-container">
+
+            </div>
+
+            <div id="error-message" class="center error">
+
+            </div>
+
+            <div class="save-button center" id="save-ratings-button">
+                Prześlij ocenę
+            </div>
+        </div>
+    </div>
+
     <div id="page-wrapper" class="center">
         <section id="container">
             <div id="server-preview" class="panel">
@@ -91,7 +136,7 @@
             </div>
 
             <div id="link-panel" class="panel">
-                
+
             </div>
 
             <div id="main-container" class="panel">
@@ -112,7 +157,7 @@
 
                 <div class="main-container-content" id="staff-main-container"
                     th:if="${server.staff != null and server.staff.size() > 0}">
-                    <h1 class="title">Administracja</h1>
+                    <h1 class="content-header">Administracja</h1>
 
                     <div class="staff-rank" th:each="entry: ${server.staff}">
                         <div class="name" th:text="${entry.name}" th:style="'color: ' + ${entry.color} + ';'"></div>
@@ -157,14 +202,208 @@
 
                 </div>
 
-                <div class="main-container-content" id="ratings-main-container">
+                <div class="main-container-content ratings-global" id="ratings-main-container">
+                    <div class="ratings-main overall-ratings-container">
+                        <div class="header">
+                            <div class="title">
+                                Ogólna ocena
+                            </div>
+                        </div>
 
+                        <div class="container">
+                            <div class="left-panel">
+                                <lottie-player id="loading-animation" src="/animation/star.json"
+                                    background="transparent" speed="1" loop autoplay></lottie-player>
+                                <span class="rating"><span class="overall-rating"></span>/5.0</span>
+                            </div>
+                            <div class="right-panel" id="ratings-container">
+                                <div class="rating" id="category-1">
+                                    <div class="up-panel">
+                                        <div class="title">Ogólna atmosfera</div>
+                                        <div class="rating-value">
+                                            0
+                                        </div>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="rating" id="category-2">
+                                    <div class="up-panel">
+                                        <div class="title">Ogólna atmosfera</div>
+                                        <div class="rating-value">
+                                            0
+                                        </div>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="rating" id="category-3">
+                                    <div class="up-panel">
+                                        <div class="title">Ogólna atmosfera</div>
+                                        <div class="rating-value">
+                                            0
+                                        </div>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="rating" id="category-4">
+                                    <div class="up-panel">
+                                        <div class="title">Ogólna atmosfera</div>
+                                        <div class="rating-value">
+                                            0
+                                        </div>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="rating" id="category-5">
+                                    <div class="up-panel">
+                                        <div class="title">Ogólna atmosfera</div>
+                                        <div class="rating-value">
+                                            0
+                                        </div>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="ratings-categories">
+
+                    </div>
+
+                    <a href="/auth/signIn">
+                        <div class="sign-in-to-rate-button center" th:if="${user==null}" style="margin-top: 150px;">
+                            Zaloguj się, aby ocenić
+                        </div>
+                    </a>
+                    <a>
+                        <div class="rate-button center" th:if="${user!=null}" style="margin-top: 150px;">
+                            Oceń serwer
+                        </div>
+                    </a>
                 </div>
             </div>
 
-            <div class="panel" id="statistic-main">
+            <div class="panel chart" id="statistic-main">
                 <div class="header">Gracze Online (24h)</div>
                 <canvas id="online-player-chart" height="80"></canvas>
+            </div>
+
+            <div class="panel ratings-global overall-ratings-container" id="ratings-main">
+                <div class="header">
+                    <div class="title">
+                        Ocena
+                    </div>
+                    <div class="more-info-button">
+                        Szczegóły
+                    </div>
+                </div>
+
+
+                <div class="container">
+                    <div class="left-panel">
+                        <lottie-player id="loading-animation" src="/animation/star.json" background="transparent"
+                            speed="1" loop autoplay></lottie-player>
+                        <span class="rating"><span class="overall-rating">0</span>/5.0</span>
+                    </div>
+                    <div class="right-panel">
+                        <div class="rating" id="category-1">
+                            <div class="up-panel">
+                                <div class="title">Ogólna atmosfera</div>
+                                <div class="rating-value">
+                                    0
+                                </div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="rating" id="category-2">
+                            <div class="up-panel">
+                                <div class="title">Ogólna atmosfera</div>
+                                <div class="rating-value">
+                                    0
+                                </div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="rating" id="category-3">
+                            <div class="up-panel">
+                                <div class="title">Ogólna atmosfera</div>
+                                <div class="rating-value">
+                                    0
+                                </div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="rating" id="category-4">
+                            <div class="up-panel">
+                                <div class="title">Ogólna atmosfera</div>
+                                <div class="rating-value">
+                                    0
+                                </div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="rating" id="category-5">
+                            <div class="up-panel">
+                                <div class="title">Ogólna atmosfera</div>
+                                <div class="rating-value">
+                                    0
+                                </div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="/auth/signIn">
+                    <div class="sign-in-to-rate-button center" th:if="${user==null}">
+                        Zaloguj się, aby ocenić
+                    </div>
+                </a>
+                <a>
+                    <div class="rate-button center" th:if="${user!=null}">
+                        Oceń serwer
+                    </div>
+                </a>
             </div>
         </section>
         <aside>
@@ -195,9 +434,205 @@
         </div>
     </div>
 </template>
-<script th:inline="javascript" type="module" defer>
-    var mainDescription = /*[[${server != null ? server.description : ''}]]*/ '';
+<template id="ratings-template">
+    <div class="ratings-main">
+        <div class="header margin-top">
+            <div class="title">
+                Ogólna ocena
+            </div>
+        </div>
 
+        <div class="container">
+            <div class="left-panel">
+                <lottie-player id="loading-animation" src="/animation/star.json" background="transparent" speed="1" loop
+                    autoplay></lottie-player>
+                <span class="rating"><span class="overall-rating"></span>/5.0</span>
+            </div>
+            <div class="right-panel">
+                <div class="rating rating-5">
+                    <div class="up-panel">
+                        <div class="title"><i class="fa-solid fa-star"></i> <i class="fa-solid fa-star"></i> <i
+                                class="fa-solid fa-star"></i> <i class="fa-solid fa-star"></i> <i
+                                class="fa-solid fa-star"></i></div>
+                        <div class="rating-value">
+
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="rating rating-4">
+                    <div class="up-panel">
+                        <div class="title"><i class="fa-solid fa-star"></i> <i class="fa-solid fa-star"></i> <i
+                                class="fa-solid fa-star"></i> <i class="fa-solid fa-star"></i></div>
+                        <div class="rating-value">
+
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="rating rating-3">
+                    <div class="up-panel">
+                        <div class="title"><i class="fa-solid fa-star"></i> <i class="fa-solid fa-star"></i> <i
+                                class="fa-solid fa-star"></i></div>
+                        <div class="rating-value">
+
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="rating rating-2">
+                    <div class="up-panel">
+                        <div class="title"><i class="fa-solid fa-star"></i> <i class="fa-solid fa-star"></i></div>
+                        <div class="rating-value">
+
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="rating rating-1">
+                    <div class="up-panel">
+                        <div class="title"><i class="fa-solid fa-star"></i></div>
+                        <div class="rating-value">
+
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+<template id="ratings-template-inverse">
+    <div class="ratings-main">
+        <div class="header margin-top">
+            <div class="title">
+                Ogólna ocena
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="right-panel">
+                <div class="rating rating-5">
+                    <div class="up-panel">
+                        <div class="rating-value">
+
+                        </div>
+                        <div class="title"><i class="fa-solid fa-star"></i> <i class="fa-solid fa-star"></i> <i
+                                class="fa-solid fa-star"></i> <i class="fa-solid fa-star"></i> <i
+                                class="fa-solid fa-star"></i></div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress" style="margin-left: auto;">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="rating rating-4">
+                    <div class="up-panel">
+                        <div class="rating-value">
+
+                        </div>
+                        <div class="title"><i class="fa-solid fa-star"></i> <i class="fa-solid fa-star"></i> <i
+                                class="fa-solid fa-star"></i> <i class="fa-solid fa-star"></i></div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress" style="margin-left: auto;">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="rating rating-3">
+                    <div class="up-panel">
+                        <div class="rating-value">
+
+                        </div>
+                        <div class="title"><i class="fa-solid fa-star"></i> <i class="fa-solid fa-star"></i> <i
+                                class="fa-solid fa-star"></i></div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress" style="margin-left: auto;">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="rating rating-2">
+                    <div class="up-panel">
+                        <div class="rating-value">
+
+                        </div>
+                        <div class="title"><i class="fa-solid fa-star"></i> <i class="fa-solid fa-star"></i></div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress" style="margin-left: auto;">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="rating rating-1">
+                    <div class="up-panel">
+                        <div class="rating-value">
+
+                        </div>
+                        <div class="title"><i class="fa-solid fa-star"></i></div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress" style="margin-left: auto;">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="left-panel">
+                <lottie-player id="loading-animation" src="/animation/star.json" background="transparent" speed="1" loop
+                    autoplay></lottie-player>
+                <span class="rating"><span class="overall-rating"></span>/5.0</span>
+            </div>
+        </div>
+    </div>
+</template>
+<template id="rating-template">
+    <div class="rating">
+        <div class="rating-header">
+            <div class="name">
+                
+            </div>
+            <div class="description">
+                
+            </div>
+        </div>
+        <div class="stars center">
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+        </div>
+    </div>
+</template>
+<script th:inline="javascript" type="module" defer>
+    const user = /*[[${user}]]*/ null;
+
+    var mainDescription = /*[[${server != null ? server.description : ''}]]*/ '';
     if (mainDescription != null) {
         document.getElementById('server-description').innerHTML = mainDescription;
     }
@@ -209,6 +644,18 @@
     import { loadLinks } from './js/server/linkLoader.js';
     var links = /*[[${server.links}]]*/ null;
     loadLinks(links);
+
+    import { loadServerPreview } from './js/server/serverPreviewLoader.js';
+    var server = /*[[${server}]]*/ null;
+    loadServerPreview(server);
+
+    import { loadRatings } from './js/server/ratingsLoader.js';
+    const playerRatings = /*[[${ratings}]]*/[];
+    loadRatings(playerRatings);
+
+    import { loadRatingCategories } from './js/server/rateServerManager.js';
+    const categoriesJson = /*[[${categories}]]*/ null;
+    loadRatingCategories(categoriesJson, user, server);
 </script>
 
 </html>
