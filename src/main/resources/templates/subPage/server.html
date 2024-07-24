@@ -629,6 +629,22 @@
         </div>
     </div>
 </template>
+<template id="rating-category-template">
+    <div class="rating">
+        <div class="up-panel">
+            <div class="title">Ogólna atmosfera</div>
+            <div class="rating-value">
+                0
+            </div>
+        </div>
+        <div class="progress-bar">
+            <div class="progress">
+
+            </div>
+        </div>
+    </div>
+</template>
+
 <script th:inline="javascript" type="module" defer>
     const user = /*[[${user}]]*/ null;
 
@@ -649,13 +665,13 @@
     var server = /*[[${server}]]*/ null;
     loadServerPreview(server);
 
-    import { loadRatings } from './js/server/ratingsLoader.js';
-    const playerRatings = /*[[${ratings}]]*/[];
-    loadRatings(playerRatings);
-
     import { loadRatingCategories } from './js/server/rateServerManager.js';
     const categoriesJson = /*[[${categories}]]*/ null;
     loadRatingCategories(categoriesJson, user, server);
+
+    import { loadRatings } from './js/server/ratingsLoader.js';
+    const playerRatings = /*[[${ratings}]]*/[];
+    loadRatings(playerRatings, categoriesJson);
 </script>
 
 </html>

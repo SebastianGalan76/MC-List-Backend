@@ -1,5 +1,5 @@
-export function loadRatings(playerRatings) {
-    const averageRatings = calculateAverageRatings(playerRatings);
+export function loadRatings(playerRatings, categories) {
+    const averageRatings = calculateAverageRatings(playerRatings, categories);
     const overallRatign = calculateOverallAverage(averageRatings);
 
     const overallRatingsContainers = document.querySelectorAll('.overall-ratings-container');
@@ -30,6 +30,13 @@ export function loadRatings(playerRatings) {
         return acc;
     }, {});
 
+    categories.forEach(category => {
+        const categoryName = category.name;
+        if(!ratingsCountByCategory[categoryName]){
+            ratingsCountByCategory[categoryName] = { categoryName, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+        }
+    })
+
     const ratingsCategoryContainer = document.getElementById('ratings-categories');
     const ratingTemplate = document.getElementById('ratings-template');
     const ratingTemplateInverse = document.getElementById('ratings-template-inverse');
@@ -58,7 +65,14 @@ export function loadRatings(playerRatings) {
             ratingsView.querySelector('.rating-value').innerHTML = ratings[i];
             ratingsView.querySelector('.progress').style.width = percent + "%";
 
-            var average = ((ratings[5] * 5 + ratings[4] * 4 + ratings[3] * 3 + ratings[2] * 2 + ratings[1] * 1) / totalRatings);
+            var average;
+            if(totalRatings != 0){
+                average = ((ratings[5] * 5 + ratings[4] * 4 + ratings[3] * 3 + ratings[2] * 2 + ratings[1] * 1) / totalRatings);
+            }
+            else{
+                average = 0;
+            }
+
             ratingsElement.querySelector('.overall-rating').innerHTML = average.toFixed(1);
         }
 
@@ -66,26 +80,38 @@ export function loadRatings(playerRatings) {
     });
 }
 
-function calculateAverageRatings(ratings) {
+function calculateAverageRatings(ratings, categories) {
     const categoryRatings = {};
 
-    ratings.forEach(rating => {
-        const categoryId = rating.category.id;
+    categories.forEach(category => {
+        const categoryId = category.id;
         if (!categoryRatings[categoryId]) {
             categoryRatings[categoryId] = {
-                name: rating.category.name,
+                name: category.name,
                 totalRate: 0,
                 count: 0
             };
         }
-        categoryRatings[categoryId].totalRate += rating.rate;
+    });
+
+    ratings.forEach(rate => {
+        const categoryId = rate.category.id;
+        categoryRatings[categoryId].totalRate += rate.rate;
         categoryRatings[categoryId].count += 1;
     });
 
     const averageRatings = [];
     for (const categoryId in categoryRatings) {
         const category = categoryRatings[categoryId];
-        const averageRate = category.totalRate / category.count;
+        var averageRate;
+
+        if(category.count != 0){
+            averageRate = category.totalRate / category.count;
+        }
+        else{
+            averageRate = 0;
+        }
+
         averageRatings.push({
             categoryId: parseInt(categoryId),
             categoryName: category.name,
