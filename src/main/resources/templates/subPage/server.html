@@ -177,33 +177,8 @@
                 <div class="button promote">Promuj</div>
                 <div class="button manage">Przejmij</div>
             </div>
-            <div class="panel" id="link-panel-aside">
+            <div class="panel" id="link-panel-aside" th:if="${server.links.size() > 0}">
                 <div class="title">Linki</div>
-
-                <div class="link">
-                    <div class="icon">
-                        <i class="fa-solid fa-cookie"></i>
-                    </div>
-                    <div class="name">
-                        Strona główna
-                    </div>
-                </div>
-                <div class="link shop">
-                    <div class="icon">
-                        <i class="fa-solid fa-cookie"></i>
-                    </div>
-                    <div class="name">
-                        Strona główna
-                    </div>
-                </div>
-                <div class="link">
-                    <div class="icon">
-                        <i class="fa-solid fa-cookie"></i>
-                    </div>
-                    <div class="name">
-                        Strona główna
-                    </div>
-                </div>
             </div>
             <div id="report-button" class="center">
                 Zgłoś serwer
@@ -211,6 +186,15 @@
         </aside>
     </div>
 </body>
+<template id="template-link">
+    <div class="server-link">
+        <div class="icon">
+        </div>
+        <div class="name">
+            Strona główna
+        </div>
+    </div>
+</template>
 <script th:inline="javascript" type="module" defer>
     var mainDescription = /*[[${server != null ? server.description : ''}]]*/ '';
 
@@ -219,8 +203,12 @@
     }
 
     import { loadData } from './js/server/statisticChart.js';
-    var data = /*[[${server.hourlyPlayerCounts}]]*/ null;
-    loadData(data);
+    var links = /*[[${server.hourlyPlayerCounts}]]*/ null;
+    loadData(links);
+
+    import { loadLinks } from './js/server/linkLoader.js';
+    var links = /*[[${server.links}]]*/ null;
+    loadLinks(links);
 </script>
 
 </html>

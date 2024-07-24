@@ -1,5 +1,6 @@
 package com.coresaken.mcserverlist.controller;
 
+import com.coresaken.mcserverlist.data.dto.LinkDto;
 import com.coresaken.mcserverlist.data.dto.StaffDto;
 import com.coresaken.mcserverlist.data.dto.StringDto;
 import com.coresaken.mcserverlist.data.response.Response;
@@ -72,5 +73,33 @@ public class ManageServerController {
         //TODO Check permissions
 
         return manageServerService.saveServerDescription(server, stringDto);
+    }
+
+    @RequestMapping("/server/{id}/manage/link")
+    public String getManageLinkPage(@PathVariable("id") Long serverId, Model model){
+        Server server = serverService.getServerById(serverId);
+
+        if(server==null){
+
+        }
+
+        model.addAttribute("server", server);
+
+        //TODO Check permissions
+        return "manage/manageLink";
+    }
+
+    @ResponseBody
+    @PostMapping("/server/{id}/manage/link/save")
+    public Response saveServerLinks(@PathVariable("id") Long serverId, @RequestBody LinkDto linkDto){
+        Server server = serverService.getServerById(serverId);
+
+        if(server==null){
+            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Wystąpił nieoczekiwany błąd #4121. Możesz zgłosić go do Administracji strony.").build();
+        }
+
+        //TODO Check permissions
+
+        return manageServerService.saveServerLinks(server, linkDto.getLinks());
     }
 }

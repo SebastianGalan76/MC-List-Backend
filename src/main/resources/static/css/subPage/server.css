@@ -233,36 +233,6 @@
   flex-direction: column;
   gap: 5px;
 }
-#page-wrapper aside #link-panel-aside .link {
-  display: flex;
-  align-items: center;
-  font-weight: 500;
-  font-weight: 1.1em;
-  gap: 10px;
-  background-color: rgb(37, 37, 37);
-  padding: 10px;
-  border-radius: 10px;
-  transition: scale 0.2s ease;
-}
-#page-wrapper aside #link-panel-aside .link .icon {
-  font-size: 1.7em;
-}
-#page-wrapper aside #link-panel-aside .link:hover {
-  scale: 1.05;
-  cursor: pointer;
-}
-#page-wrapper aside #link-panel-aside .link.shop {
-  background-color: rgb(146, 236, 44);
-}
-#page-wrapper aside #link-panel-aside .link.discord {
-  background-color: #7289DA;
-}
-#page-wrapper aside #link-panel-aside .link.facebook {
-  background-color: #4267B2;
-}
-#page-wrapper aside #link-panel-aside .link.tiktok {
-  background-color: #ff0050;
-}
 #page-wrapper aside #report-button {
   background-color: rgb(252, 99, 107);
   padding: 10px 50px;
@@ -280,6 +250,24 @@
   padding: 10px 0;
 }
 
+#link-panel {
+  display: none;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+#link-panel .server-link {
+  padding: 5px 10px !important;
+}
+#link-panel .server-link .icon {
+  font-size: 1em !important;
+}
+@media (max-width: 1200px) {
+  #link-panel {
+    display: flex;
+  }
+}
+
 #statistic-main {
   width: 100%;
 }
@@ -288,4 +276,61 @@
   text-align: center;
   font-size: 1.2em;
   font-weight: 600;
+}
+
+.server-link {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  font-weight: 1.1em;
+  gap: 10px;
+  background-color: rgb(37, 37, 37);
+  padding: 10px;
+  border-radius: 10px;
+  transition: scale 0.2s ease;
+}
+.server-link .icon {
+  display: none;
+  font-size: 1.15em;
+}
+
+.server-link:hover {
+  scale: 1.05;
+  cursor: pointer;
+}
+
+.server-link.shop {
+  background-color: rgb(146, 236, 44);
+}
+
+.server-link.discord {
+  background-color: #7289DA;
+}
+
+.server-link.facebook {
+  background-color: #4267B2;
+}
+
+.server-link.instagram {
+  background-color: #C13584;
+}
+
+.server-link.youtube {
+  background-color: #FF0000;
+}
+
+.server-link.tiktok {
+  background-color: #ff0050;
+}
+
+.server-link.main-page {
+  background-color: #ff822f;
+}
+
+.server-link.twitter {
+  background-color: #282828;
+}
+
+.server-link.regulamin {
+  background-color: #58f4ff;
 }/*# sourceMappingURL=server.css.map */

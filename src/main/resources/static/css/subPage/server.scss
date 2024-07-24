@@ -290,44 +290,7 @@
             display: flex;
             flex-direction: column;
 
-            gap: 5px;
-
-            .link{
-                display: flex;
-                align-items: center;
-                font-weight: 500;
-                font-weight: 1.1em;
-                gap: 10px;
-
-                background-color: rgb(37, 37, 37);
-                padding: 10px;
-                border-radius: 10px;
-
-                transition: scale 0.2s ease;
-
-                .icon{
-                    font-size: 1.7em;
-                }
-            }
-
-            .link:hover{
-                scale: 1.05;
-                cursor: pointer;
-            }
-
-            .link.shop{
-                background-color: rgb(146, 236, 44);;
-            }
-            .link.discord{
-                background-color: #7289DA;
-            }
-            .link.facebook{
-                background-color: #4267B2;
-            }
-            .link.tiktok{
-                background-color: #ff0050;
-            }
-            
+            gap: 5px;            
         }
 
         #report-button{
@@ -353,6 +316,26 @@
     }
 }
 
+#link-panel{
+    display: none;
+    flex-wrap: wrap;
+
+    justify-content: center;
+    gap: 10px;
+
+    .server-link{
+        padding: 5px 10px !important;
+
+        .icon{
+            font-size: 1em !important;
+        }
+    }
+
+    @media (max-width: 1200px){
+        display: flex;
+    }
+}
+
 #statistic-main{
     width: 100%;
 
@@ -362,4 +345,56 @@
         font-size: 1.2em;
         font-weight: 600;
     }
+}
+
+.server-link{
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+    font-weight: 1.1em;
+    gap: 10px;
+
+    background-color: rgb(37, 37, 37);
+    padding: 10px;
+    border-radius: 10px;
+
+    transition: scale 0.2s ease;
+
+    .icon{
+        display: none;
+        font-size: 1.15em;
+    }
+}
+
+.server-link:hover{
+    scale: 1.05;
+    cursor: pointer;
+}
+
+.server-link.shop{
+    background-color: rgb(146, 236, 44);;
+}
+.server-link.discord{
+    background-color: #7289DA;
+}
+.server-link.facebook{
+    background-color: #4267B2;
+}
+.server-link.instagram{
+    background-color: #C13584;
+}
+.server-link.youtube{
+    background-color: #FF0000;
+}
+.server-link.tiktok{
+    background-color: #ff0050;
+}
+.server-link.main-page{
+    background-color: #ff822f;
+}
+.server-link.twitter{
+    background-color: #282828;
+}
+.server-link.regulamin{
+    background-color: #58f4ff;
 }
