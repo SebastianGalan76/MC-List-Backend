@@ -509,12 +509,6 @@
   padding-bottom: 10px;
   display: block;
 }
-#rate-server-popup .content .header #close-rate-server-popup {
-  position: absolute;
-  top: 0;
-  right: 0;
-  font-size: 2em;
-}
 #rate-server-popup .content .header #close-rate-server-popup:hover {
   cursor: pointer;
   color: rgb(92, 92, 92);

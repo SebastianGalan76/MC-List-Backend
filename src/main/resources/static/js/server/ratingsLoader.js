@@ -2,16 +2,21 @@ export function loadRatings(playerRatings, categories) {
     const averageRatings = calculateAverageRatings(playerRatings, categories);
     const overallRatign = calculateOverallAverage(averageRatings);
 
+    const categoryTemplate = document.getElementById('rating-category-template');
+
+
     const overallRatingsContainers = document.querySelectorAll('.overall-ratings-container');
     overallRatingsContainers.forEach(overallRatignsContainer => {
+        const categoriesContainer = overallRatignsContainer.querySelector('.categories-container');
+
         averageRatings.forEach(ratingObj => {
-            const ratingView = overallRatignsContainer.querySelector('#category-' + ratingObj.categoryId);
-            if (ratingView != null) {
-                ratingView.querySelector('.title').innerHTML = ratingObj.categoryName;
-                ratingView.querySelector('.rating-value').innerHTML = ratingObj.averageRate.toFixed(1);;
-                const percent = (ratingObj.averageRate / 5.0) * 100;
-                ratingView.querySelector('.progress').style.width = percent + "%";
-            }
+            const ratingView = categoryTemplate.content.cloneNode(true);
+            ratingView.querySelector('.title').innerHTML = ratingObj.categoryName;
+            ratingView.querySelector('.rating-value').innerHTML = ratingObj.averageRate.toFixed(1);;
+            
+            const percent = (ratingObj.averageRate / 5.0) * 100;
+            ratingView.querySelector('.progress').style.width = percent + "%";
+            categoriesContainer.appendChild(ratingView);
         });
 
         overallRatignsContainer.querySelector('.overall-rating').innerHTML = overallRatign.toFixed(1);
@@ -32,7 +37,7 @@ export function loadRatings(playerRatings, categories) {
 
     categories.forEach(category => {
         const categoryName = category.name;
-        if(!ratingsCountByCategory[categoryName]){
+        if (!ratingsCountByCategory[categoryName]) {
             ratingsCountByCategory[categoryName] = { categoryName, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
         }
     })
@@ -66,10 +71,10 @@ export function loadRatings(playerRatings, categories) {
             ratingsView.querySelector('.progress').style.width = percent + "%";
 
             var average;
-            if(totalRatings != 0){
+            if (totalRatings != 0) {
                 average = ((ratings[5] * 5 + ratings[4] * 4 + ratings[3] * 3 + ratings[2] * 2 + ratings[1] * 1) / totalRatings);
             }
-            else{
+            else {
                 average = 0;
             }
 
@@ -105,10 +110,10 @@ function calculateAverageRatings(ratings, categories) {
         const category = categoryRatings[categoryId];
         var averageRate;
 
-        if(category.count != 0){
+        if (category.count != 0) {
             averageRate = category.totalRate / category.count;
         }
-        else{
+        else {
             averageRate = 0;
         }
 
