@@ -13,7 +13,7 @@ rateButtons.forEach(rateButton => {
         toggleRatingsPanel();
         ratingsPanel.scrollIntoView({
             behavior: 'smooth'
-          });
+        });
     });
 });
 
@@ -69,7 +69,7 @@ export function loadRatingCategories(categories, user, server) {
     })
 }
 
-function toggleRatingsPanel(){
+function toggleRatingsPanel() {
     ratingsPanel.classList.toggle('active');
 }
 

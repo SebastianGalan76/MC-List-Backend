@@ -13,7 +13,7 @@ export function loadRatings(playerRatings, categories) {
             const ratingView = categoryTemplate.content.cloneNode(true);
             ratingView.querySelector('.title').innerHTML = ratingObj.categoryName;
             ratingView.querySelector('.rating-value').innerHTML = ratingObj.averageRate.toFixed(1);;
-            
+
             const percent = (ratingObj.averageRate / 5.0) * 100;
             ratingView.querySelector('.progress').style.width = percent + "%";
             categoriesContainer.appendChild(ratingView);

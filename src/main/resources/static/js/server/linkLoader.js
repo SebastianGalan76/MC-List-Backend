@@ -58,6 +58,8 @@ function getLinkElement(link){
     const name = linkElement.querySelector('.name');
     name.innerHTML = link.name;
 
+    template.querySelector('a').href = link.url;
+
     const lowerCaseName = link.name.toLowerCase();
     for (const [className, data] of Object.entries(classNamesMap)) {
         if (data.name.includes(lowerCaseName)) {

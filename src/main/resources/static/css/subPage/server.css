@@ -3,6 +3,7 @@
   justify-content: center;
   gap: 15px;
   width: 1400px;
+  margin-top: 25px;
 }
 #page-wrapper #container {
   height: 300px;
@@ -122,7 +123,9 @@
   padding-bottom: 100px;
 }
 #page-wrapper #container #main-container #staff-main-container .staff-rank {
-  margin-top: 50px;
+  margin-top: 25px;
+  overflow: hidden;
+  position: relative;
 }
 #page-wrapper #container #main-container #staff-main-container .staff-rank .name {
   font-size: 2em;
@@ -134,7 +137,6 @@
   gap: 20px;
   width: -moz-fit-content;
   width: fit-content;
-  max-width: 100%;
   padding-bottom: 30px;
   overflow: hidden;
   overflow-x: auto;
@@ -249,6 +251,21 @@
   font-size: 1.25em;
   padding: 10px 0;
 }
+@media (max-width: 1450px) {
+  #page-wrapper {
+    width: 100%;
+  }
+}
+@media (max-width: 1350px) {
+  #page-wrapper aside {
+    width: 250px;
+  }
+}
+@media (max-width: 1100px) {
+  #page-wrapper aside {
+    display: none;
+  }
+}
 
 #link-panel {
   display: none;
@@ -256,13 +273,10 @@
   justify-content: center;
   gap: 10px;
 }
-#link-panel .server-link {
-  padding: 5px 10px !important;
-}
 #link-panel .server-link .icon {
   font-size: 1em !important;
 }
-@media (max-width: 1200px) {
+@media (max-width: 1100px) {
   #link-panel {
     display: flex;
   }
@@ -425,7 +439,6 @@
   transition: scale 0.2s ease;
 }
 .server-link .icon {
-  display: none;
   font-size: 1.15em;
 }
 
@@ -435,41 +448,36 @@
 }
 
 .server-link.shop {
-  background-color: rgb(146, 236, 44);
+  background-color: rgb(247, 190, 33);
 }
 
 .server-link.discord {
   background-color: #7289da;
 }
 
+/* 
 .server-link.facebook {
-  background-color: #4267b2;
+    background-color: #4267b2;
 }
-
 .server-link.instagram {
-  background-color: #c13584;
+    background-color: #c13584;
 }
-
 .server-link.youtube {
-  background-color: #ff0000;
+    background-color: #ff0000;
 }
-
 .server-link.tiktok {
-  background-color: #ff0050;
+    background-color: #ff0050;
 }
-
 .server-link.main-page {
-  background-color: #ff822f;
+    background-color: #ff822f;
 }
-
 .server-link.twitter {
-  background-color: #282828;
+    background-color: #282828;
 }
-
 .server-link.regulamin {
-  background-color: #58f4ff;
+    background-color: #58f4ff;
 }
-
+*/
 #rate-server-popup {
   visibility: hidden;
 }
@@ -508,6 +516,12 @@
 #rate-server-popup .content .header span {
   padding-bottom: 10px;
   display: block;
+}
+#rate-server-popup .content .header #close-rate-server-popup {
+  font-size: 1.9em;
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 #rate-server-popup .content .header #close-rate-server-popup:hover {
   cursor: pointer;

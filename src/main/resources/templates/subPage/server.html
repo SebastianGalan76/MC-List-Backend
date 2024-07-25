@@ -9,7 +9,7 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <base href="http://localhost:8080/">
+   <base href="http://localhost:8080/">
 
     <!-- Styles -->
     <link rel="stylesheet" href="/css/global.css">
@@ -149,13 +149,13 @@
                     <div class="button" onclick='showContent(this, "ratings-main-container")'>Oceny</div>
                 </div>
 
-                <div class="main-container-content" id="description-main-container">
+                <div class="main-container-content ql-snow" id="description-main-container">
                     <article id="server-description" class="ql-editor">
 
                     </article>
                 </div>
 
-                <div class="main-container-content" id="staff-main-container"
+                <div style="display: none;" class="main-container-content" id="staff-main-container"
                     th:if="${server.staff != null and server.staff.size() > 0}">
                     <h1 class="content-header">Administracja</h1>
 
@@ -198,11 +198,11 @@
                     </div>
                 </div>
 
-                <div class="main-container-content" id="statistic-main-container">
+                <div style="display: none;" class="main-container-content" id="statistic-main-container">
 
                 </div>
 
-                <div class="main-container-content ratings-global" id="ratings-main-container">
+                <div style="display: none;" class="main-container-content ratings-global" id="ratings-main-container">
                     <div class="ratings-main overall-ratings-container">
                         <div class="header">
                             <div class="title">
@@ -239,17 +239,17 @@
                 </div>
             </div>
 
-            <div class="panel chart" id="statistic-main">
+            <div style="display: none;" class="panel chart" id="statistic-main">
                 <div class="header">Gracze Online (24h)</div>
                 <canvas id="online-player-chart" height="80"></canvas>
             </div>
 
-            <div class="panel ratings-global overall-ratings-container" id="ratings-main">
+            <div style="display: none;" class="panel ratings-global overall-ratings-container" id="ratings-main">
                 <div class="header">
                     <div class="title">
                         Ocena
                     </div>
-                    <div class="more-info-button">
+                    <div class="more-info-button" onclick='showContent(this, "ratings-main-container", true)'>
                         Szczegóły
                     </div>
                 </div>
@@ -280,7 +280,7 @@
         </section>
         <aside>
             <div class="panel" id="ip-panel">
-                <div class="ip-address">Grajkownia.com</div>
+                <div class="ip-address" th:text="${server.name.name}" th:attr="data-copy=${server.ip}" onclick="copyToClipboard(this)"></div>
                 <div class="copy-info">Kliknij, aby skopiować</div>
             </div>
             <div class="panel" id="button-panel">
@@ -298,13 +298,13 @@
     </div>
 </body>
 <template id="template-link">
-    <div class="server-link">
-        <div class="icon">
-        </div>
-        <div class="name">
-            Strona główna
-        </div>
-    </div>
+        <a class="server-link" target="_blank">
+            <div class="icon">
+            </div>
+            <div class="name">
+                Strona główna
+            </div>
+        </a>
 </template>
 <template id="ratings-template">
     <div class="ratings-main">
