@@ -1,18 +1,23 @@
 package com.coresaken.mcserverlist.service.server;
 
+import com.coresaken.mcserverlist.data.dto.BasicServerDto;
 import com.coresaken.mcserverlist.data.dto.LinkDto;
 import com.coresaken.mcserverlist.data.dto.StaffDto;
 import com.coresaken.mcserverlist.data.dto.StringDto;
 import com.coresaken.mcserverlist.data.response.Response;
-import com.coresaken.mcserverlist.database.model.server.Link;
-import com.coresaken.mcserverlist.database.model.server.Server;
+import com.coresaken.mcserverlist.data.response.ServerStatus;
+import com.coresaken.mcserverlist.database.model.server.*;
 import com.coresaken.mcserverlist.database.model.server.staff.Player;
 import com.coresaken.mcserverlist.database.model.server.staff.Rank;
 import com.coresaken.mcserverlist.database.repository.ServerRepository;
+import com.coresaken.mcserverlist.service.NewServerService;
+import com.coresaken.mcserverlist.service.ServerStatusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +25,25 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ManageServerService {
     final ServerRepository serverRepository;
+    final NewServerService newServerService;
+    final ServerStatusService serverStatusService;
+
+    @Transactional
+    public Response saveServerInfo(Server server, BasicServerDto serverDto) {
+        Response response = newServerService.checkServerData(serverDto, server);
+        if(response.getStatus() != HttpStatus.OK){
+            return response;
+        }
+
+        ServerStatus serverStatus = serverStatusService.getServerStatus(serverDto.getIp(), serverDto.getPort());
+        if(!serverStatus.isOnline()){
+            return Response.builder().status(HttpStatus.NOT_FOUND).build();
+        }
+
+        newServerService.saveBasicInformation(server, serverDto, serverStatus);
+        serverRepository.save(server);
+        return Response.builder().status(HttpStatus.OK).message("Zmiany zostały zapisane prawidłowo").build();
+    }
 
     public Response saveServerStaff(Server server, StaffDto staffDto){
         if (server.getStaff() == null) {

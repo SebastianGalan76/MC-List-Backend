@@ -1,10 +1,9 @@
 package com.coresaken.mcserverlist.controller;
 
-import com.coresaken.mcserverlist.data.dto.NewServerDto;
+import com.coresaken.mcserverlist.data.dto.BasicServerDto;
 import com.coresaken.mcserverlist.data.response.Response;
 import com.coresaken.mcserverlist.service.NewServerService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,7 +22,7 @@ public class NewServerController {
 
     @ResponseBody
     @PostMapping("/add-new-server/post")
-    public Response addNewServer(@RequestBody NewServerDto newServerDto){
-        return newServerService.addNewServer(newServerDto);
+    public Response addNewServer(@RequestBody BasicServerDto basicServerDto){
+        return newServerService.addNewServer(basicServerDto);
     }
 }

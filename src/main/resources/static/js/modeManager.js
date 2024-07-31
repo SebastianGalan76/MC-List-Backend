@@ -7,6 +7,7 @@ const listContainer = document.getElementById('mode-list-container');
 const selectedItemsContainer = document.getElementById('selected-mode-container');
 
 var modeArray = [];
+var selectedModeId = -1;
 
 searchInput.addEventListener('focus', function () {
     listPanel.style.display = 'block';
@@ -33,7 +34,7 @@ document.addEventListener('click', function (event) {
 
 loadModes();
 
-export function getSelectedModes(){
+export function getSelectedModes() {
     const selectedModes = modeArray.filter(mode =>
         mode.checkbox.checked
     );
@@ -42,13 +43,19 @@ export function getSelectedModes(){
 }
 
 export function loadSelectedModes(selectedMode) {
-    if (selectedMode == null) {
-        return;
-    }
+    if (selectedMode != null) {
+        selectedModeId = selectedMode.id;
 
-    const mode = modeArray.find(mode => mode.id === selectedMode.id);
-    mode.checkbox.checked = true;
-    addSelectedItem(mode);
+        if(modeArray.length > 0){
+            if (selectedModeId > 0) {
+                const mode = modeArray.find(mode => mode.id === selectedModeId);
+                if (mode != null) {
+                    mode.checkbox.checked = true;
+                    addSelectedItem(mode);
+                }
+            }
+        }
+    }
 }
 
 async function loadModes() {
@@ -58,7 +65,7 @@ async function loadModes() {
             'Content-Type': 'application/json'
         },
     });
-    
+
 
     if (!response.ok) {
         const errorResponse = await response.json();
@@ -99,6 +106,14 @@ function populateList(modeArray) {
         itemDiv.appendChild(label);
         listContainer.appendChild(itemDiv);
     });
+
+    if (selectedModeId > 0) {
+        const mode = modeArray.find(mode => mode.id === selectedModeId);
+        if (mode != null) {
+            mode.checkbox.checked = true;
+            addSelectedItem(mode);
+        }
+    }
 }
 
 function handleCheckboxChange(mode) {
@@ -120,7 +135,7 @@ function addSelectedItem(mode) {
     const removeButtonDiv = document.createElement('div');
     removeButtonDiv.className = 'remove-button';
     removeButtonDiv.innerHTML = '<i class="fa-solid fa-trash"></i>';
-    
+
     removeButtonDiv.addEventListener('click', () => {
         modeDiv.remove();
         mode.checkbox.checked = false;

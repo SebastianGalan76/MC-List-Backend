@@ -1,6 +1,6 @@
 package com.coresaken.mcserverlist.service;
 
-import com.coresaken.mcserverlist.data.dto.NewServerDto;
+import com.coresaken.mcserverlist.data.dto.BasicServerDto;
 import com.coresaken.mcserverlist.data.response.Response;
 import com.coresaken.mcserverlist.data.response.ServerStatus;
 import com.coresaken.mcserverlist.database.model.server.*;
@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.beans.Transient;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,20 +30,20 @@ public class NewServerService {
     final HourlyPlayerCountRepository hourlyPlayerCountRepository;
 
     @Transactional
-    public Response addNewServer(NewServerDto newServerDto){
-        Response response = checkServerData(newServerDto, null);
+    public Response addNewServer(BasicServerDto basicServerDto){
+        Response response = checkServerData(basicServerDto, null);
         if(response.getStatus() != HttpStatus.OK){
             return response;
         }
 
-        ServerStatus serverStatus = serverStatusService.getServerStatus(newServerDto.getIp(), newServerDto.getPort());
+        ServerStatus serverStatus = serverStatusService.getServerStatus(basicServerDto.getIp(), basicServerDto.getPort());
         if(!serverStatus.isOnline()){
             return Response.builder().status(HttpStatus.NOT_FOUND).build();
         }
 
         Server server = new Server();
         server = serverRepository.save(server);
-        saveBasicInformation(server, newServerDto, serverStatus);
+        saveBasicInformation(server, basicServerDto, serverStatus);
 
         HourlyPlayerCount hourlyPlayerCount = new HourlyPlayerCount();
         hourlyPlayerCount.setHour(LocalDateTime.now());
@@ -52,7 +51,7 @@ public class NewServerService {
         hourlyPlayerCount.setServer(server);
         hourlyPlayerCountRepository.save(hourlyPlayerCount);
 
-        List<Mode> modes = newServerDto.getModes();
+        List<Mode> modes = basicServerDto.getModes();
         if(modes != null){
             if(modes.size() == 1){
                 server.setMode(modes.get(0));
@@ -68,7 +67,7 @@ public class NewServerService {
                     SubServer subServer = new SubServer();
                     subServer.setMode(mode);
                     subServer.setName(nameRepository.save(new Name(mode.getName(), "#ffffff")));
-                    subServer.setVersions(newServerDto.getVersions());
+                    subServer.setVersions(basicServerDto.getVersions());
 
                     subServerRepository.save(subServer);
                     if(server.getSubServers() == null){
@@ -84,18 +83,18 @@ public class NewServerService {
         return Response.builder().status(HttpStatus.PERMANENT_REDIRECT).redirect("/server/"+server.getIp()).build();
     }
 
-    private void saveBasicInformation(Server server, NewServerDto newServerDto, ServerStatus serverStatus){
+    public void saveBasicInformation(Server server, BasicServerDto basicServerDto, ServerStatus serverStatus){
         Name name = server.getName();
         if(name != null){
-            name.setName(newServerDto.getIp());
+            name.setName(basicServerDto.getIp());
             nameRepository.save(name);
         }
         else{
-            server.setName(nameRepository.save(new Name(newServerDto.getIp(), "ffffff")));
+            server.setName(nameRepository.save(new Name(basicServerDto.getIp(), "ffffff")));
         }
 
-        server.setIp(newServerDto.getIp().toLowerCase());
-        server.setPort(newServerDto.getPort());
+        server.setIp(basicServerDto.getIp().toLowerCase());
+        server.setPort(basicServerDto.getPort());
         server.setOnline(serverStatus.isOnline());
         server.setOnlinePlayers(serverStatus.getPlayers().getOnline());
 
@@ -107,14 +106,14 @@ public class NewServerService {
         server.setDetail(serverDetail);
 
         if(server.getVersions() == null){
-            server.setVersions(newServerDto.getVersions());
+            server.setVersions(basicServerDto.getVersions());
         }
         else{
             server.getVersions().clear();
-            server.getVersions().addAll(newServerDto.getVersions());
+            server.getVersions().addAll(basicServerDto.getVersions());
         }
 
-        List<Mode> modes = newServerDto.getModes();
+        List<Mode> modes = basicServerDto.getModes();
         if(modes != null){
             if(modes.size()==1){
                 server.setMode(modes.get(0));
@@ -127,7 +126,7 @@ public class NewServerService {
             server.setMode(null);
         }
     }
-    private Response checkServerData(NewServerDto serverDto, Server server){
+    public Response checkServerData(BasicServerDto serverDto, Server server){
         if(serverDto.getIp().contains("aternos.me")){
             return Response.builder().status(HttpStatus.BAD_REQUEST).message("Nie możesz dodawać serwera aternos!").build();
         }

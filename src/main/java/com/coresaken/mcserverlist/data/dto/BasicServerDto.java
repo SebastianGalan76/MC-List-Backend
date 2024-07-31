@@ -9,7 +9,7 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class NewServerDto {
+public class BasicServerDto {
     String ip;
     int port;
 

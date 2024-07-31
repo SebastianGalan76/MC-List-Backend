@@ -7,6 +7,7 @@ const listContainer = document.getElementById('version-list-container');
 const selectedItemsContainer = document.getElementById('selected-version-container');
 
 var versionArray = [];
+var selectedVersionsIds = [];
 
 searchInput.addEventListener('focus', function () {
     listPanel.style.display = 'block';
@@ -33,7 +34,7 @@ document.addEventListener('click', function (event) {
 
 loadVersions();
 
-export function getSelectedVersions(){
+export function getSelectedVersions() {
     const selectedVersions = versionArray.filter(version =>
         version.checkbox.checked
     );
@@ -42,13 +43,21 @@ export function getSelectedVersions(){
 }
 
 export function loadSelectedVersions(selectedVersions) {
-    if (selectedVersions == null) {
-        return;
-    }
+    if(selectedVersions != null){
+        selectedVersionsIds = selectedVersions.map(obj => obj.id);
 
-    const versions = versionArray.find(version => version.id === selectedVersions.id);
-    versions.checkbox.checked = true;
-    addSelectedItem(versions);
+        if(versionArray.length > 0){
+            if (selectedVersionsIds.length > 0) {
+                selectedVersionsIds.forEach(selectedVersion => {
+                    const version = versionArray.find(version => version.id === selectedVersion);
+                    if (version != null) {
+                        version.checkbox.checked = true;
+                        addSelectedItem(version);
+                    }
+                });
+            }
+        }
+    }
 }
 
 async function loadVersions() {
@@ -58,7 +67,7 @@ async function loadVersions() {
             'Content-Type': 'application/json'
         },
     });
-    
+
 
     if (!response.ok) {
         const errorResponse = await response.json();
@@ -99,6 +108,16 @@ function populateList(versionArray) {
         itemDiv.appendChild(label);
         listContainer.appendChild(itemDiv);
     });
+
+    if (selectedVersionsIds.length > 0) {
+        selectedVersionsIds.forEach(selectedVersion => {
+            const version = versionArray.find(version => version.id === selectedVersion);
+            if (version != null) {
+                version.checkbox.checked = true;
+                addSelectedItem(version);
+            }
+        });
+    }
 }
 
 function handleCheckboxChange(version) {
@@ -120,7 +139,7 @@ function addSelectedItem(version) {
     const removeButtonDiv = document.createElement('div');
     removeButtonDiv.className = 'remove-button';
     removeButtonDiv.innerHTML = '<i class="fa-solid fa-trash"></i>';
-    
+
     removeButtonDiv.addEventListener('click', () => {
         versionDiv.remove();
         version.checkbox.checked = false;

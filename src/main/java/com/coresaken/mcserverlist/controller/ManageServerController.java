@@ -1,5 +1,6 @@
 package com.coresaken.mcserverlist.controller;
 
+import com.coresaken.mcserverlist.data.dto.BasicServerDto;
 import com.coresaken.mcserverlist.data.dto.LinkDto;
 import com.coresaken.mcserverlist.data.dto.StaffDto;
 import com.coresaken.mcserverlist.data.dto.StringDto;
@@ -18,6 +19,33 @@ import org.springframework.web.bind.annotation.*;
 public class ManageServerController {
     final ManageServerService manageServerService;
     final ServerService serverService;
+
+    @RequestMapping("/server/{id}/manage/info")
+    public String getManageInfoPage(@PathVariable("id") Long serverId, Model model){
+        Server server = serverService.getServerById(serverId);
+
+        if(server==null){
+
+        }
+        model.addAttribute("server", server);
+
+        //TODO Check permissions
+        return "manage/manageInfo";
+    }
+
+    @ResponseBody
+    @PostMapping("/server/{id}/manage/info/save")
+    public Response saveServeInfo(@PathVariable("id") Long serverId, @RequestBody BasicServerDto serverDto){
+        Server server = serverService.getServerById(serverId);
+
+        if(server==null){
+            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Wystąpił nieoczekiwany błąd #4121. Możesz zgłosić go do Administracji strony.").build();
+        }
+
+        //TODO Check permissions
+
+        return manageServerService.saveServerInfo(server, serverDto);
+    }
 
     @RequestMapping("/server/{id}/manage/staff")
     public String getManageStaffPage(@PathVariable("id") Long serverId, Model model){
