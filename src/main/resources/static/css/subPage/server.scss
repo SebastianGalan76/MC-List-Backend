@@ -8,11 +8,13 @@
     margin-top: 25px;
 
     #container {
-        height: 300px;
         width: calc(1400px - 300px);
         display: flex;
         flex-direction: column;
         gap: 15px;
+        overflow: hidden;
+
+        padding-bottom: 250px;
 
         #server-preview {
             width: 100%;
@@ -153,8 +155,6 @@
 
                 .staff-rank {
                     margin-top: 25px;
-                    overflow: hidden;
-                    position: relative;
 
                     .name {
                         font-size: 2em;
@@ -167,6 +167,7 @@
                         gap: 20px;
 
                         width: fit-content;
+                        max-width: 100%;
                         padding-bottom: 30px;
 
                         overflow: hidden;
@@ -209,11 +210,31 @@
                             }
                         }
                     }
+
+                    @media(max-width: 800px){
+                        margin-top: 15px;
+
+                        .name {
+                            font-size: 1.5em;
+                        }
+
+                        .players-container{
+                            gap: 5px;
+
+                            .player{
+                                .head{
+                                    img{
+                                        width: 80px !important;
+                                        height: 80px !important;
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
 
             #ratings-main-container {
-            
             }
         }
     }
@@ -320,16 +341,16 @@
         }
     }
 
-    @media (max-width: 1450px){
+    @media (max-width: 1450px) {
         width: 100%;
     }
-    @media (max-width: 1350px){
-        aside{
+    @media (max-width: 1350px) {
+        aside {
             width: 250px;
         }
     }
-    @media (max-width: 1100px){
-        aside{
+    @media (max-width: 1100px) {
+        aside {
             display: none;
         }
     }
@@ -367,7 +388,7 @@
 .ratings-global {
     padding: 20px;
 
-    .overall-ratings-container{
+    .overall-ratings-container {
         background-color: $color-dark;
         padding: 20px 0;
         border-radius: 50px;
@@ -397,7 +418,7 @@
             background-color: $color-dark;
         }
     }
-    .header.margin-top{
+    .header.margin-top {
         margin-top: 50px;
     }
 
@@ -425,6 +446,7 @@
 
             lottie-player {
                 width: 200px;
+                height: auto;
             }
 
             .rating {
@@ -472,18 +494,65 @@
                 }
             }
         }
+
+        @media (max-width: 1000px) {
+            width: 100%;
+            padding: 0 20px;
+        }
+
+        @media (max-width: 800px) {
+            gap: 25px;
+            padding: 0 10px;
+        }
+
+        @media (max-width: 700px) {
+            gap: 10px;
+
+            .left-panel {
+                padding: 10px;
+                border-radius: 20px;
+
+                lottie-player {
+                    width: 150px;
+                }
+
+                .rating{
+                    font-size: 1.5em;
+                }
+            }
+        }
+
+        @media (max-width: 500px) {
+            gap: 5px;
+
+            .left-panel {
+                padding: 5px;
+                border-radius: 10px;
+
+                lottie-player {
+                    width: 100px;
+                }
+
+                .rating{
+                    font-size: 1.2em;
+                }
+            }
+        }
+        @media (max-width: 400px) {
+            flex-direction: column;
+        }
     }
 
     .sign-in-to-rate-button {
         padding: 15px 0;
         text-align: center;
         width: 70%;
-    
+
         border-radius: 10px;
         border: 2px solid rgb(255, 60, 0);
         background-color: rgba(255, 60, 0, 0.493);
         transition: all 0.3 ease;
-    
+
         margin-top: 50px;
         font-weight: 600;
     }
@@ -491,23 +560,32 @@
         cursor: pointer;
         background-color: rgba(255, 60, 0, 0.753);
     }
-    
+
     .rate-button {
         padding: 15px 0;
         text-align: center;
         width: 70%;
-    
+
         border-radius: 10px;
         border: 2px solid #ffba3b;
         background-color: #ffba3b5e;
         transition: all 0.3 ease;
-    
+
         margin-top: 50px;
         font-weight: 600;
     }
     .rate-button:hover {
         cursor: pointer;
         background-color: #ffba3bb0;
+    }
+
+    @media (max-width: 700px) {
+        padding: 5px;
+
+        .overall-ratings-container {
+            padding: 10px 0;
+            border-radius: 20px;
+        }
     }
 }
 
@@ -542,7 +620,6 @@
     transition: scale 0.2s ease;
 
     .icon {
-        
         font-size: 1.15em;
     }
 }
@@ -622,14 +699,14 @@
                 display: block;
             }
 
-            #close-rate-server-popup{
+            #close-rate-server-popup {
                 font-size: 1.9em;
                 position: absolute;
                 top: 0;
                 right: 0;
             }
 
-            #close-rate-server-popup:hover{
+            #close-rate-server-popup:hover {
                 cursor: pointer;
                 color: rgb(92, 92, 92);
             }
@@ -669,13 +746,13 @@
                         transition: all 0.2s ease;
                     }
 
-                    i:hover{
+                    i:hover {
                         cursor: pointer;
-                        color:#ffba3b;
+                        color: #ffba3b;
                     }
 
-                    i.active{
-                        color:#ffba3b;
+                    i.active {
+                        color: #ffba3b;
                         font-size: 1.05em;
                     }
                 }
@@ -700,8 +777,8 @@
             cursor: pointer;
             background-color: #ffba3bb0;
         }
-        
-        @media (max-width: 1100px){
+
+        @media (max-width: 1100px) {
             width: 100%;
         }
     }

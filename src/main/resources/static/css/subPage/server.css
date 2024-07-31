@@ -6,11 +6,12 @@
   margin-top: 25px;
 }
 #page-wrapper #container {
-  height: 300px;
   width: 1100px;
   display: flex;
   flex-direction: column;
   gap: 15px;
+  overflow: hidden;
+  padding-bottom: 250px;
 }
 #page-wrapper #container #server-preview {
   width: 100%;
@@ -124,8 +125,6 @@
 }
 #page-wrapper #container #main-container #staff-main-container .staff-rank {
   margin-top: 25px;
-  overflow: hidden;
-  position: relative;
 }
 #page-wrapper #container #main-container #staff-main-container .staff-rank .name {
   font-size: 2em;
@@ -137,6 +136,7 @@
   gap: 20px;
   width: -moz-fit-content;
   width: fit-content;
+  max-width: 100%;
   padding-bottom: 30px;
   overflow: hidden;
   overflow-x: auto;
@@ -169,6 +169,21 @@
   width: 100%;
   display: flex;
   justify-content: space-around;
+}
+@media (max-width: 800px) {
+  #page-wrapper #container #main-container #staff-main-container .staff-rank {
+    margin-top: 15px;
+  }
+  #page-wrapper #container #main-container #staff-main-container .staff-rank .name {
+    font-size: 1.5em;
+  }
+  #page-wrapper #container #main-container #staff-main-container .staff-rank .players-container {
+    gap: 5px;
+  }
+  #page-wrapper #container #main-container #staff-main-container .staff-rank .players-container .player .head img {
+    width: 80px !important;
+    height: 80px !important;
+  }
 }
 #page-wrapper aside {
   width: 300px;
@@ -344,6 +359,7 @@
 }
 .ratings-global .container .left-panel lottie-player {
   width: 200px;
+  height: auto;
 }
 .ratings-global .container .left-panel .rating {
   margin-top: 10px;
@@ -383,6 +399,53 @@
   background-color: #ffba3b;
   border-radius: 6px;
 }
+@media (max-width: 1000px) {
+  .ratings-global .container {
+    width: 100%;
+    padding: 0 20px;
+  }
+}
+@media (max-width: 800px) {
+  .ratings-global .container {
+    gap: 25px;
+    padding: 0 10px;
+  }
+}
+@media (max-width: 700px) {
+  .ratings-global .container {
+    gap: 10px;
+  }
+  .ratings-global .container .left-panel {
+    padding: 10px;
+    border-radius: 20px;
+  }
+  .ratings-global .container .left-panel lottie-player {
+    width: 150px;
+  }
+  .ratings-global .container .left-panel .rating {
+    font-size: 1.5em;
+  }
+}
+@media (max-width: 500px) {
+  .ratings-global .container {
+    gap: 5px;
+  }
+  .ratings-global .container .left-panel {
+    padding: 5px;
+    border-radius: 10px;
+  }
+  .ratings-global .container .left-panel lottie-player {
+    width: 100px;
+  }
+  .ratings-global .container .left-panel .rating {
+    font-size: 1.2em;
+  }
+}
+@media (max-width: 400px) {
+  .ratings-global .container {
+    flex-direction: column;
+  }
+}
 .ratings-global .sign-in-to-rate-button {
   padding: 15px 0;
   text-align: center;
@@ -412,6 +475,15 @@
 .ratings-global .rate-button:hover {
   cursor: pointer;
   background-color: rgba(255, 186, 59, 0.6901960784);
+}
+@media (max-width: 700px) {
+  .ratings-global {
+    padding: 5px;
+  }
+  .ratings-global .overall-ratings-container {
+    padding: 10px 0;
+    border-radius: 20px;
+  }
 }
 
 .chart {
