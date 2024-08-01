@@ -1,18 +1,17 @@
 package com.coresaken.mcserverlist.controller;
 
-import com.coresaken.mcserverlist.data.dto.BasicServerDto;
-import com.coresaken.mcserverlist.data.dto.LinkDto;
-import com.coresaken.mcserverlist.data.dto.StaffDto;
-import com.coresaken.mcserverlist.data.dto.StringDto;
+import com.coresaken.mcserverlist.data.dto.*;
 import com.coresaken.mcserverlist.data.response.Response;
 import com.coresaken.mcserverlist.database.model.server.Server;
 import com.coresaken.mcserverlist.service.server.ManageServerService;
 import com.coresaken.mcserverlist.service.server.ServerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequiredArgsConstructor
@@ -35,7 +34,7 @@ public class ManageServerController {
 
     @ResponseBody
     @PostMapping("/server/{id}/manage/info/save")
-    public Response saveServeInfo(@PathVariable("id") Long serverId, @RequestBody BasicServerDto serverDto){
+    public Response saveServerInfo(@PathVariable("id") Long serverId, @RequestBody BasicServerDto serverDto){
         Server server = serverService.getServerById(serverId);
 
         if(server==null){
@@ -129,5 +128,32 @@ public class ManageServerController {
         //TODO Check permissions
 
         return manageServerService.saveServerLinks(server, linkDto.getLinks());
+    }
+
+    @RequestMapping("/server/{id}/manage/banner")
+    public String getManageBannerPage(@PathVariable("id") Long serverId, Model model){
+        Server server = serverService.getServerById(serverId);
+
+        if(server==null){
+
+        }
+        model.addAttribute("server", server);
+
+        //TODO Check permissions
+        return "manage/manageBanner";
+    }
+
+    @ResponseBody
+    @PostMapping("/server/{id}/manage/banner/save")
+    public Response saveServerBanner(@PathVariable("id") Long serverId, @Param("file") MultipartFile file, @Param("url") String url){
+        Server server = serverService.getServerById(serverId);
+
+        if(server==null){
+            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Wystąpił nieoczekiwany błąd #4121. Możesz zgłosić go do Administracji strony.").build();
+        }
+
+        //TODO Check permissions
+
+        return manageServerService.saveServerBanner(server, file, url);
     }
 }

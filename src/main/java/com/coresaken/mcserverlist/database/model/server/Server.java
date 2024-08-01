@@ -34,7 +34,7 @@ public class Server {
     @Column(columnDefinition = "TEXT")
     String description;
 
-    String bannerUrl;
+    String banner;
 
     @ManyToOne
     @JoinColumn(name = "mode_id")

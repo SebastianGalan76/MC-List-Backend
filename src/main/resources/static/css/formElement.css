@@ -206,6 +206,54 @@
   }
 }
 
+.file-input-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 50px;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: rgba(0, 0, 0, 0.2588235294);
+  border: 2px solid #e2a258;
+  position: relative;
+}
+.file-input-container .file-input {
+  margin-left: 6px;
+  position: relative;
+  overflow: hidden;
+}
+.file-input-container .file-input input[type=file] {
+  position: absolute;
+  opacity: 0;
+  right: 0;
+  top: 0;
+  cursor: pointer;
+}
+.file-input-container .file-input button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #e2a258;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.file-input-container .file-input button:hover {
+  background-color: #ce8e45;
+}
+.file-input-container .file-name {
+  margin-left: 10px;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+.file-input-container .icon {
+  color: #e2a258;
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translate(0, -50%);
+}
+
 input[type=color] {
   -webkit-appearance: none;
   border: none;

@@ -9,13 +9,14 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-   <base href="http://localhost:8080/">
+    <base href="http://localhost:8080/">
 
     <!-- Styles -->
     <link rel="stylesheet" href="/css/global.css">
     <link rel="stylesheet" href="/css/subPage/server.css">
     <link rel="stylesheet" href="/css/quillEditor.css">
-
+    <link rel="stylesheet" href="/css/fragment/header.css">
+    
     <!-- Font Roboto -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -81,6 +82,12 @@
         </div>
     </div>
 
+    <div th:replace="~{fragment/header :: headerFragment}"></div>
+
+    <div id="banner" th:if="${server.banner != null}">
+        <img th:src="@{${server.banner}}">
+    </div>
+    
     <div id="page-wrapper" class="center">
         <section id="container">
             <div id="server-preview" class="panel">

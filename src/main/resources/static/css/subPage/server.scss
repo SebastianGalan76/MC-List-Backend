@@ -1,5 +1,23 @@
 @import "../base";
 
+#banner{
+    width: 100%;
+    max-height: 600px;
+    overflow: hidden;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    img {
+        width: auto;
+        height: auto;
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: cover;
+    }
+}
+
 #page-wrapper {
     display: flex;
     justify-content: center;

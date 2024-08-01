@@ -1,23 +1,22 @@
 package com.coresaken.mcserverlist.service.server;
 
-import com.coresaken.mcserverlist.data.dto.BasicServerDto;
-import com.coresaken.mcserverlist.data.dto.LinkDto;
-import com.coresaken.mcserverlist.data.dto.StaffDto;
-import com.coresaken.mcserverlist.data.dto.StringDto;
+import com.coresaken.mcserverlist.data.dto.*;
 import com.coresaken.mcserverlist.data.response.Response;
 import com.coresaken.mcserverlist.data.response.ServerStatus;
 import com.coresaken.mcserverlist.database.model.server.*;
 import com.coresaken.mcserverlist.database.model.server.staff.Player;
 import com.coresaken.mcserverlist.database.model.server.staff.Rank;
 import com.coresaken.mcserverlist.database.repository.ServerRepository;
+import com.coresaken.mcserverlist.service.BannerFileService;
 import com.coresaken.mcserverlist.service.NewServerService;
 import com.coresaken.mcserverlist.service.ServerStatusService;
+import com.coresaken.mcserverlist.util.LinkChecker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,5 +82,35 @@ public class ManageServerService {
         server.getLinks().addAll(links);
         serverRepository.save(server);
         return Response.builder().status(HttpStatus.OK).build();
+    }
+
+    public Response saveServerBanner(Server server, MultipartFile file, String url) {
+        if(server.getBanner() != null){
+            if(!LinkChecker.isLink(server.getBanner())){
+                BannerFileService.remove(server.getBanner());
+            }
+        }
+
+        if(url == null && file == null){
+            server.setBanner(null);
+        }
+
+        if(LinkChecker.isLink(url)){
+            server.setBanner(url);
+        }
+        else{
+            if(file != null){
+                Response uploadResponse = BannerFileService.upload(file, server);
+                if(uploadResponse.getStatus() != HttpStatus.OK){
+                    return uploadResponse;
+                }
+            }
+            else{
+                server.setBanner(null);
+            }
+        }
+
+        serverRepository.save(server);
+        return Response.builder().status(HttpStatus.OK).message("Ustawiłeś prawidłowo swój banner").build();
     }
 }
