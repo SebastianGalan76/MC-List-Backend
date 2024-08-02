@@ -82,4 +82,17 @@ public class ServerService {
 
         return Response.builder().status(HttpStatus.OK).build();
     }
+
+    public Response deleteServer(Server server){
+        User user = userService.getLoggedUser();
+
+        if(user==null){
+            return Response.builder().status(HttpStatus.UNAUTHORIZED).message("Twoja sesja wygasła. Zaloguj się ponownie, aby usunąć serwer!").build();
+        }
+
+        //TODO uprawnienia
+
+        serverRepository.delete(server);
+        return Response.builder().status(HttpStatus.OK).build();
+    }
 }

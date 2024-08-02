@@ -58,4 +58,16 @@ public class ServerController {
 
         return serverService.rateServer(server, playerRatings);
     }
+
+    @ResponseBody
+    @DeleteMapping("/server/{id}")
+    public Response deleteServer(@PathVariable("id") Long id){
+        Server server = serverService.getServerById(id);
+
+        if(server==null){
+            //TODO error page
+        }
+
+        return serverService.deleteServer(server);
+    }
 }

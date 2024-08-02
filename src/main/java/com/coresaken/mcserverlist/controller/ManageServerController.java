@@ -156,4 +156,17 @@ public class ManageServerController {
 
         return manageServerService.saveServerBanner(server, file, url);
     }
+
+    @RequestMapping("/server/{id}/manage/delete")
+    public String getManageDeletePage(@PathVariable("id") Long serverId, Model model){
+        Server server = serverService.getServerById(serverId);
+
+        if(server==null){
+
+        }
+        model.addAttribute("server", server);
+
+        //TODO Check permissions
+        return "manage/manageDelete";
+    }
 }
