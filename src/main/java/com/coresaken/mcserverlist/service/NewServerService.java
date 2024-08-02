@@ -5,6 +5,7 @@ import com.coresaken.mcserverlist.data.response.Response;
 import com.coresaken.mcserverlist.data.response.ServerStatus;
 import com.coresaken.mcserverlist.database.model.server.*;
 import com.coresaken.mcserverlist.database.repository.*;
+import com.coresaken.mcserverlist.database.repository.server.DailyPlayerCountRepository;
 import com.coresaken.mcserverlist.database.repository.server.ModeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,7 +28,11 @@ public class NewServerService {
     final NameRepository nameRepository;
     final ModeRepository modeRepository;
     final BlockedServerRepository blockedServerRepository;
+
     final HourlyPlayerCountRepository hourlyPlayerCountRepository;
+    final DailyPlayerCountRepository dailyPlayerCountRepository;
+
+    final PlayerStatsService playerStatsService;
 
     @Transactional
     public Response addNewServer(BasicServerDto basicServerDto){
@@ -46,13 +51,19 @@ public class NewServerService {
         saveBasicInformation(server, basicServerDto, serverStatus);
 
         HourlyPlayerCount hourlyPlayerCount = new HourlyPlayerCount();
-        hourlyPlayerCount.setHour(LocalDateTime.now());
+        hourlyPlayerCount.setTime(LocalDateTime.now());
         hourlyPlayerCount.setPlayerCount(serverStatus.getPlayers().getOnline());
         hourlyPlayerCount.setServer(server);
         hourlyPlayerCountRepository.save(hourlyPlayerCount);
 
+        DailyPlayerCount dailyPlayerCount = new DailyPlayerCount();
+        dailyPlayerCount.setTime(LocalDateTime.now());
+        dailyPlayerCount.setPlayerCount(serverStatus.getPlayers().getOnline());
+        dailyPlayerCount.setServer(server);
+        dailyPlayerCountRepository.save(dailyPlayerCount);
+
         List<Mode> modes = basicServerDto.getModes();
-        if(modes != null){
+        if(modes != null && !modes.isEmpty()){
             if(modes.size() == 1){
                 server.setMode(modes.get(0));
             }
@@ -78,7 +89,9 @@ public class NewServerService {
             }
         }
 
-        server.setNextRefreshAt(LocalDateTime.now().plusMinutes(30));
+        server.setNextRefreshAt(LocalDateTime.now().plusMinutes(PlayerStatsService.REFRESH_INTERVAL_MINUTE));
+        playerStatsService.scheduleServer(server);
+
         serverRepository.save(server);
         return Response.builder().status(HttpStatus.PERMANENT_REDIRECT).redirect("/server/"+server.getIp()).build();
     }
@@ -114,7 +127,7 @@ public class NewServerService {
         }
 
         List<Mode> modes = basicServerDto.getModes();
-        if(modes != null){
+        if(modes != null && !modes.isEmpty()){
             if(modes.size()==1){
                 server.setMode(modes.get(0));
             }

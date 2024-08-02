@@ -112,21 +112,21 @@
                         </div>
                     </div>
                     <div class="tag-container">
-                        <div class="tag mode-tag">
+                        <div class="tag mode-tag" style="display: none;">
                             <div class="icon">
                                 <i class="fa-solid fa-dice-d6"></i>
                             </div>
                             <div class="content">
-                                Sieć serwerów
+                                
                             </div>
                         </div>
 
-                        <div class="tag version-tag">
+                        <div class="tag version-tag" style="display: none;">
                             <div class="icon">
                                 <i class="fa-solid fa-code-branch"></i>
                             </div>
                             <div class="content">
-                                1.8-1.21
+                                
                             </div>
                         </div>
                     </div>
@@ -205,8 +205,26 @@
                     </div>
                 </div>
 
-                <div style="display: none;" class="main-container-content" id="statistic-main-container">
+                <div class="main-container-content" id="statistic-main-container">
+                    <div class="chart" style="margin-top: 30px;">
+                        <div class="header">Gracze Online (24h)</div>
+                        <canvas id="online-player-chart" height="80"></canvas>
+                    </div>
 
+                    <div class="chart" style="margin-top: 30px;">
+                        <div class="header">Gracze Online (7d)</div>
+                        <canvas id="daily-player-chart-7" height="80"></canvas>
+                    </div>
+
+                    <div class="chart" style="margin-top: 30px;">
+                        <div class="header">Szczytowa liczba graczy (30d)</div>
+                        <canvas id="daily-player-chart-30" height="80"></canvas>
+                    </div>
+
+                    <div class="chart" style="margin-top: 30px;">
+                        <div class="header">Szczytowa liczba graczy (1r)</div>
+                        <canvas id="daily-player-chart-365" height="80"></canvas>
+                    </div>
                 </div>
 
                 <div style="display: none;" class="main-container-content ratings-global" id="ratings-main-container">
@@ -248,7 +266,7 @@
 
             <div class="panel chart" id="statistic-main">
                 <div class="header">Gracze Online (24h)</div>
-                <canvas id="online-player-chart" height="80"></canvas>
+                <canvas id="online-player-chart-down-panel" height="80"></canvas>
             </div>
 
             <div class="panel ratings-global overall-ratings-container" id="ratings-main">
@@ -533,8 +551,9 @@
     }
 
     import { loadData } from './js/server/statisticChart.js';
-    var links = /*[[${server.hourlyPlayerCounts}]]*/ null;
-    loadData(links);
+    var hourlyPlayerCounts = /*[[${server.hourlyPlayerCounts}]]*/ null;
+    var dailyPlayerCounts = /*[[${server.dailyPlayerCounts}]]*/ null;
+    loadData(hourlyPlayerCounts, dailyPlayerCounts);
 
     import { loadLinks } from './js/server/linkLoader.js';
     var links = /*[[${server.links}]]*/ null;

@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface HourlyPlayerCountRepository extends JpaRepository<HourlyPlayerCount, Long> {
-    List<HourlyPlayerCount> findByServerOrderByHourDesc(Server server);
+    List<HourlyPlayerCount> findByServerOrderByTimeDesc(Server server);
 }

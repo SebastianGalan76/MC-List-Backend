@@ -79,5 +79,10 @@ public class Server {
     List<Link> links = new ArrayList<>();
 
     @OneToMany(mappedBy = "server", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("id ASC")
     List<HourlyPlayerCount> hourlyPlayerCounts;
+
+    @OneToMany(mappedBy = "server", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("id ASC")
+    List<DailyPlayerCount> dailyPlayerCounts;
 }

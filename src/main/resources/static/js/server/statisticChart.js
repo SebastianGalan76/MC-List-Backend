@@ -1,11 +1,4 @@
-export function loadData(data){
-    var labels = data.map(function (entry) {
-        // Konwersja daty na obiekt JavaScript
-        var date = new Date(entry.hour);
-        // Formatowanie czasu do "hh:mm"
-        return ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
-    });
-    
+export function loadData(hourlyPlayerCount, dailyPlayerCount) {
     const plugin = {
         id: 'verticalLiner',
         afterInit: (chart, args, opts) => {
@@ -18,34 +11,50 @@ export function loadData(data){
         beforeTooltipDraw: (chart, args, options) => {
             const { draw } = chart.verticalLiner
             if (!draw) return
-    
+
             const { ctx } = chart
             const { top, bottom } = chart.chartArea
             const { tooltip } = args
             const x = tooltip?.caretX
             if (!x) return
-    
+
             ctx.save()
-    
+
             ctx.beginPath()
             ctx.moveTo(x, top)
             ctx.lineTo(x, bottom)
             ctx.stroke()
-    
+
             ctx.restore()
         }
     }
-    
+
+    const gradient = window['chartjs-plugin-gradient'];
+    Chart.register(gradient);
+
+    // Tworzenie wykresu za pomocą Chart.js
+    createOnlinePlayerChart('online-player-chart', hourlyPlayerCount.slice(0, 48), plugin);
+    createOnlinePlayerChart('daily-player-chart-7', hourlyPlayerCount, plugin);
+    createOnlinePlayerChart('daily-player-chart-30', dailyPlayerCount.slice(0, 30), plugin);
+    createOnlinePlayerChart('daily-player-chart-365', dailyPlayerCount.slice(0, 365), plugin);
+
+    createOnlinePlayerChart('online-player-chart-down-panel', hourlyPlayerCount.slice(0, 48), plugin);
+}
+
+function createOnlinePlayerChart(id, data, plugin) {
+    var labels = data.map(function (entry) {
+        // Konwersja daty na obiekt JavaScript
+        var date = new Date(entry.time);
+        // Formatowanie czasu do "hh:mm"
+        return ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
+    });
+
     var playerCounts = data.map(function (entry) {
         return entry.playerCount;
     });
-    
-    const gradient = window['chartjs-plugin-gradient'];
-    Chart.register(gradient);
-    
-    // Tworzenie wykresu za pomocą Chart.js
-    var ctx = document.getElementById('online-player-chart').getContext('2d');
-    var myChart = new Chart(ctx, {
+
+    var ctx = document.getElementById(id).getContext('2d');
+    new Chart(ctx, {
         type: 'line',
         data: {
             labels: labels,
@@ -81,7 +90,7 @@ export function loadData(data){
                 },
                 y: {
                     beginAtZero: true,
-    
+
                     ticks: {
                         color: '#ffffff80'
                     }

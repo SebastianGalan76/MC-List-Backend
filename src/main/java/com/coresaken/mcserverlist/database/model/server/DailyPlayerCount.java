@@ -12,8 +12,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "hourly_player_count")
-public class HourlyPlayerCount {
+public class DailyPlayerCount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
