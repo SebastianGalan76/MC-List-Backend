@@ -28,7 +28,7 @@ public class ServerService {
 
     public Page<Server> getServers(int page){
         Pageable pageable = PageRequest.of(page - 1, 30);
-        return serverRepository.findAll(pageable);
+        return serverRepository.findAllOrderByVotesAndId(pageable);
     }
 
     @Nullable

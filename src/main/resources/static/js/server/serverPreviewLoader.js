@@ -45,4 +45,7 @@ export function loadServerPreview(serverJson) {
 
     const online = serverPreview.querySelector('.online-value');
     online.innerHTML = serverJson.onlinePlayers;
+
+    const vote = serverPreview.querySelector('.vote-value');
+    vote.innerHTML = serverJson.votes.length;
 }

@@ -33,12 +33,12 @@ export function loadData(hourlyPlayerCount, dailyPlayerCount) {
     Chart.register(gradient);
 
     // Tworzenie wykresu za pomocą Chart.js
-    createOnlinePlayerChart('online-player-chart', hourlyPlayerCount.slice(0, 48), plugin);
+    createOnlinePlayerChart('online-player-chart', hourlyPlayerCount.slice(-48), plugin);
     createOnlinePlayerChart('daily-player-chart-7', hourlyPlayerCount, plugin);
-    createOnlinePlayerChart('daily-player-chart-30', dailyPlayerCount.slice(0, 30), plugin);
-    createOnlinePlayerChart('daily-player-chart-365', dailyPlayerCount.slice(0, 365), plugin);
+    createOnlinePlayerChart('daily-player-chart-30', dailyPlayerCount.slice(-30), plugin);
+    createOnlinePlayerChart('daily-player-chart-365', dailyPlayerCount.slice(-365), plugin);
 
-    createOnlinePlayerChart('online-player-chart-down-panel', hourlyPlayerCount.slice(0, 48), plugin);
+    createOnlinePlayerChart('online-player-chart-down-panel', hourlyPlayerCount.slice(-48), plugin);
 }
 
 function createOnlinePlayerChart(id, data, plugin) {

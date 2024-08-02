@@ -1,6 +1,8 @@
 package com.coresaken.mcserverlist.database.repository;
 
 import com.coresaken.mcserverlist.database.model.server.Server;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,4 +18,7 @@ public interface ServerRepository extends JpaRepository<Server, Long> {
 
     @Query("SELECT s FROM Server s WHERE s.nextRefreshAt IS NOT NULL")
     List<Server> findAllServersWithNextRefreshAtNotNull();
+
+    @Query("SELECT s FROM Server s LEFT JOIN s.votes v GROUP BY s ORDER BY COUNT(v) DESC, s.id DESC")
+    Page<Server> findAllOrderByVotesAndId(Pageable pageable);
 }

@@ -809,3 +809,104 @@
         transform: translate(-50%, 0) scale(1);
     }
 }
+
+#vote-popup {
+    visibility: hidden;
+    position: fixed;
+    z-index: 100000;
+
+    width: 100vw;
+    height: 100vh;
+
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.4);
+        z-index: 500;
+    }
+
+    .content {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -80%) scale(0);
+        width: 400px !important;
+        z-index: 501;
+        border-radius: 10px;
+        transition: transform 0.15s ease;
+        background-color: #323232;
+
+        .header {
+            position: relative;
+            border-bottom: 1px solid rgb(255, 255, 255);
+            padding: 20px 20px;
+
+            .title {
+                font-size: 1.4em;
+                font-weight: 500;
+            }
+            span {
+                padding-bottom: 10px;
+                display: block;
+            }
+
+            #close-vote-popup {
+                font-size: 1.9em;
+                position: absolute;
+                top: 15px;
+                right: 20px;
+            }
+
+            #close-vote-popup:hover {
+                cursor: pointer;
+                color: $color-red;
+            }
+        }
+
+        .container{
+            padding: 20px;
+        }
+
+        .footer{
+            padding: 0 20px 20px 20px;
+
+            #vote-error{
+                margin-bottom: 10px;
+            }
+
+            .vote-button {
+                margin-left: auto;
+
+                padding: 10px 0;
+                text-align: center;
+                width: 40%;
+    
+                border-radius: 10px;
+                border: 2px solid #ffba3b;
+                background-color: #ffba3b5e;
+                transition: all 0.2s ease;
+    
+                font-weight: 600;
+            }
+            .vote-button:hover {
+                cursor: pointer;
+                background-color: #ffba3bb0;
+            }
+        }
+
+        @media (max-width: 400px) {
+            width: 100% !important;
+        }
+    }
+}
+
+#vote-popup.active {
+    visibility: visible;
+
+    .content {
+        transform: translate(-50%, -80%) scale(1);
+    }
+}

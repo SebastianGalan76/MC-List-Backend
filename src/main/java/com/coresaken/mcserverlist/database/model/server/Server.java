@@ -1,6 +1,7 @@
 package com.coresaken.mcserverlist.database.model.server;
 
 import com.coresaken.mcserverlist.database.model.server.staff.Rank;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

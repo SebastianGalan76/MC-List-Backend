@@ -15,8 +15,9 @@
     <link rel="stylesheet" href="/css/global.css">
     <link rel="stylesheet" href="/css/subPage/server.css">
     <link rel="stylesheet" href="/css/quillEditor.css">
+    <link rel="stylesheet" href="/css/formElement.css">
     <link rel="stylesheet" href="/css/fragment/header.css">
-    
+
     <!-- Font Roboto -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -50,6 +51,30 @@
             <a th:href="@{/server/{ip}(ip=${server.ip})}">
                 <div class="action-btn">OK</div>
             </a>
+        </div>
+    </div>
+
+    <div id="vote-popup">
+        <div class="overlay"></div>
+        <div class="content">
+            <div class="header">
+                <div class="title">❤️ Głosowanie</div>
+                <div id="close-vote-popup" onclick="hideVotePopup()"><i class="fa-solid fa-xmark"></i></div>
+            </div>
+
+            <div class="container">
+                <div class="input-area">
+                    <input id="input-vote-nick" type="text" placeholder="Nick" maxlength="256">
+                    <div class="icon">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer">
+                <div class="error" id="vote-error"></div>
+                <div class="vote-button" onclick="vote()">Zagłosuj</div>
+            </div>
         </div>
     </div>
 
@@ -87,7 +112,7 @@
     <div id="banner" th:if="${server.banner != null}">
         <img th:src="@{${server.banner}}">
     </div>
-    
+
     <div id="page-wrapper" class="center">
         <section id="container">
             <div id="server-preview" class="panel">
@@ -117,7 +142,7 @@
                                 <i class="fa-solid fa-dice-d6"></i>
                             </div>
                             <div class="content">
-                                
+
                             </div>
                         </div>
 
@@ -126,7 +151,7 @@
                                 <i class="fa-solid fa-code-branch"></i>
                             </div>
                             <div class="content">
-                                
+
                             </div>
                         </div>
                     </div>
@@ -137,7 +162,7 @@
                         <div class="icon">🟢</div><span class="online-value">0</span>
                     </div>
                     <div class="votes statistic">
-                        <div class="icon">❤️</div>0
+                        <div class="icon">❤️</div><span class="vote-value">0</span>
                     </div>
                 </div>
             </div>
@@ -242,7 +267,7 @@
                                 <span class="rating"><span class="overall-rating"></span>/5.0</span>
                             </div>
                             <div class="right-panel categories-container">
-                                
+
                             </div>
                         </div>
                     </div>
@@ -286,8 +311,8 @@
                             speed="1" loop autoplay></lottie-player>
                         <span class="rating"><span class="overall-rating">0</span>/5.0</span>
                     </div>
-                    <div class="right-panel categories-container" >
-                        
+                    <div class="right-panel categories-container">
+
                     </div>
                 </div>
 
@@ -305,11 +330,12 @@
         </section>
         <aside>
             <div class="panel" id="ip-panel">
-                <div class="ip-address" th:text="${server.name.name}" th:attr="data-copy=${server.ip}" onclick="copyToClipboard(this)"></div>
+                <div class="ip-address" th:text="${server.name.name}" th:attr="data-copy=${server.ip}"
+                    onclick="copyToClipboard(this)"></div>
                 <div class="copy-info">Kliknij, aby skopiować</div>
             </div>
             <div class="panel" id="button-panel">
-                <div class="button vote">Zagłosuj</div>
+                <div class="button vote" onclick="showVotePopup()">Zagłosuj</div>
                 <div class="button promote">Promuj</div>
                 <div class="button manage">Przejmij</div>
             </div>
@@ -323,13 +349,13 @@
     </div>
 </body>
 <template id="template-link">
-        <a class="server-link" target="_blank">
-            <div class="icon">
-            </div>
-            <div class="name">
-                Strona główna
-            </div>
-        </a>
+    <a class="server-link" target="_blank">
+        <div class="icon">
+        </div>
+        <div class="name">
+            Strona główna
+        </div>
+    </a>
 </template>
 <template id="ratings-template">
     <div class="ratings-main">
@@ -511,10 +537,10 @@
     <div class="rating">
         <div class="rating-header">
             <div class="name">
-                
+
             </div>
             <div class="description">
-                
+
             </div>
         </div>
         <div class="stars center">
@@ -570,6 +596,50 @@
     import { loadRatings } from './js/server/ratingsLoader.js';
     const playerRatings = /*[[${ratings}]]*/[];
     loadRatings(playerRatings, categoriesJson);
+</script>
+
+<script th:inline="javascript">
+    const votePopup = document.getElementById('vote-popup');
+    const voteError = document.getElementById('vote-error');
+
+    async function vote() {
+        const voteDto = {
+            serverId: /*[[${server.id}]]*/ null,
+            nick: document.getElementById('input-vote-nick').value
+        }
+
+        try {
+            const response = await fetch('/vote', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(voteDto)
+            });
+
+
+            if (!response.ok) {
+                const errorResponse = await response.json();
+                throw new Error(`Error: ${errorResponse.message}`);
+            }
+            else {
+                const responseJson = await response.json();
+
+                voteError.innerHTML = responseJson.message;
+            }
+        } catch (error) {
+            voteError.innerHTML = error;
+        }
+    }
+
+    function showVotePopup() {
+        votePopup.classList.add('active');
+        voteError.innerHTML = null;
+    }
+
+    function hideVotePopup() {
+        votePopup.classList.remove('active');
+    }
 </script>
 
 </html>

@@ -1,6 +1,6 @@
 package com.coresaken.mcserverlist.database.model.server;
 
-import com.coresaken.mcserverlist.database.model.server.Server;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,10 +19,13 @@ public class Vote {
 
     @ManyToOne
     @JoinColumn(name = "server_id")
+    @JsonIgnore
     Server server;
 
     @Column(name = "voted_at", columnDefinition = "DATE")
     LocalDate votedAt;
+
+    boolean received;
 
     //Voting person
     String ip;

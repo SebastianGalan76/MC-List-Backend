@@ -75,6 +75,9 @@ function populateList(listArray) {
         const online = template.querySelector('.online-value');
         online.innerHTML = serverJson.onlinePlayers;
 
+        const vote = template.querySelector('.vote-value');
+        vote.innerHTML = serverJson.votes.length;
+
         serverListContainer.appendChild(template);
     });
 }
