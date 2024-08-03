@@ -2,7 +2,7 @@ package com.coresaken.mcserverlist.service;
 
 import com.coresaken.mcserverlist.data.dto.BasicServerDto;
 import com.coresaken.mcserverlist.data.response.Response;
-import com.coresaken.mcserverlist.data.response.ServerStatus;
+import com.coresaken.mcserverlist.data.dto.ServerStatusDto;
 import com.coresaken.mcserverlist.database.model.server.*;
 import com.coresaken.mcserverlist.database.repository.*;
 import com.coresaken.mcserverlist.database.repository.server.DailyPlayerCountRepository;
@@ -41,24 +41,24 @@ public class NewServerService {
             return response;
         }
 
-        ServerStatus serverStatus = serverStatusService.getServerStatus(basicServerDto.getIp(), basicServerDto.getPort());
-        if(!serverStatus.isOnline()){
+        ServerStatusDto serverStatusDto = serverStatusService.getServerStatus(basicServerDto.getIp(), basicServerDto.getPort());
+        if(!serverStatusDto.online()){
             return Response.builder().status(HttpStatus.NOT_FOUND).build();
         }
 
         Server server = new Server();
         server = serverRepository.save(server);
-        saveBasicInformation(server, basicServerDto, serverStatus);
+        saveBasicInformation(server, basicServerDto, serverStatusDto);
 
         HourlyPlayerCount hourlyPlayerCount = new HourlyPlayerCount();
         hourlyPlayerCount.setTime(LocalDateTime.now());
-        hourlyPlayerCount.setPlayerCount(serverStatus.getPlayers().getOnline());
+        hourlyPlayerCount.setPlayerCount(serverStatusDto.players().online());
         hourlyPlayerCount.setServer(server);
         hourlyPlayerCountRepository.save(hourlyPlayerCount);
 
         DailyPlayerCount dailyPlayerCount = new DailyPlayerCount();
         dailyPlayerCount.setTime(LocalDateTime.now());
-        dailyPlayerCount.setPlayerCount(serverStatus.getPlayers().getOnline());
+        dailyPlayerCount.setPlayerCount(serverStatusDto.players().online());
         dailyPlayerCount.setServer(server);
         dailyPlayerCountRepository.save(dailyPlayerCount);
 
@@ -96,7 +96,7 @@ public class NewServerService {
         return Response.builder().status(HttpStatus.PERMANENT_REDIRECT).redirect("/server/"+server.getIp()).build();
     }
 
-    public void saveBasicInformation(Server server, BasicServerDto basicServerDto, ServerStatus serverStatus){
+    public void saveBasicInformation(Server server, BasicServerDto basicServerDto, ServerStatusDto serverStatusDto){
         Name name = server.getName();
         if(name != null){
             name.setName(basicServerDto.getIp());
@@ -108,13 +108,13 @@ public class NewServerService {
 
         server.setIp(basicServerDto.getIp().toLowerCase());
         server.setPort(basicServerDto.getPort());
-        server.setOnline(serverStatus.isOnline());
-        server.setOnlinePlayers(serverStatus.getPlayers().getOnline());
+        server.setOnline(serverStatusDto.online());
+        server.setOnlinePlayers(serverStatusDto.players().online());
 
         ServerDetail serverDetail = new ServerDetail();
-        serverDetail.setMotdHtml(serverStatus.getMotd().getHtml());
-        serverDetail.setMotdClean(serverStatus.getMotd().getClean());
-        serverDetail.setIcon(serverStatus.getIcon());
+        serverDetail.setMotdHtml(serverStatusDto.motd().html());
+        serverDetail.setMotdClean(serverStatusDto.motd().clean());
+        serverDetail.setIcon(serverStatusDto.icon());
         serverDetail = serverDetailRepository.save(serverDetail);
         server.setDetail(serverDetail);
 

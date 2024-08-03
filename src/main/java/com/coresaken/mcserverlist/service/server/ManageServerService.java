@@ -2,7 +2,7 @@ package com.coresaken.mcserverlist.service.server;
 
 import com.coresaken.mcserverlist.data.dto.*;
 import com.coresaken.mcserverlist.data.response.Response;
-import com.coresaken.mcserverlist.data.response.ServerStatus;
+import com.coresaken.mcserverlist.data.dto.ServerStatusDto;
 import com.coresaken.mcserverlist.database.model.server.*;
 import com.coresaken.mcserverlist.database.model.server.staff.Player;
 import com.coresaken.mcserverlist.database.model.server.staff.Rank;
@@ -34,12 +34,12 @@ public class ManageServerService {
             return response;
         }
 
-        ServerStatus serverStatus = serverStatusService.getServerStatus(serverDto.getIp(), serverDto.getPort());
-        if(!serverStatus.isOnline()){
+        ServerStatusDto serverStatusDto = serverStatusService.getServerStatus(serverDto.getIp(), serverDto.getPort());
+        if(!serverStatusDto.online()){
             return Response.builder().status(HttpStatus.NOT_FOUND).build();
         }
 
-        newServerService.saveBasicInformation(server, serverDto, serverStatus);
+        newServerService.saveBasicInformation(server, serverDto, serverStatusDto);
         serverRepository.save(server);
         return Response.builder().status(HttpStatus.OK).message("Zmiany zostały zapisane prawidłowo").build();
     }

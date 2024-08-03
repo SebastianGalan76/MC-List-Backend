@@ -1,6 +1,6 @@
 package com.coresaken.mcserverlist.controller;
 
-import com.coresaken.mcserverlist.data.response.ServerStatus;
+import com.coresaken.mcserverlist.data.dto.ServerStatusDto;
 import com.coresaken.mcserverlist.service.ServerStatusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +13,7 @@ public class ServerStatusController {
     final ServerStatusService serverStatusService;
 
     @GetMapping("/server/status/{address}")
-    public ServerStatus getServerStatus(@PathVariable String address) {
+    public ServerStatusDto getServerStatus(@PathVariable String address) {
         return serverStatusService.getServerStatus(address);
     }
 }

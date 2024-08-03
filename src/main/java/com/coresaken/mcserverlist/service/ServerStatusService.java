@@ -1,27 +1,43 @@
 package com.coresaken.mcserverlist.service;
 
-import com.coresaken.mcserverlist.data.response.ServerStatus;
+import com.coresaken.mcserverlist.data.dto.ServerStatusDto;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestTemplate;
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
 @Service
 public class ServerStatusService {
 
-    public ServerStatus getServerStatus(String address) {
-        RestTemplate restTemplate = new RestTemplate();
+    final HttpClient client = HttpClient.newHttpClient();
+    final ObjectMapper objectMapper = new ObjectMapper();
+
+    public ServerStatusDto getServerStatus(String address) {
         String url = "https://api.mcstatus.io/v2/status/java/" + address;
-        try{
-            return restTemplate.getForObject(url, ServerStatus.class);
-        }catch (HttpClientErrorException e){
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .GET()
+                .build();
+
+        try {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            return objectMapper.readValue(response.body(), ServerStatusDto.class);
+        } catch (HttpClientErrorException e) {
             return null;
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public ServerStatus getServerStatus(String ip, int port) {
+    public ServerStatusDto getServerStatus(String ip, int port) {
         StringBuilder finalAddress = new StringBuilder();
         finalAddress.append(ip);
-        if(port>0){
+        if (port > 0) {
             finalAddress.append(":").append(port);
         }
 

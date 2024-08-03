@@ -1,6 +1,6 @@
 package com.coresaken.mcserverlist.service;
 
-import com.coresaken.mcserverlist.data.response.ServerStatus;
+import com.coresaken.mcserverlist.data.dto.ServerStatusDto;
 import com.coresaken.mcserverlist.database.model.server.DailyPlayerCount;
 import com.coresaken.mcserverlist.database.model.server.HourlyPlayerCount;
 import com.coresaken.mcserverlist.database.model.server.Server;
@@ -11,7 +11,6 @@ import com.coresaken.mcserverlist.database.repository.ServerRepository;
 import com.coresaken.mcserverlist.database.repository.server.DailyPlayerCountRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +18,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -89,19 +87,19 @@ public class PlayerStatsService {
     }
 
     private void refreshServer(Server server) {
-        ServerStatus serverResponse = serverStatusService.getServerStatus(server.getIp(), server.getPort());
+        ServerStatusDto serverResponse = serverStatusService.getServerStatus(server.getIp(), server.getPort());
 
-        server.setOnline(serverResponse.isOnline());
-        server.setOnlinePlayers(serverResponse.getPlayers().getOnline());
+        server.setOnline(serverResponse.online());
+        server.setOnlinePlayers(serverResponse.players().online());
 
         ServerDetail serverDetail = server.getDetail();
-        serverDetail.setIcon(serverResponse.getIcon());
-        serverDetail.setMotdHtml(serverResponse.getMotd().getHtml());
-        serverDetail.setMotdClean(serverResponse.getMotd().getClean());
+        serverDetail.setIcon(serverResponse.icon());
+        serverDetail.setMotdHtml(serverResponse.motd().html());
+        serverDetail.setMotdClean(serverResponse.motd().clean());
         server.setDetail(serverDetail);
 
         server.setNextRefreshAt(LocalDateTime.now().plusMinutes(REFRESH_INTERVAL_MINUTE));
-        savePlayerStatistic(server, serverResponse.getPlayers().getOnline());
+        savePlayerStatistic(server, serverResponse.players().online());
 
         serverDetailRepository.save(serverDetail);
         serverRepository.save(server);
