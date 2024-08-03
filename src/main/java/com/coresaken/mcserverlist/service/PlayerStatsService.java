@@ -67,7 +67,7 @@ public class PlayerStatsService {
         if (existingCounts.size() >= 336) {
             hourlyPlayerCountRepository.delete(existingCounts.get(existingCounts.size() - 1));
         }
-        List<DailyPlayerCount> dailyPlayerCountList = dailyPlayerCountRepository.findByDate(LocalDate.now());
+        List<DailyPlayerCount> dailyPlayerCountList = dailyPlayerCountRepository.findByDate(LocalDate.now(), server);
         if(!dailyPlayerCountList.isEmpty()){
             DailyPlayerCount dailyPlayerCount = dailyPlayerCountList.get(0);
             if(dailyPlayerCount.getPlayerCount() < playerCount){

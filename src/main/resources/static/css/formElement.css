@@ -300,4 +300,21 @@ input[type=color]::-webkit-color-swatch {
 .margin-30 {
   margin-top: 30px;
   margin-bottom: 30px;
+}
+
+.select-value-area {
+  background-color: rgba(0, 0, 0, 0.2588235294);
+  border: 2px solid #e2a258;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 16px;
+  color: #e2a258;
+}
+.select-value-area option {
+  background-color: #f5f5f5;
+  color: #e2a258;
+}
+.select-value-area option:checked {
+  background-color: #e2a258;
+  color: #f5f5f5;
 }/*# sourceMappingURL=formElement.css.map */

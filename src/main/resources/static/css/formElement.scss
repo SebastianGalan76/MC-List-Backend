@@ -271,8 +271,6 @@
         position: relative;
         overflow: hidden;
 
-
-
         input[type="file"] {
             position: absolute;
             opacity: 0;
@@ -280,7 +278,7 @@
             top: 0;
             cursor: pointer;
         }
-    
+
         button {
             display: inline-block;
             padding: 10px 20px;
@@ -290,7 +288,7 @@
             border-radius: 4px;
             cursor: pointer;
         }
-    
+
         button:hover {
             background-color: $color-theme-dark;
         }
@@ -356,4 +354,23 @@ input[type="color"]::-webkit-color-swatch {
 .margin-30 {
     margin-top: 30px;
     margin-bottom: 30px;
+}
+
+.select-value-area {
+    background-color: $color-dark; 
+    border: 2px solid $color-theme;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 16px;
+    color: $color-theme;
+
+    option {
+        background-color: $color-white;
+        color: $color-theme;
+    }
+
+    option:checked {
+        background-color: $color-theme;
+        color: $color-white;
+    }
 }

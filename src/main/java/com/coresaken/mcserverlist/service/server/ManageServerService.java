@@ -3,6 +3,7 @@ package com.coresaken.mcserverlist.service.server;
 import com.coresaken.mcserverlist.data.dto.*;
 import com.coresaken.mcserverlist.data.response.Response;
 import com.coresaken.mcserverlist.data.dto.ServerStatusDto;
+import com.coresaken.mcserverlist.database.model.User;
 import com.coresaken.mcserverlist.database.model.server.*;
 import com.coresaken.mcserverlist.database.model.server.staff.Player;
 import com.coresaken.mcserverlist.database.model.server.staff.Rank;
@@ -10,6 +11,7 @@ import com.coresaken.mcserverlist.database.repository.ServerRepository;
 import com.coresaken.mcserverlist.service.BannerFileService;
 import com.coresaken.mcserverlist.service.NewServerService;
 import com.coresaken.mcserverlist.service.ServerStatusService;
+import com.coresaken.mcserverlist.service.UserService;
 import com.coresaken.mcserverlist.util.LinkChecker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,7 +20,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +31,7 @@ public class ManageServerService {
     final ServerRepository serverRepository;
     final NewServerService newServerService;
     final ServerStatusService serverStatusService;
+    final UserService userService;
 
     @Transactional
     public Response saveServerInfo(Server server, BasicServerDto serverDto) {
@@ -112,5 +118,41 @@ public class ManageServerService {
 
         serverRepository.save(server);
         return Response.builder().status(HttpStatus.OK).message("Ustawiłeś prawidłowo swój banner").build();
+    }
+
+    @Transactional
+    public Response saveServerRoles(Server server, ServerRoleDto serverRoleDto) {
+        Set<ServerUserRole> ownerRole = server.getServerUserRoles().stream()
+                .filter(role -> role.getRole() == ServerUserRole.Role.OWNER)
+                .collect(Collectors.toSet());
+
+        server.getServerUserRoles().clear();
+        server.getServerUserRoles().addAll(ownerRole);
+        if(serverRoleDto.getRoles() == null){
+            return Response.builder().status(HttpStatus.OK).build();
+        }
+
+        Set<Long> savedIds = ownerRole.stream().map(sur -> sur.getUser().getId()).collect(Collectors.toSet());
+
+        for(ServerRoleDto.RoleDto roleDto: serverRoleDto.getRoles()){
+            User user = userService.getUserByEmailOrLogin(roleDto.getUser().getLogin());
+            if(user == null || savedIds.contains(user.getId())){
+                continue;
+            }
+
+            try{
+                ServerUserRole.Role role = ServerUserRole.Role.valueOf(roleDto.getRole());
+                ServerUserRole serverUserRole = new ServerUserRole();
+                serverUserRole.setUser(user);
+                serverUserRole.setServer(server);
+                serverUserRole.setRole(role);
+                server.getServerUserRoles().add(serverUserRole);
+                savedIds.add(user.getId());
+            }catch (IllegalArgumentException e){
+            }
+        }
+
+        serverRepository.save(server);
+        return Response.builder().status(HttpStatus.OK).build();
     }
 }

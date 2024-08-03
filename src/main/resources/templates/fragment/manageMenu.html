@@ -4,14 +4,15 @@
 <body>
     <div th:fragment="menuFragment">
         <div id="aside-menu">
-            <a th:href="'/server/' + ${server.id} + '/manage/info'">
+            <a th:href="'/server/' + ${server.id} + '/manage/info'" th:if="${role != null and role.value >= T(com.coresaken.mcserverlist.database.model.server.ServerUserRole.Role).ADMINISTRATOR.value}">
                 <li>Podstawowe informacje</li>
             </a>
-            <a th:href="'/server/' + ${server.id} + '/manage/banner'"><li>Baner</li></a>
-            <a th:href="'/server/' + ${server.id} + '/manage/description'"><li>Opis serwera</li></a>
-            <a th:href="'/server/' + ${server.id} + '/manage/link'"><li>Linki</li></a>
-            <a th:href="'/server/' + ${server.id} + '/manage/staff'"><li>Administracja</li></a>
-            <a th:href="'/server/' + ${server.id} + '/manage/delete'"><li>Usuń serwer</li></a>
+            <a th:href="'/server/' + ${server.id} + '/manage/banner'" th:if="${role != null and role.value >= T(com.coresaken.mcserverlist.database.model.server.ServerUserRole.Role).MODERATOR.value}"><li>Baner</li></a>
+            <a th:href="'/server/' + ${server.id} + '/manage/description'" th:if="${role != null and role.value >= T(com.coresaken.mcserverlist.database.model.server.ServerUserRole.Role).HELPER.value}"><li>Opis serwera</li></a>
+            <a th:href="'/server/' + ${server.id} + '/manage/link'" th:if="${role != null and role.value >= T(com.coresaken.mcserverlist.database.model.server.ServerUserRole.Role).MODERATOR.value}"><li>Linki</li></a>
+            <a th:href="'/server/' + ${server.id} + '/manage/staff'" th:if="${role != null and role.value >= T(com.coresaken.mcserverlist.database.model.server.ServerUserRole.Role).MODERATOR.value}"><li>Administracja</li></a>
+            <a th:href="'/server/' + ${server.id} + '/manage/role'" th:if="${role != null and role.value >= T(com.coresaken.mcserverlist.database.model.server.ServerUserRole.Role).ADMINISTRATOR.value}"><li>Uprawnienia</li></a>
+            <a th:href="'/server/' + ${server.id} + '/manage/delete'" th:if="${role != null and role.value >= T(com.coresaken.mcserverlist.database.model.server.ServerUserRole.Role).ADMINISTRATOR.value}"><li>Usuń serwer</li></a>
         </div>
     </div>
 </body>

@@ -1,13 +1,13 @@
 package com.coresaken.mcserverlist.controller;
 
 import com.coresaken.mcserverlist.data.response.Response;
-import com.coresaken.mcserverlist.database.model.User;
 import com.coresaken.mcserverlist.database.model.server.Server;
 import com.coresaken.mcserverlist.database.model.server.ratings.PlayerRating;
 import com.coresaken.mcserverlist.database.repository.PlayerRatingRepository;
 import com.coresaken.mcserverlist.database.repository.RatingCategoryRepository;
 import com.coresaken.mcserverlist.service.UserService;
 import com.coresaken.mcserverlist.service.server.ServerService;
+import com.coresaken.mcserverlist.util.PermissionChecker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -16,7 +16,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -37,13 +36,14 @@ public class ServerController {
         Server server = serverService.getServerByIp(ip);
 
         if(server==null){
-            //TODO error page
+            return "error/404";
         }
 
         model.addAttribute("user", userService.getLoggedUser());
         model.addAttribute("server", server);
         model.addAttribute("ratings", playerRatingRepository.findByServer(server));
         model.addAttribute("categories", ratingCategoryRepository.findAll());
+        model.addAttribute("role", PermissionChecker.getRoleForServer(userService.getLoggedUser(), server));
         return "subPage/server";
     }
 
@@ -53,7 +53,7 @@ public class ServerController {
         Server server = serverService.getServerByIp(ip);
 
         if(server==null){
-            //TODO error page
+            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Wystąpił nieoczekiwany błąd #8741. Możesz zgłosić go do Administracji strony.").build();
         }
 
         return serverService.rateServer(server, playerRatings);
@@ -65,7 +65,7 @@ public class ServerController {
         Server server = serverService.getServerById(id);
 
         if(server==null){
-            //TODO error page
+            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Wystąpił nieoczekiwany błąd #8741. Możesz zgłosić go do Administracji strony.").build();
         }
 
         return serverService.deleteServer(server);

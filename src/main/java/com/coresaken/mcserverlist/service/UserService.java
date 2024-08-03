@@ -22,7 +22,9 @@ public class UserService {
     }
 
     @Nullable
-    public User getUserByEmail(String email){
-        return userRepository.findByEmail(email).orElse(null);
+    public User getUserByEmailOrLogin(String identifier){
+        return userRepository.findByEmailOrLogin(identifier, identifier).orElse(null);
     }
+
+
 }
