@@ -7,6 +7,7 @@ import com.coresaken.mcserverlist.database.model.User;
 import com.coresaken.mcserverlist.database.model.server.*;
 import com.coresaken.mcserverlist.database.model.server.staff.Player;
 import com.coresaken.mcserverlist.database.model.server.staff.Rank;
+import com.coresaken.mcserverlist.database.repository.NameRepository;
 import com.coresaken.mcserverlist.database.repository.ServerRepository;
 import com.coresaken.mcserverlist.service.BannerFileService;
 import com.coresaken.mcserverlist.service.NewServerService;
@@ -32,6 +33,8 @@ public class ManageServerService {
     final NewServerService newServerService;
     final ServerStatusService serverStatusService;
     final UserService userService;
+
+    final NameRepository nameRepository;
 
     @Transactional
     public Response saveServerInfo(Server server, BasicServerDto serverDto) {
@@ -150,6 +153,27 @@ public class ManageServerService {
                 savedIds.add(user.getId());
             }catch (IllegalArgumentException e){
             }
+        }
+
+        serverRepository.save(server);
+        return Response.builder().status(HttpStatus.OK).build();
+    }
+
+    @Transactional
+    public Response saveSubServers(Server server, ListDto<SubServerDto> subServersDto) {
+        server.getSubServers().clear();
+
+
+        for(SubServerDto subServerDto:subServersDto.getData()){
+            SubServer subServer = new SubServer();
+            subServer.setIndex(subServerDto.getIndex());
+
+            subServer.setServer(server);
+            subServer.setName(nameRepository.save(new Name(subServerDto.getName(), subServerDto.getColor())));
+            subServer.setMode(subServerDto.getMode());
+            subServer.setVersions(subServerDto.getVersions());
+
+            server.getSubServers().add(subServer);
         }
 
         serverRepository.save(server);

@@ -49,11 +49,10 @@ public class Server {
 
     LocalDateTime nextRefreshAt;
 
-    @ManyToMany
-    @JoinTable(
-            name = "server_subserver",
-            joinColumns = @JoinColumn(name = "server_id"),
-            inverseJoinColumns = @JoinColumn(name = "subserver_id")
+    @OneToMany(
+            mappedBy = "server",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
     )
     List<SubServer> subServers;
 

@@ -159,3 +159,14 @@ function removeSelectedItem(version) {
         version.view = null;
     }
 }
+
+export function removeAllSelectedVersions(){
+    versionArray.forEach(version => {
+        if(version.checkbox.checked && version.view != null){
+            version.view.remove();
+            version.view = null;
+            
+            version.checkbox.checked = false;
+        }
+    })
+}

@@ -241,6 +241,39 @@ public class ManageServerController {
         return manageServerService.saveServerRoles(server, serverRoleDto);
     }
 
+    @RequestMapping("/server/{id}/manage/subserver")
+    public String getManageSubServerPage(@PathVariable("id") Long serverId, Model model){
+        Server server = serverService.getServerById(serverId);
+        User user = userService.getLoggedUser();
+
+        if(server==null){
+            return "error/404";
+        }
+        if(!PermissionChecker.hasPermissionForServer(user, server, ServerUserRole.Role.MODERATOR)){
+            return "error/403";
+        }
+
+        model.addAttribute("server", server);
+        model.addAttribute("role", PermissionChecker.getRoleForServer(user, server));
+
+        return "manage/manageSubserver";
+    }
+
+    @ResponseBody
+    @PostMapping("/server/{id}/manage/subserver/save")
+    public Response saveSubServers(@PathVariable("id") Long serverId, @RequestBody ListDto<SubServerDto> subServersDto){
+        Server server = serverService.getServerById(serverId);
+
+        if(server==null){
+            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Wystąpił nieoczekiwany błąd #4262. Możesz zgłosić go do Administracji strony.").build();
+        }
+        if(!PermissionChecker.hasPermissionForServer(userService.getLoggedUser(), server, ServerUserRole.Role.MODERATOR)){
+            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Nie posiadasz wymaganych uprawnień, aby to zrobić!").build();
+        }
+
+        return manageServerService.saveSubServers(server, subServersDto);
+    }
+
     @RequestMapping("/server/{id}/manage/delete")
     public String getManageDeletePage(@PathVariable("id") Long serverId, Model model){
         Server server = serverService.getServerById(serverId);

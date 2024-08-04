@@ -69,7 +69,7 @@ public class NewServerService {
             }
             else{
                 server.setMode(modeRepository.getReferenceById(1L));
-
+                int index = 0;
                 for(Mode mode:modes){
                     if(mode.getId() == 1){
                         continue;
@@ -79,12 +79,15 @@ public class NewServerService {
                     subServer.setMode(mode);
                     subServer.setName(nameRepository.save(new Name(mode.getName(), "#ffffff")));
                     subServer.setVersions(basicServerDto.getVersions());
+                    subServer.setIndex(index);
+                    subServer.setServer(server);
 
                     subServerRepository.save(subServer);
                     if(server.getSubServers() == null){
                         server.setSubServers(new ArrayList<>());
                     }
                     server.getSubServers().add(subServer);
+                    index++;
                 }
             }
         }
@@ -103,7 +106,7 @@ public class NewServerService {
             nameRepository.save(name);
         }
         else{
-            server.setName(nameRepository.save(new Name(basicServerDto.getIp(), "ffffff")));
+            server.setName(nameRepository.save(new Name(basicServerDto.getIp(), "#ffffff")));
         }
 
         server.setIp(basicServerDto.getIp().toLowerCase());

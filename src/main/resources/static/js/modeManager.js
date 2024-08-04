@@ -6,6 +6,8 @@ const listContainer = document.getElementById('mode-list-container');
 
 const selectedItemsContainer = document.getElementById('selected-mode-container');
 
+var singleSelection = false;
+
 var modeArray = [];
 var selectedModeId = -1;
 
@@ -56,6 +58,10 @@ export function loadSelectedModes(selectedMode) {
             }
         }
     }
+}
+
+export function onlySingleSelection(){
+    singleSelection = true;
 }
 
 async function loadModes() {
@@ -125,6 +131,10 @@ function handleCheckboxChange(mode) {
 }
 
 function addSelectedItem(mode) {
+    if(singleSelection){
+        removeAllSelectedModes();
+    }
+
     const modeDiv = document.createElement('div');
     modeDiv.className = 'item';
 
@@ -154,4 +164,15 @@ function removeSelectedItem(mode) {
 
         mode.view = null;
     }
+}
+
+export function removeAllSelectedModes(){
+    modeArray.forEach(mode => {
+        if(mode.checkbox.checked && mode.view != null){
+            mode.view.remove();
+            mode.view = null;
+            
+            mode.checkbox.checked = false;
+        }
+    })
 }
