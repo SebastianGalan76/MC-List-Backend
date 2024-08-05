@@ -1,10 +1,10 @@
 @import "../base";
 
-#banner{
+#banner {
     width: 100%;
     max-height: 600px;
     overflow: hidden;
-    
+
     display: flex;
     justify-content: center;
     align-items: center;
@@ -229,19 +229,19 @@
                         }
                     }
 
-                    @media(max-width: 800px){
+                    @media (max-width: 800px) {
                         margin-top: 15px;
 
                         .name {
                             font-size: 1.5em;
                         }
 
-                        .players-container{
+                        .players-container {
                             gap: 5px;
 
-                            .player{
-                                .head{
-                                    img{
+                            .player {
+                                .head {
+                                    img {
                                         width: 80px !important;
                                         height: 80px !important;
                                     }
@@ -252,7 +252,52 @@
                 }
             }
 
-            #ratings-main-container {
+            #subservers-main-container {
+                position: relative;
+
+                #subservers-container {
+                    width: fit-content;
+                    max-width: 100%;
+                    margin-top: 40px;
+
+                    display: flex;
+                    justify-content: center;
+                    flex-wrap: wrap;
+                    gap: 20px;
+                }
+
+                .subserver {
+                    background-color: $color-dark;
+                    padding: 20px;
+                    border-radius: 10px;
+                    width: 300px;
+                    text-align: center;
+
+                    .title {
+                        font-size: 1.2em;
+                        font-weight: 700;
+                    }
+
+                    .tag-container {
+                        margin-top: 20px;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        gap: 10px;
+                        font-size: 0.9em;
+
+                        .tag {
+                            display: flex;
+                            gap: 8px;
+
+                            background-color: #ffffff1a;
+                            width: fit-content;
+
+                            padding: 3px 10px;
+                            border-radius: 15px;
+                        }
+                    }
+                }
             }
         }
     }
@@ -534,7 +579,7 @@
                     width: 150px;
                 }
 
-                .rating{
+                .rating {
                     font-size: 1.5em;
                 }
             }
@@ -551,7 +596,7 @@
                     width: 100px;
                 }
 
-                .rating{
+                .rating {
                     font-size: 1.2em;
                 }
             }
@@ -866,14 +911,14 @@
             }
         }
 
-        .container{
+        .container {
             padding: 20px;
         }
 
-        .footer{
+        .footer {
             padding: 0 20px 20px 20px;
 
-            #vote-error{
+            #vote-error {
                 margin-bottom: 10px;
             }
 
@@ -883,12 +928,12 @@
                 padding: 10px 0;
                 text-align: center;
                 width: 40%;
-    
+
                 border-radius: 10px;
                 border: 2px solid #ffba3b;
                 background-color: #ffba3b5e;
                 transition: all 0.2s ease;
-    
+
                 font-weight: 600;
             }
             .vote-button:hover {

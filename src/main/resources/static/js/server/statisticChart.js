@@ -33,15 +33,15 @@ export function loadData(hourlyPlayerCount, dailyPlayerCount) {
     Chart.register(gradient);
 
     // Tworzenie wykresu za pomocą Chart.js
-    createOnlinePlayerChart('online-player-chart', hourlyPlayerCount.slice(-48), plugin);
-    createOnlinePlayerChart('daily-player-chart-7', hourlyPlayerCount, plugin);
-    createOnlinePlayerChart('daily-player-chart-30', dailyPlayerCount.slice(-30), plugin);
-    createOnlinePlayerChart('daily-player-chart-365', dailyPlayerCount.slice(-365), plugin);
+    createOnlinePlayerChart('online-player-chart', hourlyPlayerCount.slice(-48), plugin, true);
+    createOnlinePlayerChart('daily-player-chart-7', hourlyPlayerCount, plugin, true);
+    createOnlinePlayerChart('daily-player-chart-30', dailyPlayerCount.slice(-30), plugin, false);
+    createOnlinePlayerChart('daily-player-chart-365', dailyPlayerCount.slice(-365), plugin, false);
 
-    createOnlinePlayerChart('online-player-chart-down-panel', hourlyPlayerCount.slice(-48), plugin);
+    createOnlinePlayerChart('online-player-chart-down-panel', hourlyPlayerCount.slice(-48), plugin, true);
 }
 
-function createOnlinePlayerChart(id, data, plugin) {
+function createOnlinePlayerChart(id, data, plugin, beginAtZero) {
     var labels = data.map(function (entry) {
         // Konwersja daty na obiekt JavaScript
         var date = new Date(entry.time);
@@ -89,7 +89,7 @@ function createOnlinePlayerChart(id, data, plugin) {
                     }
                 },
                 y: {
-                    beginAtZero: true,
+                    beginAtZero: beginAtZero,
 
                     ticks: {
                         color: '#ffffff80'

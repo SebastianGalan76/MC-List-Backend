@@ -6,11 +6,53 @@
     gap: 5px;
     padding: 10px;
 
-    li{
-        padding: 10px 0;
-        font-size: 1.2em;
-        list-style: none;
+    .user-panel{
+        padding: 10px 20px;
+        display: flex !important;
+        flex-direction: column !important;
+        background-color: $color-dark;
+        border-radius: 10px;
+        border: 1px solid $color-white;
 
-        border-bottom: 1px solid $color-white;
+        .login{
+            font-weight: 800;
+        }
+
+        .role{
+            font-style: italic;
+        }
+    }
+
+    .server-page{
+        margin: 50px 0;
+        color: $color-green;
+        font-size: 1.2em;
+    }
+    .server-page:hover{
+        cursor: pointer;
+        color: $color-green-dark;
+    }
+
+    .menu{
+        .title{
+            font-weight: 800;
+        }
+
+        li{
+            padding: 10px 5px;
+            font-size: 1.2em;
+            list-style: none;
+    
+            border-bottom: 1px solid $color-white;
+        }
+
+        li:hover{
+            background-color: $color-dark;
+            cursor: pointer;
+        }
+    }
+
+    @media (max-width: 800px){
+        font-size: 0.9em;
     }
 }

@@ -169,12 +169,14 @@
                     <div class="button selected" onclick='showContent(this, "description-main-container")'
                         th:if="${server.description != null and server.description.length > 0}">Opis</div>
                     <div class="button" onclick='showContent(this, "staff-main-container")'
-                        th:if="${server.staff != null and server.staff.size() > 0}">Administracja</div>
+                        th:if="${server.staff != null and server.staff.size() > 0}">Administracja
+                    </div>
+                    <div class="button" onclick='showContent(this, "subservers-main-container")'>Tryby</div>
                     <div class="button" onclick='showContent(this, "statistic-main-container")'>Statystyki</div>
                     <div class="button" onclick='showContent(this, "ratings-main-container")'>Oceny</div>
                 </div>
 
-                <div class="main-container-content ql-snow" id="description-main-container">
+                <div style="display: none;" class="main-container-content ql-snow" id="description-main-container">
                     <article id="server-description" class="ql-editor">
 
                     </article>
@@ -223,7 +225,7 @@
                     </div>
                 </div>
 
-                <div class="main-container-content" id="statistic-main-container">
+                <div style="display: none;" class="main-container-content" id="statistic-main-container">
                     <div class="chart" style="margin-top: 30px;">
                         <div class="header">Gracze Online (24h)</div>
                         <canvas id="online-player-chart" height="80"></canvas>
@@ -242,6 +244,14 @@
                     <div class="chart" style="margin-top: 30px;">
                         <div class="header">Szczytowa liczba graczy (1y)</div>
                         <canvas id="daily-player-chart-365" height="80"></canvas>
+                    </div>
+                </div>
+                
+                <div class="main-container-content" id="subservers-main-container">
+                    <h1 class="content-header">Tryby</h1>
+                    
+                    <div id="subservers-container" class="center">
+                        
                     </div>
                 </div>
 
@@ -561,7 +571,31 @@
         </div>
     </div>
 </template>
+<template id="subserver-template">
+    <div class="subserver">
+        <div class="title"></div>
 
+        <div class="tag-container">
+            <div class="tag mode-tag" style="display: none;">
+                <div class="icon">
+                    <i class="fa-solid fa-dice-d6"></i>
+                </div>
+                <div class="content">
+                    
+                </div>
+            </div>
+
+            <div class="tag version-tag" style="display: none;">
+                <div class="icon">
+                    <i class="fa-solid fa-code-branch"></i>
+                </div>
+                <div class="content">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
 <script th:inline="javascript" type="module" defer>
     const user = /*[[${user}]]*/ null;
 
@@ -574,6 +608,10 @@
     var hourlyPlayerCounts = /*[[${server.hourlyPlayerCounts}]]*/ null;
     var dailyPlayerCounts = /*[[${server.dailyPlayerCounts}]]*/ null;
     loadData(hourlyPlayerCounts, dailyPlayerCounts);
+
+    import { loadSubservers } from './js/server/subServerLoader.js';
+    var subservers = /*[[${server.subServers}]]*/ null;
+    loadSubservers(subservers);
 
     import { loadLinks } from './js/server/linkLoader.js';
     var links = /*[[${server.links}]]*/ null;

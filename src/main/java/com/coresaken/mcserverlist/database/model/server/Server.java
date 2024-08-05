@@ -54,6 +54,7 @@ public class Server {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+    @OrderBy("index ASC")
     List<SubServer> subServers;
 
     @OneToMany(mappedBy = "server", cascade = CascadeType.ALL, orphanRemoval = true)

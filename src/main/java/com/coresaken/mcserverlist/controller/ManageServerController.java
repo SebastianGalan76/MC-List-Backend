@@ -37,6 +37,7 @@ public class ManageServerController {
             return "error/403";
         }
 
+        model.addAttribute("user", user);
         model.addAttribute("server", server);
         model.addAttribute("role", PermissionChecker.getRoleForServer(user, server));
 
@@ -55,6 +56,7 @@ public class ManageServerController {
             return "error/403";
         }
 
+        model.addAttribute("user", user);
         model.addAttribute("server", server);
         model.addAttribute("role", PermissionChecker.getRoleForServer(user, server));
 
@@ -88,6 +90,7 @@ public class ManageServerController {
             return "error/403";
         }
 
+        model.addAttribute("user", user);
         model.addAttribute("server", server);
         model.addAttribute("role", PermissionChecker.getRoleForServer(user, server));
 
@@ -121,6 +124,7 @@ public class ManageServerController {
             return "error/403";
         }
 
+        model.addAttribute("user", user);
         model.addAttribute("server", server);
         model.addAttribute("role", PermissionChecker.getRoleForServer(user, server));
 
@@ -154,6 +158,7 @@ public class ManageServerController {
             return "error/403";
         }
 
+        model.addAttribute("user", user);
         model.addAttribute("server", server);
         model.addAttribute("role", PermissionChecker.getRoleForServer(user, server));
 
@@ -187,6 +192,7 @@ public class ManageServerController {
             return "error/403";
         }
 
+        model.addAttribute("user", user);
         model.addAttribute("server", server);
         model.addAttribute("role", PermissionChecker.getRoleForServer(user, server));
 
@@ -220,6 +226,7 @@ public class ManageServerController {
             return "error/403";
         }
 
+        model.addAttribute("user", user);
         model.addAttribute("server", server);
         model.addAttribute("role", PermissionChecker.getRoleForServer(user, server));
 
@@ -253,6 +260,7 @@ public class ManageServerController {
             return "error/403";
         }
 
+        model.addAttribute("user", user);
         model.addAttribute("server", server);
         model.addAttribute("role", PermissionChecker.getRoleForServer(user, server));
 
@@ -286,6 +294,7 @@ public class ManageServerController {
             return "error/403";
         }
 
+        model.addAttribute("user", user);
         model.addAttribute("server", server);
         model.addAttribute("role", PermissionChecker.getRoleForServer(user, server));
 
