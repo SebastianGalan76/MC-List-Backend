@@ -51,6 +51,25 @@ public class ServerController {
         return "subPage/server";
     }
 
+    @RequestMapping("/server/{id}/take")
+    public String getServerTakeOverPage(@PathVariable("id") Long id, Model model){
+        Server server = serverService.getServerById(id);
+
+        if(server==null){
+            return "error/404";
+        }
+
+        model.addAttribute("user", userService.getLoggedUser());
+        model.addAttribute("server", server);
+        return "subPage/takeOver";
+    }
+
+    @ResponseBody
+    @GetMapping("/take-over/{id}")
+    public Response takeOverServer(@PathVariable("id") Long id){
+        return serverService.takeOver(id);
+    }
+
     @ResponseBody
     @PostMapping("/server/{ip}/rate/save")
     public Response getServerRatePage(@PathVariable("ip") String ip, @RequestBody List<PlayerRating> playerRatings){

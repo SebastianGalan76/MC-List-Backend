@@ -72,6 +72,7 @@ public class AuthenticationService {
         User user = User.builder()
                 .login(request.getLogin())
                 .email(request.getEmail())
+                .uuid(UUID.randomUUID().toString())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(User.Role.USER)
                 .build();

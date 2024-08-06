@@ -34,6 +34,9 @@ public class User implements UserDetails {
 
     String password;
 
+    @Column(unique = true)
+    String uuid;
+
     @Enumerated(EnumType.STRING)
     Role role;
 

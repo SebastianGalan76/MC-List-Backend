@@ -372,8 +372,8 @@
             <div class="panel" id="button-panel">
                 <div class="button vote" onclick="showVotePopup()">Zagłosuj</div>
                 <div class="button promote">Promuj</div>
-                <div class="button manage" th:if="${server.serverUserRoles.size() == 0}">Przejmij</div>
-                <a th:href="'/server/' + ${server.id} + '/manage'"><div class="button manage" th:if="${role != null}">Zarządzaj</div></a>
+                <a th:href="'/server/' + ${server.id} + '/manage'" th:if="${role != null}"><div class="button manage">Zarządzaj</div></a>
+                <a th:href="'/server/'+ ${server.id} +'/take'" th:if="${server.serverUserRoles.size() == 0}"><div class="button manage">Przejmij</div></a>
             </div>
             <div class="panel" id="link-panel-aside" th:if="${server.links.size() > 0}">
                 <div class="title">Linki</div>
