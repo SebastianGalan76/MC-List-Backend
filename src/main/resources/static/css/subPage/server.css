@@ -243,6 +243,9 @@
   padding: 3px 10px;
   border-radius: 15px;
 }
+#page-wrapper #container #main-container #information-main-container .h {
+  font-weight: 700;
+}
 #page-wrapper aside {
   width: 300px;
   flex-shrink: 0;

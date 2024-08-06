@@ -183,6 +183,7 @@
 
             <div id="main-container" class="panel">
                 <div id="button-container">
+                    <div class="button" onclick='showContent(this, "information-main-container")'>Informacje</div>
                     <div class="button selected" onclick='showContent(this, "description-main-container")'
                         th:if="${server.description != null and server.description.length > 0}">Opis</div>
                     <div class="button" onclick='showContent(this, "staff-main-container")'
@@ -193,7 +194,20 @@
                     <div class="button" onclick='showContent(this, "ratings-main-container")'>Oceny</div>
                 </div>
 
-                <div style="display: none;" class="main-container-content ql-snow" id="description-main-container">
+                <div th:style="'display:' + (${server.description != null and server.description.length > 0} ? 'none' : 'block')" class="main-container-content" id="information-main-container">
+                    <h1 class="content-header">Informacje</h1>
+
+                    <span class="h">Adres: </span><span th:text="${server.name.name}"></span><br>
+                    <span class="h">Port: </span><span th:text="${server.port}"></span> <br>
+
+                    <span>Wersja: 1.16.5-1.19.2</span> <br>
+                    <span>Tryby: Survival, Creative, SkyBlock</span> <br>
+                    <span>Promowany do: 08.05.2023</span> <br>
+                    <span>Zaktualizowano: 08.05.2023</span> <br>
+                    <span>Dodano: 08.05.2023</span> <br>
+                </div>
+
+                <div th:style="'display:' + (${server.description != null and server.description.length > 0} ? 'block' : 'none')" class="main-container-content ql-snow" id="description-main-container">
                     <article id="server-description" class="ql-editor">
 
                     </article>
