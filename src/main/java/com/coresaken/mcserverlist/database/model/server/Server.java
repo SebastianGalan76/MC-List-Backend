@@ -51,6 +51,7 @@ public class Server {
     int onlinePlayers;
 
     LocalDateTime nextRefreshAt;
+    int promotionPoints;
 
     @OneToMany(
             mappedBy = "server",

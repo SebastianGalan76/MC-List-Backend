@@ -3,6 +3,7 @@ const serverTemplate = document.getElementById("server-template");
 const serverListContainer = document.getElementById("server-container");
 
 import { getCurrentPage, refreshPageContainer } from "./pageManager.js";
+var promotedServers = false;
 
 export async function loadServers() {
     const response = await fetch('/server/list/' + getCurrentPage(), {
@@ -71,11 +72,31 @@ export function populateList(listArray) {
                 versionTag.querySelector('.content').innerHTML = minValue.name + " - " + maxValue.name;
             }
         }
-        if (serverJson.mods){
+        if (serverJson.mods) {
             template.querySelector('.mods-tag ').style.display = "flex";
         }
-        if (serverJson.premium){
+        if (serverJson.premium) {
             template.querySelector('.premium-tag ').style.display = "flex";
+        }
+
+        if (serverJson.promotionPoints > 0) {
+            const promotionPoints = template.querySelector('.promotion-value');
+            promotionPoints.innerHTML = serverJson.promotionPoints;
+
+            template.querySelector('.server').classList.add('promoted');
+
+            if(!promotedServers){
+                promotedServers = true;
+                serverListContainer.appendChild(createServerHeader('promoted', '👑', 'Promowane serwery'));
+            }
+        }
+        else {
+            template.querySelector('.promotion').style.display = "none";
+
+            if(promotedServers){
+                promotedServers = false;
+                serverListContainer.appendChild(createServerHeader('', '', 'Serwery'));
+            }
         }
 
         const online = template.querySelector('.online-value');
@@ -86,4 +107,29 @@ export function populateList(listArray) {
 
         serverListContainer.appendChild(template);
     });
+}
+
+function createServerHeader(className, icon, text) {
+    const header = document.createElement('div');
+    header.className = 'servers-header';
+    if (className) header.classList.add(className);
+
+    const title = document.createElement('div');
+    title.className = 'title';
+    
+    if (icon) {
+        const iconElement = document.createElement('div');
+        iconElement.className = 'icon';
+        iconElement.textContent = icon;
+        title.appendChild(iconElement);
+    }
+
+    title.appendChild(document.createTextNode(text));
+    header.appendChild(title);
+
+    const divider = document.createElement('div');
+    divider.className = className ? 'divider-line-horizontal' : 'divider-line';
+    header.appendChild(divider);
+
+    return header;
 }

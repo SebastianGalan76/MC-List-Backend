@@ -20,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -120,10 +121,11 @@ public class ServerService {
         }
 
         List<Server> resultList = new ArrayList<>(commonServers);
-
-        Comparator<Server> comparator = Comparator.comparingInt(s -> s.getVotes().size());
-        comparator = comparator.reversed();
-        resultList.sort(comparator);
+        resultList = resultList.stream()
+                .sorted(Comparator
+                        .comparingInt(Server::getPromotionPoints)
+                        .thenComparingInt(s -> s.getVotes().size()).reversed())
+                .collect(Collectors.toList());
 
         int start = (int) pageable.getOffset();
         int end = Math.min((start + pageable.getPageSize()), resultList.size());
