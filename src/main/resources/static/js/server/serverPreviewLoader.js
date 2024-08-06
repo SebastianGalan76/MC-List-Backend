@@ -42,6 +42,12 @@ export function loadServerPreview(serverJson) {
             versionTag.querySelector('.content').innerHTML = minValue.name + " - " + maxValue.name;
         }
     }
+    if (serverJson.mods){
+        serverPreview.querySelector('.mods-tag ').style.display = "flex";
+    }
+    if (serverJson.premium){
+        serverPreview.querySelector('.premium-tag ').style.display = "flex";
+    }
 
     const online = serverPreview.querySelector('.online-value');
     online.innerHTML = serverJson.onlinePlayers;

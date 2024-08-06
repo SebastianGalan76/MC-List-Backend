@@ -39,6 +39,9 @@ public class Server {
 
     String banner;
 
+    boolean premium = false;
+    boolean mods = false;
+
     @ManyToOne
     @JoinColumn(name = "mode_id")
     Mode mode;

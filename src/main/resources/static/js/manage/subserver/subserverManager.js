@@ -12,8 +12,8 @@ createButton.addEventListener('click', () => {
 });
 
 import { getSelectedVersions, loadSelectedVersions, removeAllSelectedVersions } from '../../versionManager.js';
-import { getSelectedModes, removeAllSelectedModes, onlySingleSelection, loadSelectedModes } from '../../modeManager.js';
-onlySingleSelection();
+import { getSelectedModes, removeAllSelectedModes, onlySingleSelectionMode, loadSelectedModes } from '../../modeManager.js';
+onlySingleSelectionMode();
 
 var subserverId = -1000;
 export var subservers = [];

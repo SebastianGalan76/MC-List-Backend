@@ -33,6 +33,7 @@
 
     <script src="/js/pageManager.js" type="module" defer></script>
     <script src="/js/serverListManager.js" type="module" defer></script>
+    <script src="/js/searchServer.js" type="module" defer></script>
 </head>
 
 <body>
@@ -47,7 +48,7 @@
     <div id="search-container" class="center">
         <div class="row">
             <div class="input-area">
-                <input id="login-input" type="text" placeholder="Nazwa serwera lub motd" maxlength="60">
+                <input id="name-input" type="text" placeholder="Nazwa serwera lub motd" maxlength="60">
                 <div class="icon">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </div>
@@ -107,13 +108,13 @@
 
             <div class="checkbox-container">
                 <div class="checkbox-area">
-                    <input type="checkbox" id="server-premium">
-                    <label for="server-premium">Premium</label>
+                    <input type="checkbox" id="server-premium-checkbox">
+                    <label for="server-premium-checkbox">Premium</label>
                 </div>
     
                 <div class="checkbox-area">
-                    <input type="checkbox" id="server-mods">
-                    <label for="server-mods">Mody</label>
+                    <input type="checkbox" id="server-mods-checkbox">
+                    <label for="server-mods-checkbox">Mody</label>
                 </div>
             </div>
         </div>
@@ -261,6 +262,24 @@
                         </div>
                         <div class="content">
     
+                        </div>
+                    </div>
+
+                    <div class="tag mods-tag" style="display: none;">
+                        <div class="icon">
+                            <i class="fa-solid fa-parachute-box"></i>
+                        </div>
+                        <div class="content">
+                            Mody
+                        </div>
+                    </div>
+
+                    <div class="tag premium-tag" style="display: none;">
+                        <div class="icon">
+                            <i class="fa-solid fa-medal"></i>
+                        </div>
+                        <div class="content">
+                            Premium
                         </div>
                     </div>
                 </div>

@@ -60,7 +60,7 @@ export function loadSelectedModes(selectedMode) {
     }
 }
 
-export function onlySingleSelection(){
+export function onlySingleSelectionMode(){
     singleSelection = true;
 }
 

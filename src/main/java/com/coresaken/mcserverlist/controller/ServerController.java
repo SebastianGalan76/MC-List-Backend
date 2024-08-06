@@ -1,5 +1,6 @@
 package com.coresaken.mcserverlist.controller;
 
+import com.coresaken.mcserverlist.data.dto.SearchServerDto;
 import com.coresaken.mcserverlist.data.response.Response;
 import com.coresaken.mcserverlist.database.model.server.Server;
 import com.coresaken.mcserverlist.database.model.server.ratings.PlayerRating;
@@ -10,6 +11,9 @@ import com.coresaken.mcserverlist.service.server.ServerService;
 import com.coresaken.mcserverlist.util.PermissionChecker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -69,5 +73,14 @@ public class ServerController {
         }
 
         return serverService.deleteServer(server);
+    }
+
+    @ResponseBody
+    @PostMapping("/server/search/{page}")
+    public Page<Server> searchServer(@RequestBody SearchServerDto searchServerDto, @PathVariable("page") int page){
+        Sort sort = Sort.by(Sort.Direction.fromString("desc"), "votes");
+        Pageable pageable = PageRequest.of(page - 1, 30, sort);
+
+        return serverService.searchServer(searchServerDto, pageable);
     }
 }

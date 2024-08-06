@@ -8,6 +8,7 @@ const selectedItemsContainer = document.getElementById('selected-version-contain
 
 var versionArray = [];
 var selectedVersionsIds = [];
+var singleSelection = false;
 
 searchInput.addEventListener('focus', function () {
     listPanel.style.display = 'block';
@@ -58,6 +59,9 @@ export function loadSelectedVersions(selectedVersions) {
             }
         }
     }
+}
+export function onlySingleSelectionVersion(){
+    singleSelection = true;
 }
 
 async function loadVersions() {
@@ -129,6 +133,10 @@ function handleCheckboxChange(version) {
 }
 
 function addSelectedItem(version) {
+    if(singleSelection){
+        removeAllSelectedVersions();
+    }
+
     const versionDiv = document.createElement('div');
     versionDiv.className = 'item';
 

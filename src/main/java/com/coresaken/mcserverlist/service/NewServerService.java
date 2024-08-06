@@ -7,6 +7,7 @@ import com.coresaken.mcserverlist.database.model.server.*;
 import com.coresaken.mcserverlist.database.repository.*;
 import com.coresaken.mcserverlist.database.repository.server.DailyPlayerCountRepository;
 import com.coresaken.mcserverlist.database.repository.server.ModeRepository;
+import com.coresaken.mcserverlist.util.UnicodeConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -116,7 +117,7 @@ public class NewServerService {
 
         ServerDetail serverDetail = new ServerDetail();
         serverDetail.setMotdHtml(serverStatusDto.motd().html());
-        serverDetail.setMotdClean(serverStatusDto.motd().clean());
+        serverDetail.setMotdClean(UnicodeConverter.convertUnicodeToAscii(serverStatusDto.motd().clean()));
         serverDetail.setIcon(serverStatusDto.icon());
         serverDetail = serverDetailRepository.save(serverDetail);
         server.setDetail(serverDetail);

@@ -1,5 +1,6 @@
 package com.coresaken.mcserverlist.service.server;
 
+import com.coresaken.mcserverlist.data.dto.SearchServerDto;
 import com.coresaken.mcserverlist.data.response.Response;
 import com.coresaken.mcserverlist.database.model.User;
 import com.coresaken.mcserverlist.database.model.server.Server;
@@ -12,13 +13,13 @@ import com.coresaken.mcserverlist.util.PermissionChecker;
 import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -92,5 +93,41 @@ public class ServerService {
 
         serverRepository.delete(server);
         return Response.builder().status(HttpStatus.OK).build();
+    }
+
+    public Page<Server> searchServer(SearchServerDto searchServerDto, Pageable pageable){
+        Set<Server> serversByName = new HashSet<>();
+        if(searchServerDto.getName() != null && !searchServerDto.getName().isEmpty()){
+            serversByName.addAll(serverRepository.searchByIp(searchServerDto.getName()));
+            serversByName.addAll(serverRepository.searchByMotd(searchServerDto.getName()));
+        }
+        else{
+            serversByName.addAll(serverRepository.findAll());
+        }
+
+        Long versionId = searchServerDto.getVersion() != null ? searchServerDto.getVersion().getId() : 0;
+        Set<Server> serversByModeAndVersions = new HashSet<>(serverRepository.findServersByModeAndVersionRange(searchServerDto.getMode(), versionId));
+
+        Set<Server> commonServers = new HashSet<>(serversByName);
+        if (searchServerDto.getMode() != null || searchServerDto.getVersion() != null) {
+            commonServers.retainAll(serversByModeAndVersions);
+        }
+        if (searchServerDto.isPremium()) {
+            commonServers.retainAll(serverRepository.findAllPremiumServers());
+        }
+        if(searchServerDto.isMods()){
+            commonServers.retainAll(serverRepository.findAllServersWithMods());
+        }
+
+        List<Server> resultList = new ArrayList<>(commonServers);
+
+        Comparator<Server> comparator = Comparator.comparingInt(s -> s.getVotes().size());
+        comparator = comparator.reversed();
+        resultList.sort(comparator);
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), resultList.size());
+
+        return new PageImpl<>(resultList.subList(start, end), pageable, resultList.size());
     }
 }

@@ -25,7 +25,7 @@ export async function loadServers() {
     }
 }
 
-function populateList(listArray) {
+export function populateList(listArray) {
     serverListContainer.innerHTML = null;
 
     listArray.forEach(serverJson => {
@@ -70,6 +70,12 @@ function populateList(listArray) {
             else {
                 versionTag.querySelector('.content').innerHTML = minValue.name + " - " + maxValue.name;
             }
+        }
+        if (serverJson.mods){
+            template.querySelector('.mods-tag ').style.display = "flex";
+        }
+        if (serverJson.premium){
+            template.querySelector('.premium-tag ').style.display = "flex";
         }
 
         const online = template.querySelector('.online-value');
