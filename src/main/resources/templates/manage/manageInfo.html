@@ -113,6 +113,18 @@
                         <span class="center" style="margin-top: 5px; text-align: center;">Wystarczy wybrać najstarszą i najnowszą wersję serwera. Wszystkie wersje pomiędzy będą traktowane jako wspierane wersje</span>
                     </div>
         
+                    <div class="checkbox-container">
+                        <div class="checkbox-area">
+                            <input type="checkbox" id="server-premium-checkbox" th:checked="${server.premium}"> 
+                            <label for="server-premium-checkbox">Premium</label>
+                        </div>
+            
+                        <div class="checkbox-area">
+                            <input type="checkbox" id="server-mods-checkbox" th:checked="${server.mods}">
+                            <label for="server-mods-checkbox">Mody</label>
+                        </div>
+                    </div>
+
                     <div id="server-status-response-error" style="display: none;"><span class="red">Nie możemy znaleźć takiego
                         serwera. Czy wpisałeś poprawny adres oraz port serwera?</span><br>
                     <br>
@@ -132,29 +144,6 @@
         </section>
     </div>
 </body>
-<template id="player-template">
-    <li class="player item" draggable="true">
-        <div class="head">
-            <img class="head-src" src="" draggable="false">
-        </div>
-        <div class="nick">
-
-        </div>
-        <div class="links">
-            <i class="fa-brands fa-discord" style="display: none;"></i>
-            <i class="fa-brands fa-tiktok" style="display: none;"></i>
-            <i class="fa-brands fa-instagram" style="display: none;"></i>
-            <i class="fa-brands fa-youtube" style="display: none;"></i>
-        </div>
-    </li>
-</template>
-<template id="rank-template">
-    <li class="rank item" draggable="true">
-        <div class="rank-name"></div>
-
-        <div class="click-to-edit">Kliknij, aby edytować <i class="fa-solid fa-grip-vertical"></i></div>
-    </li>
-</template>
 
 <script type="module" th:inline="javascript">
     const server = /*[[${server}]]*/ null;

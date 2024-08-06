@@ -2,17 +2,34 @@ const nameInput = document.getElementById('name-input');
 const premiumCheckbox = document.getElementById('server-premium-checkbox');
 const modsCheckbox = document.getElementById('server-mods-checkbox');
 
+
 import { getCurrentPage, refreshPageContainer } from "./pageManager.js";
 import { getSelectedModes, onlySingleSelectionMode } from "./modeManager.js";
 import { getSelectedVersions, onlySingleSelectionVersion } from "./versionManager.js";
-import { populateList } from "./serverListManager.js";
+import { populateList, showLoadingPanel } from "./serverListManager.js";
 
 onlySingleSelectionMode();
 onlySingleSelectionVersion();
 
 document.getElementById('search-server-button').addEventListener('click', searchServers);
+var isFunctionLocked = false;
 
 export async function searchServers() {
+    showLoadingPanel();
+
+    if (isFunctionLocked) {
+        setTimeout(() => {
+            searchServers();
+        }, 5000);
+
+        return;
+    }
+
+    isFunctionLocked = true;
+    setTimeout(() => {
+        isFunctionLocked = false;
+    }, 5000);
+
     let version = null;
     let selectedVersions = getSelectedVersions();
     if(selectedVersions.length>0){

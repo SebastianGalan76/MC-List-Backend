@@ -114,6 +114,8 @@ public class NewServerService {
         server.setPort(basicServerDto.getPort());
         server.setOnline(serverStatusDto.online());
         server.setOnlinePlayers(serverStatusDto.players().online());
+        server.setPremium(basicServerDto.isPremium());
+        server.setMods(basicServerDto.isMods());
 
         ServerDetail serverDetail = new ServerDetail();
         serverDetail.setMotdHtml(serverStatusDto.motd().html());

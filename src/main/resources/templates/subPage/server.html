@@ -188,7 +188,7 @@
                     <div class="button" onclick='showContent(this, "staff-main-container")'
                         th:if="${server.staff != null and server.staff.size() > 0}">Administracja
                     </div>
-                    <div class="button" onclick='showContent(this, "subservers-main-container")'>Tryby</div>
+                    <div class="button" onclick='showContent(this, "subservers-main-container")' th:if="${server.subServers != null and server.subServers.size() > 0}">Tryby</div>
                     <div class="button" onclick='showContent(this, "statistic-main-container")'>Statystyki</div>
                     <div class="button" onclick='showContent(this, "ratings-main-container")'>Oceny</div>
                 </div>
@@ -243,6 +243,7 @@
                 </div>
 
                 <div style="display: none;" class="main-container-content" id="statistic-main-container">
+                    <h1 class="content-header">Statystyki</h1>
                     <div class="chart" style="margin-top: 30px;">
                         <div class="header">Gracze Online (24h)</div>
                         <canvas id="online-player-chart" height="80"></canvas>
@@ -264,7 +265,7 @@
                     </div>
                 </div>
                 
-                <div class="main-container-content" id="subservers-main-container">
+                <div style="display: none;" class="main-container-content" id="subservers-main-container">
                     <h1 class="content-header">Tryby</h1>
                     
                     <div id="subservers-container" class="center">

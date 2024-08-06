@@ -15,4 +15,6 @@ public class BasicServerDto {
 
     List<Mode> modes;
     List<Version> versions;
+
+    boolean premium, mods;
 }

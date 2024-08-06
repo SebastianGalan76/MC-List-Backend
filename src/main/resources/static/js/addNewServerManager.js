@@ -1,6 +1,9 @@
 const addressInput = document.getElementById('address-input');
 const portInput = document.getElementById('port-input');
 
+const premiumCheckbox = document.getElementById('server-premium-checkbox');
+const modsCheckbox = document.getElementById('server-mods-checkbox');
+
 import { getSelectedVersions } from './versionManager.js';
 import { getSelectedModes } from './modeManager.js';
 import { isAddressValid, isPortValid } from './utils.js';
@@ -125,7 +128,9 @@ export async function editServer(serverId) {
         port: portInput.value,
 
         versions: getSelectedVersions(),
-        modes: getSelectedModes()
+        modes: getSelectedModes(),
+        premium: premiumCheckbox.checked,
+        mods: premiumCheckbox.mods,
     }
 
     try {

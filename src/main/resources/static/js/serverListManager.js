@@ -1,9 +1,7 @@
 const serverTemplate = document.getElementById("server-template");
-
 const serverListContainer = document.getElementById("server-container");
 
 import { getCurrentPage, refreshPageContainer } from "./pageManager.js";
-var promotedServers = false;
 
 export async function loadServers() {
     const response = await fetch('/server/list/' + getCurrentPage(), {
@@ -28,6 +26,7 @@ export async function loadServers() {
 
 export function populateList(listArray) {
     serverListContainer.innerHTML = null;
+    let serversHeader = 0;
 
     listArray.forEach(serverJson => {
         const template = serverTemplate.content.cloneNode(true);
@@ -85,16 +84,17 @@ export function populateList(listArray) {
 
             template.querySelector('.server').classList.add('promoted');
 
-            if(!promotedServers){
-                promotedServers = true;
+            if (serversHeader == 0 || serversHeader == 2) {
+                serversHeader = 1;
                 serverListContainer.appendChild(createServerHeader('promoted', '👑', 'Promowane serwery'));
             }
         }
         else {
             template.querySelector('.promotion').style.display = "none";
 
-            if(promotedServers){
-                promotedServers = false;
+            if (serversHeader == 0 || serversHeader == 1) {
+                console.log(serversHeader);
+                serversHeader = 2;
                 serverListContainer.appendChild(createServerHeader('', '', 'Serwery'));
             }
         }
@@ -109,6 +109,11 @@ export function populateList(listArray) {
     });
 }
 
+export function showLoadingPanel(){
+    serverListContainer.innerHTML = null;
+    serverListContainer.appendChild(createLoadedView());
+}
+
 function createServerHeader(className, icon, text) {
     const header = document.createElement('div');
     header.className = 'servers-header';
@@ -116,7 +121,7 @@ function createServerHeader(className, icon, text) {
 
     const title = document.createElement('div');
     title.className = 'title';
-    
+
     if (icon) {
         const iconElement = document.createElement('div');
         iconElement.className = 'icon';
@@ -132,4 +137,18 @@ function createServerHeader(className, icon, text) {
     header.appendChild(divider);
 
     return header;
+}
+
+function createLoadedView() {
+    const lottiePlayer = document.createElement('lottie-player');
+    lottiePlayer.classList.add('center');
+    lottiePlayer.id = 'loading-animation';
+    lottiePlayer.src = '/animation/loading.json';
+    lottiePlayer.background = 'transparent';
+    lottiePlayer.speed = '1';
+    lottiePlayer.style.width = '100px';
+    lottiePlayer.style.height = '100px';
+    lottiePlayer.loop = true;
+    lottiePlayer.autoplay = true;
+    return lottiePlayer;
 }

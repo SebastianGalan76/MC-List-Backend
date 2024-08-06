@@ -21,8 +21,8 @@ public class PermissionChecker {
         if(user == null || server == null){
             return null;
         }
-        if(user.getRole()== User.Role.ADMIN){
-            return ServerUserRole.Role.ADMINISTRATOR;
+        if(user.getRole() == User.Role.ADMIN){
+            return ServerUserRole.Role.OWNER;
         }
 
         ServerUserRole sur = server.getServerUserRoles().stream().filter(role -> role.getUser().equals(user)).findFirst().orElse(null);

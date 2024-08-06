@@ -26,6 +26,10 @@
     font-size: 0.8em;
   }
 }
+#info-container #form-container .checkbox-container {
+  display: flex;
+  gap: 20px;
+}
 @media (max-width: 1100px) {
   #info-container {
     width: 100%;
