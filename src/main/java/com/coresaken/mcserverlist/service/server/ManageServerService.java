@@ -109,10 +109,11 @@ public class ManageServerService {
         }
         else{
             if(file != null){
-                Response uploadResponse = BannerFileService.upload(file, server);
+                Response uploadResponse = BannerFileService.upload(file);
                 if(uploadResponse.getStatus() != HttpStatus.OK){
                     return uploadResponse;
                 }
+                server.setBanner("/uploads/banners/" + uploadResponse.getMessage());
             }
             else{
                 server.setBanner(null);

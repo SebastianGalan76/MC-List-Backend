@@ -1,0 +1,157 @@
+@import "../base";
+
+.header{
+    text-align: center;
+
+    padding: 30px 0;
+    font-size: 1.3em;
+    font-weight: 500;
+
+    position: relative;
+
+    .button{
+        position: absolute;
+        right: 30px;
+        top: 30px;
+        background-color: #ffffff0e;
+        padding: 10px 30px;
+        border: 1px solid #79797971;
+        border-radius: 10px;
+    }
+
+    .button:hover{
+        background-color: $color-dark;
+        cursor: pointer;
+    }
+}
+
+#banner-container-big {
+    height: 300px;
+    width: 80%;
+    background-color: $color-dark;
+
+    .banner {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+
+        text-align: center;
+
+        .title {
+            font-size: 3em;
+            font-weight: 600;
+        }
+        .size {
+            color: #919191;
+            font-weight: 600;
+        }
+
+        .price {
+            text-align: center;
+
+            .value {
+                font-size: 2.3em;
+            }
+        }
+
+        .limit {
+            font-weight: 600;
+        }
+    }
+}
+
+#banner-container-small {
+    margin-top: 20px;
+
+    height: 120px;
+    width: 1200px;
+    background-color: $color-dark;
+
+    .banner {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+
+        text-align: center;
+
+        .title {
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+        .size {
+            font-size: 0.9em;
+            color: #919191;
+            font-weight: 600;
+        }
+
+        .price {
+            text-align: center;
+
+            .value {
+                font-size: 1.3em;
+            }
+        }
+
+        .limit {
+            font-weight: 600;
+        }
+    }
+}
+
+.banner:hover{
+    border: 2px solid #79797971;
+    cursor: pointer;
+}
+
+.banner.selected{
+    border: 2px solid $color-theme;
+}
+#form-container{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    width: 800px;
+    padding: 20px;
+    margin-top: 30px;
+
+    .button{
+        background-color: $color-theme;
+        padding: 10px 30px;
+        border-radius: 10px;
+        width: fit-content;
+        margin-left: auto;
+    }
+
+    .button:hover{
+        background-color: $color-theme-dark;
+        cursor: pointer;
+    }
+}
+
+.section{
+    width: 800px;
+    background-color: #ffffff0e;
+    padding: 20px;
+    margin-top: 50px;
+
+    h2{
+        padding: 30px 0;
+        text-align: center;
+    }
+
+    ol{
+        padding: 0 30px;
+    }
+}
+
+.link {
+    color: $color-theme;
+    font-weight: 600;
+}
+
+.link:hover {
+    color: $color-theme-dark;
+}

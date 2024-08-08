@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pl">
+
+<head>
+    <title>Rejestracja - Lista serwerów minecraft</title>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <base href="http://localhost:8080/">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/formElement.css">
+    <link rel="stylesheet" href="/css/subPage/banner.css">
+    <link rel="stylesheet" href="/css/fragment/header.css">
+
+    <!-- Font Roboto -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/2282473dfd.js" crossorigin="anonymous"></script>
+
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+</head>
+
+<body>
+    <div th:replace="~{fragment/header :: headerFragment}"></div>
+
+    <div class="header">
+        <h1>Zakup baner reklamowy</h1>
+        <br><br>
+        <h3>Wybierz typ</h3>
+        <a href="/user/banner"><div class="button">Moje banery</div></a>
+    </div>
+    <div id="banner-container-big" class="center">
+        <div class="banner" onclick="selectBanner(this, 1)">
+            <div>
+                <div class="title">Duży baner</div>
+                <div class="size">1800x350px</div>
+            </div>
+            <div class="price">
+                <div class="value">100zł</div>
+                <span>miesiąc</span>
+            </div>
+            <div class="limit">
+                Limit: 0/4
+            </div>
+        </div>
+    </div>
+
+    <div id="banner-container-small" class="center">
+        <div class="banner" onclick="selectBanner(this, 2)">
+            <div>
+                <div class="title">Mały baner</div>
+                <div class="size">1200x120px</div>
+            </div>
+            <div class="price">
+                <div class="value">30zł</div>
+                <span>miesiąc</span>
+            </div>
+            <div class="limit">
+                Obecna ilość: 5
+            </div>
+        </div>
+    </div>
+    <div id="form-container" class="center">
+        <div class="input-area">
+            <input id="link-input" type="text" placeholder="Docelowy link (np. sklep, strona główna)" maxlength="256">
+            <div class="icon">
+                <i class="fa-solid fa-link"></i>
+            </div>
+        </div>
+
+        <div class="file-input-container center">
+            <div class="file-input">
+                <button type="button">Wybierz plik</button>
+                <input type="file" id="file-input">
+            </div>
+            <span class="file-name" id="file-name">Nie wybrano pliku</span>
+
+            <div class="icon">
+                <i class="fa-solid fa-file"></i>
+            </div>
+        </div>
+
+        <div class="error" id="error-response"></div>
+
+        <div class="button" onclick="uploadBanner(this)">Prześlij do weryfikacji</div>
+    </div>
+    <div class="section center">
+        <h2>Etapy zakupu</h2>
+        <ol>
+            <li>Wybierasz wielkość.</li>
+            <li>Wypełniasz formularz i przesyłasz dane do weryfikacji.</li>
+            <li>Administrator strony weryfikuje grafikę oraz link.</li>
+            <li>Po akceptacji możesz uiścić opłatę i aktywować baner.</li>
+        </ol>
+    </div>
+
+    <div class="section center">
+        <h2>Zasady</h2>
+        <ol>
+            <li>Wybierasz typ.</li>
+            <li>Wypełniasz formularz i przesyłasz grafikę.</li>
+            <li>Administrator strony weryfikuje grafikę oraz link.</li>
+            <li>Po akceptacji możesz uiścić opłatę i aktywować baner.</li>
+        </ol>
+    </div>
+</body>
+
+<script>
+    var selectedBanner = 0;
+
+    const banners = document.querySelectorAll('.banner');
+    const errorResponse = document.getElementById('error-response');
+
+    function selectBanner(view, id) {
+        selectedBanner = id;
+
+        banners.forEach(banner =>
+            banner.classList.remove('selected')
+        );
+
+        view.classList.add('selected');
+    }
+
+    async function uploadBanner(button) {
+        const fileInput = document.getElementById('file-input');
+        const linkInput = document.getElementById('link-input');
+
+        const file = fileInput.files[0];
+        const link = linkInput.value;
+
+        if (selectedBanner == 0) {
+            errorResponse.innerHTML = 'Wybierz rozmiar';
+            return;
+        }
+
+        if (file == null) {
+            errorResponse.innerHTML = 'Prześlij plik graficzny. Akceptujemy jedynie rozszerzenia jpeg, png, i gif';
+            return;
+        }
+        else {
+            const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+            if (!allowedTypes.includes(file.type)) {
+                errorResponse.innerHTML = 'Akceptujemy jedynie rozszerzenia jpeg, png, i gif';
+                return;
+            }
+
+            if (file.size > 4 * 1024 * 1024) {
+                errorResponse.innerHTML = 'Rozmiar pliku jest za duży';
+                return;
+            }
+        }
+        errorResponse.innerHTML = '';
+        var size = "SMALL";
+        if (selectedBanner == 1) {
+            size = "BIG";
+        }
+
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('link', link);
+        formData.append('size', size);
+
+        try {
+            const response = await fetch('/banner', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!response.ok) {
+                const errorResponse = await response.json();
+                throw new Error(`Error: ${errorResponse.message}`);
+            }
+            else {
+                const responseJson = await response.json();
+                errorResponse.innerHTML = responseJson.message;
+
+                if (responseJson.status == "OK") {
+                    button.style.display = "none";
+                }
+            }
+        } catch (error) {
+            errorResponse.innerHTML = error.message;
+        }
+    }
+</script>
+
+<script>
+    document.getElementById('file-input').addEventListener('change', function (event) {
+        const fileName = event.target.files.length > 0 ? event.target.files[0].name : 'Nie wybrano pliku';
+        document.getElementById('file-name').textContent = fileName;
+    });
+
+    document.querySelector('.file-input button').addEventListener('click', function () {
+        document.getElementById('file-input').click();
+    });
+</script>
+
+</html>

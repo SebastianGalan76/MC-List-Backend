@@ -3,6 +3,7 @@ package com.coresaken.mcserverlist.service;
 import com.coresaken.mcserverlist.data.response.Response;
 import com.coresaken.mcserverlist.database.model.server.Server;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -19,7 +20,7 @@ public class BannerFileService {
     private static final long MAX_FILE_SIZE = 4 * 1024 * 1024;
     private static final String UPLOAD_DIR = System.getProperty("user.dir") + "/uploads/banners/";
 
-    public static Response upload(MultipartFile file, Server server) {
+    public static Response upload(MultipartFile file) {
         if (file.isEmpty()) {
             return Response.builder().status(HttpStatus.BAD_REQUEST).message("Akceptujemy jedynie rozszerzenia jpeg, png, i gif").build();
         }
@@ -43,13 +44,12 @@ public class BannerFileService {
                 Files.createDirectories(uploadPath);
             }
             file.transferTo(new File(UPLOAD_DIR + newFilename));
-            server.setBanner("/uploads/banners/" + newFilename);
         } catch (IOException e) {
             e.printStackTrace();
             return Response.builder().status(HttpStatus.BAD_REQUEST).message("Pojawił się błąd #4124. Spróbuj ponownie później lub skontaktuj się z nami").build();
         }
 
-        return Response.builder().status(HttpStatus.OK).build();
+        return Response.builder().status(HttpStatus.OK).message("/uploads/banners/"+newFilename).build();
     }
 
     public static void remove(String fileName){

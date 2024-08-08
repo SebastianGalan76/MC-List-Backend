@@ -29,3 +29,23 @@ export function isPortValid(port) {
 
     return true;
 }
+
+export function convertDate(inputDate) {
+    if(inputDate == null){
+        return '';
+    }
+
+    var date = new Date(inputDate);
+
+    var day = String(date.getDate()).padStart(2, '0');
+    var month = String(date.getMonth() + 1).padStart(2, '0'); 
+    var year = date.getFullYear();
+    
+    var hours = String(date.getHours()).padStart(2, '0');
+    var minutes = String(date.getMinutes()).padStart(2, '0');
+    var seconds = String(date.getSeconds()).padStart(2, '0');
+
+    var formattedDate = `${day}.${month}.${year} ${hours}:${minutes}:${seconds}`;
+    
+    return formattedDate;
+}

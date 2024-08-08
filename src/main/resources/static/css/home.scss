@@ -1,21 +1,23 @@
 @import "base";
 
 #banner-container {
-    margin-top: 50px;
-    margin-bottom: 50px;
+    margin-top: 20px;
+    margin-bottom: 30px;
 
-    width: fit-content;
-    height: fit-content;
+    width: 80%;
+    max-height: 350px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     .banner {
-        padding: 15px;
+        width: 100%;
 
+        position: relative;
         img {
-            width: auto;
+            width: 100%;
             height: auto;
-            max-width: 100%;
-            max-height: 100%;
-            -o-object-fit: cover;
             object-fit: cover;
         }
     }
@@ -29,6 +31,7 @@
         }
     }
 }
+
 
 #search-container {
     width: 1200px;
