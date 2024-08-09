@@ -53,6 +53,27 @@ function createOnlinePlayerChart(id, data, plugin, beginAtZero) {
         return entry.playerCount;
     });
 
+    var minPlayerCount = Math.min(...playerCounts);
+
+    var yConfig;
+
+    if (beginAtZero || minPlayerCount < 10) {
+        yConfig = {
+            beginAtZero: true,
+            ticks: {
+                color: '#ffffff80'
+            }
+        };
+    }
+    else {
+        yConfig = {
+            min: minPlayerCount - 10,
+            ticks: {
+                color: '#ffffff80'
+            }
+        };
+    }
+
     var ctx = document.getElementById(id).getContext('2d');
     new Chart(ctx, {
         type: 'line',
@@ -88,13 +109,7 @@ function createOnlinePlayerChart(id, data, plugin, beginAtZero) {
                         color: '#ffffff80'
                     }
                 },
-                y: {
-                    beginAtZero: beginAtZero,
-
-                    ticks: {
-                        color: '#ffffff80'
-                    }
-                }
+                y: yConfig
             },
             plugins: {
                 legend: {

@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Data
@@ -60,7 +62,7 @@ public class BannerService {
         }
 
         bannerRepository.save(banner);
-        return Response.builder().status(HttpStatus.OK).build();
+        return Response.builder().status(HttpStatus.OK).message("Baner został zaakceptowany").build();
     }
 
     public Response rejectBanner(Long bannerId, String reason){
@@ -76,7 +78,7 @@ public class BannerService {
 
         banner.changeStatus(Banner.Status.REJECTED, reason);
         bannerRepository.save(banner);
-        return Response.builder().status(HttpStatus.OK).build();
+        return Response.builder().status(HttpStatus.OK).message("Baner został odrzucony").build();
     }
 
     public Response publishBanner(Long bannerId){
@@ -138,5 +140,13 @@ public class BannerService {
         BannerFileService.remove(banner.getFilePath());
         bannerRepository.delete(banner);
         return Response.builder().status(HttpStatus.OK).build();
+    }
+
+    public List<Banner> getBannersByStatus(Banner.Status[] statuses){
+        List<Banner> banners = new ArrayList<>();
+        for(Banner.Status status:statuses){
+            banners.addAll(bannerRepository.findByStatus(status));
+        }
+        return banners;
     }
 }

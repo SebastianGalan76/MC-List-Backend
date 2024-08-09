@@ -16,7 +16,7 @@ public class BannerController {
     final UserService userService;
     final BannerService bannerService;
 
-    @RequestMapping("/banner")
+    @RequestMapping("/banners")
     public String getBannerPage(Model model){
         model.addAttribute("user", userService.getLoggedUser());
         return "subPage/banner";
@@ -38,5 +38,17 @@ public class BannerController {
     @DeleteMapping("/banner/{id}")
     public Response deleteBanner(@PathVariable("id") Long id){
         return bannerService.deleteBanner(id);
+    }
+
+    @ResponseBody
+    @PostMapping("/banner/{id}/accept")
+    public Response acceptBanner(@PathVariable("id") Long id){
+        return bannerService.acceptBanner(id);
+    }
+
+    @ResponseBody
+    @PostMapping("/banner/{id}/reject")
+    public Response rejectBanner(@PathVariable("id") Long id, @Param("reason") String reason){
+        return bannerService.rejectBanner(id, reason);
     }
 }

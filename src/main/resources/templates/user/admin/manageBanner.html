@@ -45,30 +45,25 @@
             </div>
 
             <div id="form-container" class="center">
+                Link: <br>
+                <span id="link-preview"></span>
+
                 <div class="input-area">
-                    <input id="link-input" type="text" placeholder="Docelowy link (np. sklep, strona główna)"
+                    <input id="reject-reason-input" type="text" placeholder="Powód odrzucenia"
                         maxlength="256">
                     <div class="icon">
                         <i class="fa-solid fa-link"></i>
                     </div>
                 </div>
 
-                <div class="file-input-container center">
-                    <div class="file-input">
-                        <button type="button">Zmień plik</button>
-                        <input type="file" id="file-input">
-                    </div>
-                    <span class="file-name" id="file-name">Nie wybrano nowego pliku</span>
-
-                    <div class="icon">
-                        <i class="fa-solid fa-file"></i>
-                    </div>
-                </div>
-
                 <div class="error" id="error-response"></div>
 
-                <div class="save-button center" id="save-changes-button">
-                    Wyślij zmiany do weryfikacji
+                <div class="save-button center" id="accept-button">
+                    Zaakceptuj
+                </div>
+
+                <div class="save-button center" id="reject-button">
+                    Odrzuć
                 </div>
             </div>
         </div>
@@ -134,8 +129,9 @@
     const editPopup = document.getElementById('change-banner-popup');
     const deletePopup = document.getElementById('delete-banner-popup');
 
-    const fileInput = document.getElementById('file-input');
-    const linkInput = document.getElementById('link-input');
+    const linkPreview = document.getElementById('link-preview');
+
+    const rejectReasonInput = document.getElementById('reject-reason-input');
 
     const previewBanner = document.getElementById('banner-preview-src');
     const responseError = document.getElementById('error-response');
@@ -148,15 +144,11 @@
     document.getElementById('close-change-banner-popup').addEventListener('click', () => {
         editPopup.classList.remove('active');
     });
-    document.getElementById('save-changes-button').addEventListener('click', () => {
-        editBannerPerform();
+    document.getElementById('accept-button').addEventListener('click', () => {
+        acceptBannerPerform();
     });
-
-    document.getElementById('close-delete-banner-popup').addEventListener('click', () => {
-        deletePopup.classList.remove('active');
-    });
-    document.getElementById('delete-banner-button').addEventListener('click', () => {
-        deleteBannerPerform();
+    document.getElementById('reject-button').addEventListener('click', () => {
+        rejectBannerPerform();
     });
 
     const banners = /*[[${banners}]]*/[];
@@ -195,22 +187,60 @@
         deleteIcon.title = "Usuń baner";
         deleteIcon.onclick = function () { deleteBanner(bannerJson); };
         newRow.lastElementChild.appendChild(deleteIcon);
-
-        if (!bannerJson.paid && bannerJson.status=="ACCEPTED") {
-            var payIcon = document.createElement('i');
-            payIcon.title = "Opłać i opublikuj baner";
-            payIcon.className = 'fa-solid fa-sack-dollar';
-            payIcon.onclick = function () { payBanner(bannerJson); };
-            newRow.lastElementChild.appendChild(payIcon);
-        }
     }
 
     function editBanner(bannerJson) {
         editPopup.classList.add('active');
 
-        linkInput.value = bannerJson.link;
         previewBanner.src = bannerJson.filePath;
+        linkPreview.innerHTML = bannerJson.link;
         selectedBanner = bannerJson;
+    }
+
+    async function acceptBannerPerform() {
+        responseError.innerHTML = '';
+
+        try {
+            const response = await fetch('/banner/' + selectedBanner.id +'/accept', {
+                method: 'POST',
+            });
+
+            if (!response.ok) {
+                const errorResponse = await response.json();
+                throw new Error(`Error: ${errorResponse.message}`);
+            }
+            else {
+                const responseJson = await response.json();
+                responseError.innerHTML = responseJson.message;
+            }
+        } catch (error) {
+            responseError.innerHTML = error.message;
+        }
+    }
+
+    async function rejectBannerPerform() {
+        responseError.innerHTML = '';
+
+        const formData = new FormData();
+        formData.append('reason', rejectReasonInput.value);
+
+        try {
+            const response = await fetch('/banner/' + selectedBanner.id +'/reject', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!response.ok) {
+                const errorResponse = await response.json();
+                throw new Error(`Error: ${errorResponse.message}`);
+            }
+            else {
+                const responseJson = await response.json();
+                responseError.innerHTML = responseJson.message;
+            }
+        } catch (error) {
+            responseError.innerHTML = error.message;
+        }
     }
 
     function deleteBanner(bannerJson) {
@@ -237,63 +267,12 @@
         }
     }
 
-    async function editBannerPerform() {
-        if (selectedBanner == null) {
-            return;
-        }
-
-        const file = fileInput.files[0];
-        const link = linkInput.value;
-
-        if (file != null) {
-            const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-            if (!allowedTypes.includes(file.type)) {
-                responseError.innerHTML = 'Akceptujemy jedynie rozszerzenia jpeg, png, i gif';
-                return;
-            }
-
-            if (file.size > 4 * 1024 * 1024) {
-                responseError.innerHTML = 'Rozmiar pliku jest za duży';
-                return;
-            }
-        }
-        responseError.innerHTML = '';
-
-        const formData = new FormData();
-        if (file != null) {
-            formData.append('file', file);
-        }
-        formData.append('link', link);
-
-        try {
-            const response = await fetch('/banner/' + selectedBanner.id, {
-                method: 'PUT',
-                body: formData
-            });
-
-            if (!response.ok) {
-                const errorResponse = await response.json();
-                throw new Error(`Error: ${errorResponse.message}`);
-            }
-            else {
-                const responseJson = await response.json();
-                responseError.innerHTML = responseJson.message;
-            }
-        } catch (error) {
-            console.log(error.message);
-        }
-    }
-
-    async function payBanner(bannerJson) {
-
-    }
-
     function getStatus(bannerJson) {
         if (bannerJson.status == "PUBLISHED") {
             return "Opublikowany";
         }
         if (bannerJson.status == "ACCEPTED") {
-            return "Zaakceptowany <i class=\"fa-solid fa-circle-info\" title='Opłać teraz baner, aby został opublikowany'></i>";
+            return "Zaakceptowany";
         }
         if (bannerJson.status == "REJECTED") {
             return "Odrzucony   <i class=\"fa-solid fa-circle-info\" title='Powód: " + bannerJson.rejectedReason + "'></i>";
@@ -306,18 +285,4 @@
         }
     }
 </script>
-
-
-
-<script>
-    document.getElementById('file-input').addEventListener('change', function (event) {
-        const fileName = event.target.files.length > 0 ? event.target.files[0].name : 'Nie wybrano pliku';
-        document.getElementById('file-name').textContent = fileName;
-    });
-
-    document.querySelector('.file-input button').addEventListener('click', function () {
-        document.getElementById('file-input').click();
-    });
-</script>
-
 </html>
