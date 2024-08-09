@@ -30,9 +30,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ManageServerService {
     final ServerRepository serverRepository;
+
     final NewServerService newServerService;
     final ServerStatusService serverStatusService;
     final UserService userService;
+    final ModeService modeService;
 
     final NameRepository nameRepository;
 
@@ -164,17 +166,21 @@ public class ManageServerService {
     public Response saveSubServers(Server server, ListDto<SubServerDto> subServersDto) {
         server.getSubServers().clear();
 
+        List<SubServerDto> subServerDtos = subServersDto.getData();
+        if(!subServerDtos.isEmpty()){
+            server.setMode(modeService.getNetworkMode());
 
-        for(SubServerDto subServerDto:subServersDto.getData()){
-            SubServer subServer = new SubServer();
-            subServer.setIndex(subServerDto.getIndex());
+            for(SubServerDto subServerDto:subServerDtos){
+                SubServer subServer = new SubServer();
+                subServer.setIndex(subServerDto.getIndex());
 
-            subServer.setServer(server);
-            subServer.setName(nameRepository.save(new Name(subServerDto.getName(), subServerDto.getColor())));
-            subServer.setMode(subServerDto.getMode());
-            subServer.setVersions(subServerDto.getVersions());
+                subServer.setServer(server);
+                subServer.setName(nameRepository.save(new Name(subServerDto.getName(), subServerDto.getColor())));
+                subServer.setMode(subServerDto.getMode());
+                subServer.setVersions(subServerDto.getVersions());
 
-            server.getSubServers().add(subServer);
+                server.getSubServers().add(subServer);
+            }
         }
 
         serverRepository.save(server);

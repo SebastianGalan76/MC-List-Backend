@@ -33,19 +33,15 @@ public interface ServerRepository extends JpaRepository<Server, Long> {
 
     @Query("SELECT DISTINCT s FROM Server s " +
             "LEFT JOIN s.versions v " +
-            "LEFT JOIN s.subServers ss " +
-            "LEFT JOIN ss.versions sv " +
-            "LEFT JOIN ss.mode sm " +
-            "WHERE (:mode IS NULL OR s.mode = :mode OR sm = :mode) " +
+            "WHERE (:mode IS NULL OR s.mode = :mode) " +
             "AND (:versionId = 0 " +
             "    OR (v.id <= :versionId AND EXISTS (SELECT 1 FROM s.versions v2 WHERE v2.id >= :versionId)) " +
-            "    OR (SIZE(s.versions) = 1 AND v.id = :versionId) " +
-            "    OR (sv.id <= :versionId AND EXISTS (SELECT 1 FROM ss.versions sv2 WHERE sv2.id >= :versionId)) " +
-            "    OR (SIZE(ss.versions) = 1 AND sv.id = :versionId))")
+            "    OR (SIZE(s.versions) = 1 AND v.id = :versionId))")
     List<Server> findServersByModeAndVersionRange(
             @Param("mode") Mode mode,
             @Param("versionId") Long versionId
     );
+
 
     @Query("SELECT s FROM Server s WHERE s.premium = true")
     List<Server> findAllPremiumServers();

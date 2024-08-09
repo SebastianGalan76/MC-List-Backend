@@ -10,4 +10,6 @@ import java.util.List;
 public interface BannerRepository extends JpaRepository<Banner, Long> {
     List<Banner> findByOwnerId(Long userId);
     List<Banner> findByStatus(Banner.Status status);
+
+    List<Banner> findByStatusAndSize(Banner.Status status, Banner.Size size);
 }

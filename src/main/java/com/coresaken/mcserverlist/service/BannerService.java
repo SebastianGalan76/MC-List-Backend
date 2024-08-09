@@ -4,6 +4,7 @@ import com.coresaken.mcserverlist.data.response.Response;
 import com.coresaken.mcserverlist.database.model.Banner;
 import com.coresaken.mcserverlist.database.model.User;
 import com.coresaken.mcserverlist.database.repository.BannerRepository;
+import jakarta.annotation.PostConstruct;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,41 @@ public class BannerService {
     final UserService userService;
     final BannerRepository bannerRepository;
 
+    private List<Banner> bigBanners;
+    private int bigBannerIndex;
+
+    private List<Banner> smallBanners;
+    private int smallBannerIndex;
+
+    @PostConstruct
+    public void initialize(){
+        bigBanners = bannerRepository.findByStatusAndSize(Banner.Status.PUBLISHED, Banner.Size.BIG);
+        smallBanners = bannerRepository.findByStatusAndSize(Banner.Status.PUBLISHED, Banner.Size.SMALL);
+
+        bigBannerIndex = 0;
+        smallBannerIndex = 0;
+    }
+
+    public Banner getBigBanner(){
+        if(bigBanners.isEmpty()){
+            return null;
+        }
+        return bigBanners.get(bigBannerIndex++%bigBanners.size());
+    }
+
+    public List<Banner> getSmallBanners(){
+        if(smallBanners.isEmpty()){
+            return null;
+        }
+
+        List<Banner> banners = new ArrayList<>();
+        for(int i=0;i<3;i++){
+            banners.add(smallBanners.get(smallBannerIndex++%smallBanners.size()));
+        }
+
+        return banners;
+    }
+
     public Response createBanner(MultipartFile file, String link, String size) {
         User user = userService.getLoggedUser();
         if(user == null){
@@ -33,7 +69,7 @@ public class BannerService {
         }
 
         Banner banner = new Banner();
-        banner.setBannerSize(Banner.BannerSize.valueOf(size));
+        banner.setSize(Banner.Size.valueOf(size));
         banner.setLink(link);
         banner.setOwner(user);
         banner.changeStatus(Banner.Status.NOT_VERIFIED, null);
@@ -56,6 +92,13 @@ public class BannerService {
 
         if(banner.isPaid()){
             banner.changeStatus(Banner.Status.PUBLISHED, null);
+
+            if(banner.getSize() == Banner.Size.BIG){
+                bigBanners.add(banner);
+            }
+            else if(banner.getSize() == Banner.Size.SMALL){
+                smallBanners.add(banner);
+            }
         }
         else{
             banner.changeStatus(Banner.Status.ACCEPTED, null);
@@ -93,6 +136,14 @@ public class BannerService {
         banner.setPublishedAt(now);
         banner.setFinishedAt(now.plusDays(31));
         banner.setPaid(true);
+
+        if(banner.getSize() == Banner.Size.BIG){
+            bigBanners.add(banner);
+        }
+        else if(banner.getSize() == Banner.Size.SMALL){
+            smallBanners.add(banner);
+        }
+
         bannerRepository.save(banner);
         return Response.builder().status(HttpStatus.OK).build();
     }
@@ -106,6 +157,13 @@ public class BannerService {
         User user = userService.getLoggedUser();
         if(user==null || user.getRole() != User.Role.ADMIN || !banner.getOwner().equals(user)){
             return Response.builder().status(HttpStatus.BAD_REQUEST).message("Nie posiadasz wymaganych uprawnień, aby to zrobić").build();
+        }
+
+        if(banner.getSize() == Banner.Size.BIG){
+            bigBanners.remove(banner);
+        }
+        else if(banner.getSize() == Banner.Size.SMALL){
+            smallBanners.remove(banner);
         }
 
         if(file != null){
@@ -130,6 +188,13 @@ public class BannerService {
         Banner banner = bannerRepository.findById(id).orElse(null);
         if(banner == null){
             return Response.builder().status(HttpStatus.BAD_REQUEST).message("Wystąpił błąd #8725. Brak baneru o podanym ID").build();
+        }
+
+        if(banner.getSize() == Banner.Size.BIG){
+            bigBanners.remove(banner);
+        }
+        else if(banner.getSize() == Banner.Size.SMALL){
+            smallBanners.remove(banner);
         }
 
         User user = userService.getLoggedUser();

@@ -41,10 +41,10 @@
 <body>
     <div th:replace="~{fragment/header :: headerFragment}"></div>
 
-    <div id="banner-container" class="center">
-        <div class="banner">
-            <img src="/img/promo1.webp" alt="Baner reklamowy">
-        </div>
+    <div id="banner-container" class="center" th:if="${bigBanner != null}">
+        <a class="banner" th:href="${bigBanner.link}">
+            <img th:src="${bigBanner.filePath}" alt="Baner reklamowy">
+        </a>
     </div>
 
     <div id="search-container" class="center">
@@ -194,9 +194,22 @@
     </a>
 </template>
 
-<script type="module">
+<template id="banner-small-template">
+    <div class="banner-small-container center">
+        <a class="banner">
+            <img class="banner-img-scr" alt="Baner reklamowy">
+        </a>
+    </div>
+</template>
+
+<script type="module" th:inline="javascript">
     import {initializePageManager, refreshPageContainer } from "./js/pageManager.js";
     import {loadServers } from "./js/serverListManager.js";
+    import {loadBanners } from "./js/smallBannerManager.js";
+
+    const smallBanners = /*[[${smallBanners}]]*/ [];
+    loadBanners(smallBanners);
+
     initializePageManager(document.getElementById("page-container"), loadServers);
     loadServers();
 

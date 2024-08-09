@@ -1,14 +1,10 @@
 package com.coresaken.mcserverlist.database.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 
 @Entity
@@ -28,7 +24,7 @@ public class Banner {
     User owner;
 
     @Enumerated(EnumType.STRING)
-    BannerSize bannerSize;
+    Size size;
 
     @Enumerated(EnumType.STRING)
     Status status;
@@ -40,7 +36,7 @@ public class Banner {
 
     boolean paid = false;
 
-    public enum BannerSize{
+    public enum Size {
         BIG, NORMAL, SMALL
     }
 

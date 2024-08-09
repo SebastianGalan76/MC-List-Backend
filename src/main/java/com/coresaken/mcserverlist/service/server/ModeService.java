@@ -18,9 +18,18 @@ public class ModeService implements CommandLineRunner {
     final ModeRepository modeRepository;
 
     List<Mode> modeList;
+    Mode networkMode;
 
     @Override
     public void run(String... args) throws Exception {
         modeList = modeRepository.findAll();
+
+        networkMode = modeList.stream()
+                .filter(mode -> mode.getId() == 1)
+                .findFirst().orElse(null);
+    }
+
+    public Mode getServerNetworkMode(){
+        return networkMode;
     }
 }

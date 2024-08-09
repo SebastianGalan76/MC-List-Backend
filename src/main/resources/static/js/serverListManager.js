@@ -2,6 +2,7 @@ const serverTemplate = document.getElementById("server-template");
 const serverListContainer = document.getElementById("server-container");
 
 import { getCurrentPage, refreshPageContainer } from "./pageManager.js";
+import { getBanner } from "./smallBannerManager.js";
 
 export async function loadServers() {
     const response = await fetch('/server/list/' + getCurrentPage(), {
@@ -27,6 +28,7 @@ export async function loadServers() {
 export function populateList(listArray) {
     serverListContainer.innerHTML = null;
     let serversHeader = 0;
+    let serverIndex = 1;
 
     listArray.forEach(serverJson => {
         const template = serverTemplate.content.cloneNode(true);
@@ -93,7 +95,6 @@ export function populateList(listArray) {
             template.querySelector('.promotion').style.display = "none";
 
             if (serversHeader == 0 || serversHeader == 1) {
-                console.log(serversHeader);
                 serversHeader = 2;
                 serverListContainer.appendChild(createServerHeader('', '', 'Serwery'));
             }
@@ -105,7 +106,15 @@ export function populateList(listArray) {
         const vote = template.querySelector('.vote-value');
         vote.innerHTML = serverJson.votes.length;
 
+        if(serverIndex % 8 == 0){
+            var banner = getBanner();
+            if(banner != null){
+                serverListContainer.appendChild(banner);
+            }
+        }
+
         serverListContainer.appendChild(template);
+        serverIndex++;
     });
 }
 

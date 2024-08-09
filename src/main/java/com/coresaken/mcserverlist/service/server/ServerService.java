@@ -9,6 +9,7 @@ import com.coresaken.mcserverlist.database.model.server.ServerUserRole;
 import com.coresaken.mcserverlist.database.model.server.ratings.PlayerRating;
 import com.coresaken.mcserverlist.database.repository.PlayerRatingRepository;
 import com.coresaken.mcserverlist.database.repository.ServerRepository;
+import com.coresaken.mcserverlist.database.repository.SubServerRepository;
 import com.coresaken.mcserverlist.service.ServerStatusService;
 import com.coresaken.mcserverlist.service.UserService;
 import com.coresaken.mcserverlist.util.PermissionChecker;
@@ -31,6 +32,8 @@ public class ServerService {
     final ServerStatusService serverStatusService;
 
     final ServerRepository serverRepository;
+    final SubServerRepository subServerRepository;
+
     final PlayerRatingRepository playerRatingRepository;
 
     public Page<Server> getServers(int page){
@@ -111,6 +114,7 @@ public class ServerService {
 
         Long versionId = searchServerDto.getVersion() != null ? searchServerDto.getVersion().getId() : 0;
         Set<Server> serversByModeAndVersions = new HashSet<>(serverRepository.findServersByModeAndVersionRange(searchServerDto.getMode(), versionId));
+        serversByModeAndVersions.addAll(subServerRepository.findServersByModeAndVersion(searchServerDto.getMode(), versionId));
 
         Set<Server> commonServers = new HashSet<>(serversByName);
         if (searchServerDto.getMode() != null || searchServerDto.getVersion() != null) {
