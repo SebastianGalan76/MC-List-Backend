@@ -5,6 +5,68 @@ header {
     background-color: $color-dark;
     
     padding: 0 60px;
+    position: relative;
+
+    .button-container{
+        ul{
+            li{
+                list-style-type: none;
+                font-weight: 600;
+                padding: 0 5px;
+            }
+
+            li.add-server-button{
+                color: $color-green;
+            }
+            li.add-server-button:hover{
+                color: $color-green-dark;
+            }
+
+            li.buy-banner-button{
+                color: $color-yellow;
+            }
+            li.buy-banner-button:hover{
+                color: $color-yellow-dark;
+            }
+
+            li:hover{
+                cursor: pointer;
+                color: rgb(226, 221, 186);
+            }
+        }
+
+        @media (max-width: 900px){
+            ul{
+                gap: 3px;
+            }
+        }
+
+        @media (max-width: 750px){
+            display: none;
+        }
+
+    }
+
+    .user-logged-in{
+        font-weight: 800;
+    }
+
+    .user-not-logged-in{
+        .sign-in{
+            display: block;
+            background-color: $color-theme;
+            padding: 8px 30px;
+            border-radius: 15px;
+            font-weight: 700;
+
+            border: 2px solid $color-white;
+        }
+
+        .sign-in:hover{
+            cursor: pointer;
+            background-color: $color-theme-dark;
+        }
+    }
 
     .wrapper{
         height: 60px;
@@ -29,57 +91,102 @@ header {
                 ul{
                     display: flex;
                     gap: 10px;
-
-                    li{
-                        list-style-type: none;
-                        font-weight: 600;
-                        padding: 0 5px;
-                    }
-
-                    li.add-server-button{
-                        color: $color-green;
-                    }
-                    li.add-server-button:hover{
-                        color: $color-green-dark;
-                    }
-
-                    li.buy-banner-button{
-                        color: $color-yellow;
-                    }
-                    li.buy-banner-button:hover{
-                        color: $color-yellow-dark;
-                    }
-
-                    li:hover{
-                        cursor: pointer;
-                        color: rgb(226, 221, 186);
-                    }
                 }
-
             }
         }
 
         .right-panel {
-            .user-logged-in{
-                font-weight: 800;
-            }
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            z-index: 150;
 
-            .user-not-logged-in{
-                .sign-in{
+            #menu-button{
+                display: none;
+                padding: 15px;
+                background-color: $color-dark;
+                border-radius: 10px;
+
+                @media (max-width: 750px) {
                     display: block;
-                    background-color: $color-theme;
-                    padding: 8px 30px;
-                    border-radius: 15px;
-                    font-weight: 700;
-        
-                    border: 2px solid $color-white;
-                }
-        
-                .sign-in:hover{
-                    cursor: pointer;
-                    background-color: $color-theme-dark;
                 }
             }
         }
+    }
+
+    .right-panel-menu{
+        display: none;
+
+        width: 100%;
+        height: calc(100vh - 60px);
+
+        position: absolute;
+        top: 0;
+        left: 0;
+        
+        #background{
+            position: absolute;
+            width: 100%;
+            height: 100%;
+
+            background-color: $color-dark;
+            backdrop-filter: blur(2px);
+            z-index: 50;
+        }
+
+        .panel-menu{
+            width: 250px;
+            height: 100vh;
+
+            overflow-y: auto;
+            padding-top: 60px;
+
+            background-color: #0f0f0f;
+            position: absolute;
+            right: 0;
+            z-index: 100;
+
+            .logo{
+                background-color: rebeccapurple;
+                width: 100%;
+                height: 30px;
+
+                margin-top: 15px;
+            }
+
+            .button-container{
+                display: flex;
+                flex-direction: column !important;
+
+                margin-top: 50px;
+
+                ul{
+                    display: flex;
+                    flex-direction: column;
+                    gap: 20px;
+                    align-items: center;
+                }
+            }
+
+            .user-not-logged-in{
+                margin-top: 50px;
+
+                width: 80%;
+                text-align: center;
+            }
+
+            .user-logged-in{
+                margin-top: 50px;
+                text-align: center;
+            }
+        }
+    }
+
+    .right-panel-menu.active{
+        display: block;
+    }
+
+    @media (max-width: 900px){
+        padding: 0 20px;
     }
 }

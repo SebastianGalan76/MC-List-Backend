@@ -14,6 +14,18 @@
   border: 1px solid rgba(121, 121, 121, 0.4431372549);
   border-radius: 10px;
 }
+@media (max-width: 800px) {
+  .header .button {
+    position: relative;
+    right: 0;
+    top: 0;
+    width: 80%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
 .header .button:hover {
   background-color: rgba(0, 0, 0, 0.2588235294);
   cursor: pointer;
@@ -21,7 +33,7 @@
 
 #banner-container-big {
   height: 300px;
-  width: 80%;
+  width: 1800px;
   background-color: rgba(0, 0, 0, 0.2588235294);
 }
 #banner-container-big .banner {
@@ -47,6 +59,11 @@
 }
 #banner-container-big .banner .limit {
   font-weight: 600;
+}
+@media (max-width: 1800px) {
+  #banner-container-big {
+    width: 100%;
+  }
 }
 
 #banner-container-small {
@@ -80,6 +97,11 @@
 #banner-container-small .banner .limit {
   font-weight: 600;
 }
+@media (max-width: 1200px) {
+  #banner-container-small {
+    width: 100%;
+  }
+}
 
 .banner:hover {
   border: 2px solid rgba(121, 121, 121, 0.4431372549);
@@ -110,6 +132,11 @@
   background-color: #ce8e45;
   cursor: pointer;
 }
+@media (max-width: 800px) {
+  #form-container {
+    width: 100%;
+  }
+}
 
 .section {
   width: 800px;
@@ -123,6 +150,11 @@
 }
 .section ol {
   padding: 0 30px;
+}
+@media (max-width: 800px) {
+  .section {
+    width: 100%;
+  }
 }
 
 .link {

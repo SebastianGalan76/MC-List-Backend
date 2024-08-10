@@ -115,7 +115,7 @@
         const url = urlInput.value;
 
         if (file != null) {
-            const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+            const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', "image/webp"];
             if (!allowedTypes.includes(file.type)) {
                 responseError.innerHTML = 'Akceptujemy jedynie rozszerzenia jpeg, png, i gif';
                 return;

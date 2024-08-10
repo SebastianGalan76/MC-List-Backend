@@ -1,6 +1,4 @@
-function copyToClipboard(element) {
-    const text = element.getAttribute('data-copy');
-
+export function copyValueToClipboard(text) {
     const tempInput = document.createElement('input');
     tempInput.style.position = 'absolute';
     tempInput.style.left = '-9999px';

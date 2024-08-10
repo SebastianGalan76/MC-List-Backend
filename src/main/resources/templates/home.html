@@ -42,7 +42,7 @@
     <div th:replace="~{fragment/header :: headerFragment}"></div>
 
     <div id="banner-container" class="center" th:if="${bigBanner != null}">
-        <a class="banner" th:href="${bigBanner.link}">
+        <a class="banner" th:href="${bigBanner.link}" target="_blank">
             <img th:src="${bigBanner.filePath}" alt="Baner reklamowy">
         </a>
     </div>
@@ -196,7 +196,7 @@
 
 <template id="banner-small-template">
     <div class="banner-small-container center">
-        <a class="banner">
+        <a class="banner" target="_blank">
             <img class="banner-img-scr" alt="Baner reklamowy">
         </a>
     </div>

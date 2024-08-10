@@ -8,7 +8,7 @@ export function loadBanners(bannersJson) {
 }
 
 export function getBanner() {
-    if(banners.length == 0){
+    if(banners == null || banners.length == 0){
         return null;
     }
 

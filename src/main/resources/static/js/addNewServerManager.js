@@ -130,7 +130,7 @@ export async function editServer(serverId) {
         versions: getSelectedVersions(),
         modes: getSelectedModes(),
         premium: premiumCheckbox.checked,
-        mods: premiumCheckbox.mods,
+        mods: modsCheckbox.checked
     }
 
     try {

@@ -13,79 +13,6 @@
   overflow: hidden;
   padding-bottom: 250px;
 }
-#page-wrapper #container #server-preview {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-#page-wrapper #container #server-preview .logo {
-  background-color: rgba(0, 0, 0, 0.2588235294);
-  width: 120px;
-  height: 120px;
-  overflow: hidden;
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-shrink: 0;
-}
-#page-wrapper #container #server-preview .logo img {
-  width: 80px;
-  height: 80px;
-  max-width: 100%;
-  max-height: 100%;
-  -o-object-fit: cover;
-     object-fit: cover;
-}
-#page-wrapper #container #server-preview .middle-panel {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-#page-wrapper #container #server-preview .middle-panel .address-value {
-  font-size: 1.2em;
-  font-weight: 800;
-}
-#page-wrapper #container #server-preview .middle-panel .motd {
-  display: flex;
-  align-items: center;
-}
-#page-wrapper #container #server-preview .middle-panel .tag-container {
-  margin-top: 10px;
-  display: flex;
-  gap: 10px;
-  font-size: 0.9em;
-}
-#page-wrapper #container #server-preview .middle-panel .tag-container .tag {
-  display: flex;
-  gap: 8px;
-  background-color: rgba(255, 255, 255, 0.1019607843);
-  width: -moz-fit-content;
-  width: fit-content;
-  padding: 3px 10px;
-  border-radius: 15px;
-}
-#page-wrapper #container #server-preview .statistic-container {
-  flex-shrink: 0;
-  display: flex;
-  gap: 20px;
-}
-#page-wrapper #container #server-preview .statistic-container .statistic {
-  width: 120px;
-  height: 120px;
-  background-color: rgba(0, 0, 0, 0.2588235294);
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  align-items: center;
-  justify-content: center;
-}
-#page-wrapper #container #server-preview .statistic-container .statistic .icon {
-  font-size: 2.2em;
-}
 #page-wrapper #container #main-container .header {
   font-size: 2em;
   text-align: center;
@@ -140,6 +67,14 @@
 #page-wrapper #container #main-container #option-container .option .info .button:hover {
   cursor: pointer;
   background-color: #ce8e45;
+}
+@media (max-width: 800px) {
+  #page-wrapper #container #main-container #option-container {
+    flex-direction: column;
+  }
+  #page-wrapper #container #main-container #option-container .option {
+    width: 100%;
+  }
 }
 #page-wrapper #container #main-container .response {
   margin-top: 20px;

@@ -16,98 +16,6 @@
 
         padding-bottom: 250px;
 
-        #server-preview {
-            width: 100%;
-
-            display: flex;
-            align-items: center;
-            gap: 10px;
-
-            .logo {
-                background-color: $color-dark;
-
-                width: 120px;
-                height: 120px;
-
-                overflow: hidden;
-                border-radius: 10px;
-
-                display: flex;
-                justify-content: center;
-                align-items: center;
-
-                flex-shrink: 0;
-                img {
-                    width: 80px;
-                    height: 80px;
-                    max-width: 100%;
-                    max-height: 100%;
-                    object-fit: cover;
-                }
-            }
-
-            .middle-panel {
-                flex-grow: 1;
-
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-
-                .address-value {
-                    font-size: 1.2em;
-                    font-weight: 800;
-                }
-
-                .motd {
-                    display: flex;
-                    align-items: center;
-                }
-
-                .tag-container {
-                    margin-top: 10px;
-                    display: flex;
-                    gap: 10px;
-                    font-size: 0.9em;
-
-                    .tag {
-                        display: flex;
-                        gap: 8px;
-
-                        background-color: #ffffff1a;
-                        width: fit-content;
-
-                        padding: 3px 10px;
-                        border-radius: 15px;
-                    }
-                }
-            }
-
-            .statistic-container {
-                flex-shrink: 0;
-
-                display: flex;
-                gap: 20px;
-
-                .statistic {
-                    width: 120px;
-                    height: 120px;
-                    background-color: $color-dark;
-                    border-radius: 10px;
-
-                    display: flex;
-                    flex-direction: column;
-
-                    gap: 10px;
-                    align-items: center;
-                    justify-content: center;
-
-                    .icon {
-                        font-size: 2.2em;
-                    }
-                }
-            }
-        }
-
         #main-container {
             .header{
                 font-size: 2em;
@@ -167,6 +75,14 @@
                             cursor: pointer;
                             background-color: $color-theme-dark;
                         }
+                    }
+                }
+
+                @media (max-width: 800px){
+                    flex-direction: column;
+
+                    .option{
+                        width: 100%;
                     }
                 }
             }  

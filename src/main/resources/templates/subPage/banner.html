@@ -34,10 +34,10 @@
     <div th:replace="~{fragment/header :: headerFragment}"></div>
 
     <div class="header">
+        <a href="/user/banner"><div class="button">Moje banery</div></a>
         <h1>Zakup baner reklamowy</h1>
         <br><br>
         <h3>Wybierz typ</h3>
-        <a href="/user/banner"><div class="button">Moje banery</div></a>
     </div>
     <div id="banner-container-big" class="center">
         <div class="banner" onclick="selectBanner(this, 1)">
@@ -148,7 +148,7 @@
             return;
         }
         else {
-            const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+            const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', "image/webp"];
             if (!allowedTypes.includes(file.type)) {
                 errorResponse.innerHTML = 'Akceptujemy jedynie rozszerzenia jpeg, png, i gif';
                 return;

@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class BannerFileService {
-    private static final List<String> ALLOWED_TYPES = Arrays.asList("image/jpeg", "image/png", "image/gif");
+    private static final List<String> ALLOWED_TYPES = Arrays.asList("image/jpeg", "image/png", "image/gif", "image/webp");
     private static final long MAX_FILE_SIZE = 4 * 1024 * 1024;
     private static final String UPLOAD_DIR = System.getProperty("user.dir") + "/uploads/banners/";
 

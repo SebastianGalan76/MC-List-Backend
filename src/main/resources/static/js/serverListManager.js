@@ -3,6 +3,7 @@ const serverListContainer = document.getElementById("server-container");
 
 import { getCurrentPage, refreshPageContainer } from "./pageManager.js";
 import { getBanner } from "./smallBannerManager.js";
+import { copyValueToClipboard } from "./copyToClipboard.js";
 
 export async function loadServers() {
     const response = await fetch('/server/list/' + getCurrentPage(), {
@@ -99,6 +100,11 @@ export function populateList(listArray) {
                 serverListContainer.appendChild(createServerHeader('', '', 'Serwery'));
             }
         }
+        
+        template.querySelector('.fa-copy').addEventListener('click', (event) => {
+            event.preventDefault();
+            copyValueToClipboard(serverJson.ip);
+        });
 
         const online = template.querySelector('.online-value');
         online.innerHTML = serverJson.onlinePlayers;
