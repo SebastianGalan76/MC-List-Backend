@@ -40,7 +40,7 @@
 
 <body>
     <div th:replace="~{fragment/header :: headerFragment}"></div>
-
+    <h1 class="center" style="margin-top: 10px;">Lista serwerów minecraft</h1>
     <div id="banner-container" class="center" th:if="${bigBanner != null}">
         <a class="banner" th:href="${bigBanner.link}" target="_blank">
             <img th:src="${bigBanner.filePath}" alt="Baner reklamowy">

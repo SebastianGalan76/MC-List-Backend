@@ -14,8 +14,9 @@ import java.util.List;
 public interface SubServerRepository extends JpaRepository<SubServer, Long> {
     @Query("SELECT DISTINCT s.server FROM SubServer s " +
             "JOIN s.versions v " +
-            "WHERE s.mode = :mode " +
-            "AND v.id <= :versionId " +
-            "AND EXISTS (SELECT 1 FROM s.versions v2 WHERE v2.id >= :versionId)")
+            "WHERE (:mode IS NULL OR s.mode = :mode) " +
+            "AND (:versionId = 0 " +
+            "    OR (v.id <= :versionId AND EXISTS (SELECT 1 FROM s.versions v2 WHERE v2.id >= :versionId)) " +
+            "    OR (SIZE(s.versions) = 1 AND v.id = :versionId))")
     List<Server> findServersByModeAndVersion(@Param("mode") Mode mode, @Param("versionId") Long versionId);
 }

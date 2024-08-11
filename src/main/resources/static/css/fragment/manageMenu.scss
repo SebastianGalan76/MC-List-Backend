@@ -1,10 +1,22 @@
 @import "../base";
 
+#menu-button{
+    font-size: 1.3em;
+    padding: 10px;
+
+    position: absolute;
+    display: none;
+    
+    @media (max-width: 800px){
+        display: block;
+    }
+}
+
 #aside-menu{
     display: flex;
     flex-direction: column;
     gap: 5px;
-    padding: 10px;
+    padding: 50px 10px 10px 10px;
 
     .user-panel{
         padding: 10px 20px;
@@ -54,5 +66,11 @@
 
     @media (max-width: 800px){
         font-size: 0.9em;
+
+        display: none;
     }
+}
+
+#aside-menu.active{
+    display: flex;
 }

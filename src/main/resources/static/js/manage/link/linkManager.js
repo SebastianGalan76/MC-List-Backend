@@ -59,6 +59,7 @@ function createLink() {
         selectedLink.url = urlInput.value;
 
         selectedLink = null;
+        clearPanel();
         return;
     }
 

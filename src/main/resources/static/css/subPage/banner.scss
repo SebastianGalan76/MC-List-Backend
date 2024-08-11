@@ -1,6 +1,6 @@
 @import "../base";
 
-.header{
+.header {
     text-align: center;
 
     padding: 30px 0;
@@ -9,7 +9,7 @@
 
     position: relative;
 
-    .button{
+    .button {
         position: absolute;
         right: 30px;
         top: 30px;
@@ -18,7 +18,7 @@
         border: 1px solid #79797971;
         border-radius: 10px;
 
-        @media (max-width: 800px){
+        @media (max-width: 800px) {
             position: relative;
             right: 0;
             top: 0;
@@ -32,48 +32,65 @@
         }
     }
 
-    .button:hover{
+    .button:hover {
         background-color: $color-dark;
         cursor: pointer;
     }
 }
 
 #banner-container-big {
-    height: 300px;
     width: 1800px;
+
     background-color: $color-dark;
+    position: relative;
 
-    .banner {
+    .banner-preview {
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        width: 100%;
         height: 100%;
+
         display: flex;
-        flex-direction: column;
-        justify-content: space-around;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
 
-        text-align: center;
+        z-index: 100;
 
-        .title {
-            font-size: 3em;
-            font-weight: 600;
-        }
-        .size {
-            color: #919191;
-            font-weight: 600;
-        }
+        .banner {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
 
-        .price {
-            text-align: center;
-
-            .value {
-                font-size: 2.3em;
+            position: relative;
+            img {
+                width: 100%;
+                height: auto;
+                object-fit: cover;
             }
-        }
-
-        .limit {
-            font-weight: 600;
         }
     }
 
-    @media (max-width: 1800px){
+    .banner {
+        width: 100%;
+        
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        position: relative;
+
+        img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+    }
+
+    @media (max-width: 1800px) {
         width: 100%;
     }
 }
@@ -84,52 +101,70 @@
     height: 120px;
     width: 1200px;
     background-color: $color-dark;
+    position: relative;
 
-    .banner {
+    .banner-preview {
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        width: 100%;
         height: 100%;
+
         display: flex;
-        flex-direction: column;
-        justify-content: space-around;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
 
-        text-align: center;
+        z-index: 100;
 
-        .title {
-            font-size: 1.2em;
-            font-weight: 600;
-        }
-        .size {
-            font-size: 0.9em;
-            color: #919191;
-            font-weight: 600;
-        }
+        .banner {
+            width: 100%;
 
-        .price {
-            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
 
-            .value {
-                font-size: 1.3em;
+            position: relative;
+            img {
+                width: 100%;
+                height: auto;
+                object-fit: cover;
             }
-        }
-
-        .limit {
-            font-weight: 600;
         }
     }
 
-    @media (max-width: 1200px){
+    .banner {
+        width: 100%;
+        max-height: 120px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        position: relative;
+
+        img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+    }
+
+    @media (max-width: 1200px) {
         width: 100%;
     }
 }
 
-.banner:hover{
-    border: 2px solid #79797971;
+.banner-preview:hover {
+    outline: 2px solid #79797971;
     cursor: pointer;
 }
 
-.banner.selected{
-    border: 2px solid $color-theme;
+.banner-preview.selected {
+    outline: 2px solid $color-theme;
 }
-#form-container{
+#form-container {
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -138,7 +173,7 @@
     padding: 20px;
     margin-top: 30px;
 
-    .button{
+    .button {
         background-color: $color-theme;
         padding: 10px 30px;
         border-radius: 10px;
@@ -146,32 +181,32 @@
         margin-left: auto;
     }
 
-    .button:hover{
+    .button:hover {
         background-color: $color-theme-dark;
         cursor: pointer;
     }
 
-    @media (max-width: 800px){
+    @media (max-width: 800px) {
         width: 100%;
     }
 }
 
-.section{
+.section {
     width: 800px;
     background-color: #ffffff0e;
     padding: 20px;
     margin-top: 50px;
 
-    h2{
+    h2 {
         padding: 30px 0;
         text-align: center;
     }
 
-    ol{
+    ol {
         padding: 0 30px;
     }
 
-    @media (max-width: 800px){
+    @media (max-width: 800px) {
         width: 100%;
     }
 }

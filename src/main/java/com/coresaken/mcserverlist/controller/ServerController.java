@@ -97,7 +97,6 @@ public class ServerController {
     @ResponseBody
     @PostMapping("/server/search/{page}")
     public Page<Server> searchServer(@RequestBody SearchServerDto searchServerDto, @PathVariable("page") int page){
-        //Sort sort = Sort.by(Sort.Order.desc("promotionPoints"), Sort.Order.desc("votes"));
         Pageable pageable = PageRequest.of(page - 1, 30);
 
         return serverService.searchServer(searchServerDto, pageable);

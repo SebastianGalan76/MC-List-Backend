@@ -1,7 +1,7 @@
 #banner-container {
   margin-top: 20px;
   margin-bottom: 30px;
-  width: 80%;
+  width: 1800px;
   max-height: 350px;
   display: flex;
   justify-content: center;
@@ -10,6 +10,9 @@
 }
 #banner-container .banner {
   width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: relative;
 }
 #banner-container .banner img {
@@ -17,6 +20,11 @@
   height: auto;
   -o-object-fit: cover;
      object-fit: cover;
+}
+@media (max-width: 1800px) {
+  #banner-container {
+    width: 100%;
+  }
 }
 @media (max-width: 800px) {
   #banner-container {
@@ -40,6 +48,9 @@
 }
 .banner-small-container .banner {
   width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: relative;
 }
 .banner-small-container .banner img {

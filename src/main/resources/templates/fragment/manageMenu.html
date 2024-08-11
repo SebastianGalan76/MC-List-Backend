@@ -3,6 +3,10 @@
 
 <body>
     <div th:fragment="menuFragment">
+        <div id="menu-button" onclick="toggleMenu()">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+
         <div id="aside-menu">
             <div class="user-panel">
                 <span class="login" th:text="${user.login}"></span>
@@ -51,6 +55,23 @@
                 </a>
             </div>
         </div>
+
+        <script>
+            const rightPanelMenu = document.getElementById('aside-menu');
+
+            function handleResize() {
+                if (window.innerWidth < 600) {
+                    rightPanelMenu.classList.remove('active');
+                }
+            }
+
+            window.addEventListener('resize', handleResize);
+            handleResize();
+
+            function toggleMenu() {
+                rightPanelMenu.classList.toggle('active');
+            }
+        </script>
     </div>
 </body>
 </html>

@@ -62,9 +62,10 @@ header .wrapper .left-panel {
   flex-shrink: 0;
 }
 header .wrapper .left-panel .logo {
-  width: 200px;
-  height: 30px;
-  background-color: rebeccapurple;
+  height: 34px;
+  width: auto;
+  position: relative;
+  top: 5px;
 }
 header .wrapper .left-panel .button-container {
   margin-left: 25px;
@@ -118,8 +119,7 @@ header .right-panel-menu .panel-menu {
   z-index: 100;
 }
 header .right-panel-menu .panel-menu .logo {
-  background-color: rebeccapurple;
-  width: 100%;
+  width: auto;
   height: 30px;
   margin-top: 15px;
 }

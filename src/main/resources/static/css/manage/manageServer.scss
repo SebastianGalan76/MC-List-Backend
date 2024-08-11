@@ -6,7 +6,7 @@
     display: flex;
 
     aside {
-        width: 250px;
+        width: fit-content;
         height: 100vh;
         flex-shrink: 0;
         position: sticky;
@@ -17,10 +17,18 @@
             right: 0;
             top: 0;
         }
+
+        @media(max-width: 800px){
+            position: absolute;
+            left: 0;
+            z-index: 100;
+
+            background-color: #1b1b1b;
+        }
     }
 
     #container {
-        width: calc(100% - 250px);
+        flex-grow: 1;
         padding: 10px;
 
         .header {

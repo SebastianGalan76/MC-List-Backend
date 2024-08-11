@@ -4,7 +4,7 @@
     margin-top: 20px;
     margin-bottom: 30px;
 
-    width: 80%;
+    width: 1800px;
     max-height: 350px;
 
     display: flex;
@@ -15,12 +15,20 @@
     .banner {
         width: 100%;
 
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
         position: relative;
         img {
             width: 100%;
             height: auto;
             object-fit: cover;
         }
+    }
+
+    @media (max-width: 1800px) {
+        width: 100%;
     }
 
     @media (max-width: 800px) {
@@ -48,6 +56,10 @@
     .banner {
         width: 100%;
 
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
         position: relative;
         img {
             width: 100%;
@@ -65,7 +77,6 @@
         }
     }
 }
-
 
 #search-container {
     width: 1200px;
@@ -164,8 +175,8 @@
             height: 2px;
         }
 
-        @media (max-width: 600px){
-            .title{
+        @media (max-width: 600px) {
+            .title {
                 font-size: 1em;
                 padding: 5px 0;
             }
