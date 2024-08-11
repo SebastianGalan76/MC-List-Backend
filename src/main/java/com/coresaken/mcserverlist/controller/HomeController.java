@@ -21,4 +21,18 @@ public class HomeController {
 
         return "home";
     }
+
+    @RequestMapping("/rules")
+    public String getRulesPage(Model model){
+        model.addAttribute("user", userService.getLoggedUser());
+
+        return "subPage/rules";
+    }
+
+    @RequestMapping("/privacy-policy")
+    public String getPrivacyPolicyPage(Model model){
+        model.addAttribute("user", userService.getLoggedUser());
+
+        return "subPage/privacyPolicy";
+    }
 }

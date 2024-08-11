@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="/css/quillEditor.css">
     <link rel="stylesheet" href="/css/formElement.css">
     <link rel="stylesheet" href="/css/fragment/header.css">
+    <link rel="stylesheet" href="/css/fragment/footer.css">
     <link rel="stylesheet" href="/css/fragment/serverPreview.css">
 
     <!-- Font Roboto -->
@@ -402,6 +403,7 @@
             </div>
         </aside>
     </div>
+    <div th:replace="~{fragment/footer :: footerFragment}"></div>
 </body>
 <template id="template-link">
     <a class="server-link" target="_blank">

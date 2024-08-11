@@ -17,6 +17,7 @@
 
     <link rel="stylesheet" href="/css/home.css">
     <link rel="stylesheet" href="/css/fragment/header.css">
+    <link rel="stylesheet" href="/css/fragment/footer.css">
 
     <!-- Font Roboto -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -127,6 +128,8 @@
     <div id="page-container" class="center">
         
     </div>
+
+    <div th:replace="~{fragment/footer :: footerFragment}"></div>
 </body>
 
 <template id="server-template">

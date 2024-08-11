@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="/css/formElement.css">
     <link rel="stylesheet" href="/css/subPage/banner.css">
     <link rel="stylesheet" href="/css/fragment/header.css">
+    <link rel="stylesheet" href="/css/fragment/footer.css">
 
     <!-- Font Roboto -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -97,15 +98,7 @@
         </ol>
     </div>
 
-    <div class="section center">
-        <h2>Zasady</h2>
-        <ol>
-            <li>Wybierasz typ.</li>
-            <li>Wypełniasz formularz i przesyłasz grafikę.</li>
-            <li>Administrator strony weryfikuje grafikę oraz link.</li>
-            <li>Po akceptacji możesz uiścić opłatę i aktywować baner.</li>
-        </ol>
-    </div>
+    <div th:replace="~{fragment/footer :: footerFragment}"></div>
 </body>
 
 <script>
