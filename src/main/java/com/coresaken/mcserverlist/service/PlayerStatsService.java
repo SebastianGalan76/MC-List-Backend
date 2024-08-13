@@ -46,7 +46,7 @@ public class PlayerStatsService {
         LocalDateTime nextExecutionTime = calculateNextRefreshTime(server.getNextRefreshAt());
 
         long delay = ChronoUnit.MILLIS.between(now, nextExecutionTime);
-        scheduler.schedule(() -> refreshServer(server), delay, TimeUnit.MILLISECONDS);
+        scheduler.schedule(() -> refreshServer(server.getId()), delay, TimeUnit.MILLISECONDS);
     }
 
     private void scheduleAllServers() {
@@ -86,7 +86,12 @@ public class PlayerStatsService {
         hourlyPlayerCountRepository.save(hourlyPlayerCount);
     }
 
-    private void refreshServer(Server server) {
+    private void refreshServer(Long serverId) {
+        Server server = serverRepository.findById(serverId).orElse(null);
+        if(server==null){
+            return;
+        }
+
         ServerStatusDto serverResponse = serverStatusService.getServerStatus(server.getIp(), server.getPort());
 
         server.setOnline(serverResponse.online());
