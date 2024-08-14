@@ -16,7 +16,7 @@ public class RefreshTaskQueue {
         queue.offer(server);
     }
 
-    public Server takeTask() throws InterruptedException {
+    public Server pollTask() throws InterruptedException {
         return queue.poll(1, TimeUnit.SECONDS);
     }
 }
