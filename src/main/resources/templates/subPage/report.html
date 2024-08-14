@@ -98,43 +98,31 @@
             </div>
 
             <div id="main-container" class="panel">
-                <div class="header">Promowanie serwera</div>
+                <div class="header">Zgłaszanie serwera</div>
 
                 <br>
-                <span class="center" style="text-align: center;">MC-List.pl to najnowocześniejsza lista serwerów
-                    Minecraft. Dzięki promowaniu swojego serwera możesz dotrzeć do większej liczby graczy.
+                <span class="center" style="text-align: center;">Jeśli serwer łamie nasz regulamin, możesz go tutaj
+                    zgłosić
                     <br><br>
-                    Promowane serwery wyświetlają się na samej górze listy. Im więcej serwer posiada punktów promowania,
-                    tym wyżej jest na liście. Serwery z zakupionym promowaniem posiadają wyróżniający się styl.</span>
-                <br>
-
-                <br>
-                <span class="center" style="text-align: center;">Chcesz lepiej wyróżnić swój serwer?
-                    <br>
-                    <a href="/banners" class="link">Zakup baner reklamowy</a>
-                </span>
-                <br>
-                <span class="center" style="text-align: center;">Każdego dnia serwer traci jeden punkt promowania.<br>
-                    10 Punktów Promowania = 10 dni promowania
+                    <b>Zgłoś serwer, szczególnie gdy:</b> <br>
+                    Podaje fałszywe informacje. <br>
+                    Posiada zawyżoną ilość graczy online. <br>
+                    Nie jest polskim serwerem <br>
                 </span>
                 <br>
 
                 <div id="form-container" class="center">
-                    Ilość punktów:
                     <div class="input-area">
-                        <input id="promotion-points-input" type="number" placeholder="Ilość punktów" maxlength="60"
-                            value="10">
+                        <input id="report-reason-input" type="text" placeholder="Powód" maxlength="512">
                         <span class="required">*</span>
-                        <div class="icon" style="padding-bottom: 10px;">
-                            <span>👑</span>
+                        <div class="icon">
+                            <i class="fa-solid fa-flag"></i>
                         </div>
                     </div>
 
-                    <span>Cena: <span id="price-value">20</span>zł</span>
-
                     <div class="footer">
                         <div id="error-message" class="error"></div>
-                        <div class="submit-button" onclick="buyPoints()">Zakup</div>
+                        <div class="submit-button" onclick="sendReport(this)">Zgłoś</div>
                     </div>
                 </div>
             </div>
@@ -150,27 +138,42 @@
 
 <script th:inline="javascript">
     const responseError = document.getElementById('error-message');
-    const priceValue = document.getElementById('price-value');
-    const promotionPointsInput = document.getElementById('promotion-points-input');
+    const reportReasonInput = document.getElementById('report-reason-input');
 
-    promotionPointsInput.addEventListener('input', () => {
-        priceValue.innerHTML = promotionPointsInput.value * 2;
-    });
+    async function sendReport(button) {
+        var serverId = /*[[${server.id}]]*/ 0;
+        var reportReason = reportReasonInput.value;
 
-    async function buyPoints() {
-        var serverIp = /*[[${server.ip}]]*/ 0;
-        var promotionPoints = promotionPointsInput.value;
-
-        if(promotionPoints < 10){
-            responseError.innerHTML = "Minimalna ilość to 10"
-            return;
-        }
-        if(promotionPoints > 365){
-            responseError.innerHTML = "Maksymalna liczba to 365"
+        if (reportReason.length < 20) {
+            responseError.innerHTML = "Powód zgłoszenia jest zbyt krótki. Opisz bardziej swój powód"
             return;
         }
 
-        window.location.href = '/server/payment/' + serverIp + '/' + promotionPoints;
+        try {
+            const response = await fetch('/server/' + serverId + '/report/send', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    text: reportReason
+                })
+            });
+
+            if (!response.ok) {
+                const errorResponse = await response.json();
+                throw new Error(`Error: ${errorResponse.message}`);
+            }
+            else {
+                const responseJson = await response.json();
+
+                responseError.innerHTML = responseJson.message;
+
+                button.style.display = "none";
+            }
+        } catch (error) {
+            responseError.innerHTML = error.message;
+        }
     }
 </script>
 

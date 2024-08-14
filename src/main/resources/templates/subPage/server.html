@@ -402,9 +402,11 @@
             <div class="panel" id="link-panel-aside" th:if="${server.links.size() > 0}">
                 <div class="title">Linki</div>
             </div>
-            <div id="report-button" class="center">
-                Zgłoś serwer
-            </div>
+            <a th:href="'/server/'+ ${server.id} +'/report'">
+                <div id="report-button" class="center">
+                    Zgłoś serwer
+                </div>
+            </a>
         </aside>
     </div>
     <div th:replace="~{fragment/footer :: footerFragment}"></div>

@@ -4,6 +4,7 @@ import com.coresaken.mcserverlist.data.response.Response;
 import com.coresaken.mcserverlist.database.model.Banner;
 import com.coresaken.mcserverlist.database.model.User;
 import com.coresaken.mcserverlist.database.repository.BannerRepository;
+import jakarta.annotation.Nullable;
 import jakarta.annotation.PostConstruct;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -216,5 +217,10 @@ public class BannerService {
         }
 
         publishBanner(banner);
+    }
+
+    @Nullable
+    public Banner getById(Long id) {
+        return bannerRepository.findById(id).orElse(null);
     }
 }

@@ -40,13 +40,17 @@ public class PaymentController {
     public String getPaymentPage(@PathVariable("ip") String ip,
                                  @PathVariable("promotionPoints") int promotionPointsAmount,
                                  Model model) {
-        Server jobOffer = serverService.getServerByIp(ip);
-        if(jobOffer == null){
+        Server server = serverService.getServerByIp(ip);
+        if(server == null){
+            return "error-404";
+        }
+
+        if(promotionPointsAmount < 10 || promotionPointsAmount > 365){
             return "error-404";
         }
 
         PromotionPoints promotionPoints = new PromotionPoints();
-        promotionPoints.setServerId(jobOffer.getId());
+        promotionPoints.setServerId(server.getId());
         promotionPoints.setPromotionPoints(promotionPointsAmount);
         String successAction;
         try{
@@ -70,6 +74,44 @@ public class PaymentController {
         return "subPage/payment";
     }
 
+    @RequestMapping("/banner/payment/{id}")
+    public String getBannerPaymentPage(@PathVariable("id") Long id,
+                                 Model model) {
+        com.coresaken.mcserverlist.database.model.Banner banner = bannerService.getById(id);
+        if(banner == null){
+            return "error-404";
+        }
+
+        Banner bannerPayment = new Banner();
+        bannerPayment.setBannerId(id);
+
+        String successAction;
+        try{
+            ObjectMapper mapper = new ObjectMapper();
+            successAction = mapper.writeValueAsString(bannerPayment);
+        }catch (JsonProcessingException e) {
+            return "error-404";
+        }
+
+        Payment payment = new Payment();
+        payment.setAction(PaymentAction.BANNER);
+        payment.setServiceId(paymentService.generateRandomServiceId());
+        payment.setStatus(Payment.Status.DEFAULT);
+        payment.setSuccessAction(successAction);
+        payment = paymentRepository.save(payment);
+        String price;
+        if(banner.getSize()== com.coresaken.mcserverlist.database.model.Banner.Size.BIG){
+            price = "100";
+        }
+        else {
+            price = "30";
+        }
+
+        PaymentDto paymentDto = getBannerPaymentDto(payment.getId(), price);
+        model.addAttribute("paymentRequest", paymentDto);
+
+        return "subPage/payment";
+    }
 
     @ResponseBody
     @PostMapping("/payment-notification")
@@ -155,6 +197,27 @@ public class PaymentController {
         paymentDto.setSecret(secret);
         paymentDto.setAmount(price);
         paymentDto.setServiceName("Punkty promowania dla serwera: " + ip);
+        paymentDto.setWebsiteAddress(websiteAddress);
+        paymentDto.setOrderId(String.valueOf(orderId));
+
+        String stringBuilder = password + ";" +
+                paymentDto.getAmount() + ";" +
+                paymentDto.getServiceName() + ";" +
+                paymentDto.getWebsiteAddress() + ";" +
+                paymentDto.getOrderId() + ";" +
+                paymentDto.getSecret();
+        String hash = paymentService.hashSHA256(stringBuilder);
+        paymentDto.setHash(hash);
+
+        return paymentDto;
+    }
+
+    private PaymentDto getBannerPaymentDto(Long orderId, String price){
+        PaymentDto paymentDto = new PaymentDto();
+
+        paymentDto.setSecret(secret);
+        paymentDto.setAmount(price);
+        paymentDto.setServiceName("Banner reklamowy");
         paymentDto.setWebsiteAddress(websiteAddress);
         paymentDto.setOrderId(String.valueOf(orderId));
 

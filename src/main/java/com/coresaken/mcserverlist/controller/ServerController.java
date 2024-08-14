@@ -1,6 +1,7 @@
 package com.coresaken.mcserverlist.controller;
 
 import com.coresaken.mcserverlist.data.dto.SearchServerDto;
+import com.coresaken.mcserverlist.data.dto.StringDto;
 import com.coresaken.mcserverlist.data.response.Response;
 import com.coresaken.mcserverlist.database.model.server.Server;
 import com.coresaken.mcserverlist.database.model.server.ratings.PlayerRating;
@@ -80,6 +81,25 @@ public class ServerController {
     @GetMapping("/take-over/{id}")
     public Response takeOverServer(@PathVariable("id") Long id){
         return serverService.takeOver(id);
+    }
+
+    @RequestMapping("/server/{id}/report")
+    public String getServerReportPage(@PathVariable("id") Long id, Model model){
+        Server server = serverService.getServerById(id);
+
+        if(server==null){
+            return "error/404";
+        }
+
+        model.addAttribute("user", userService.getLoggedUser());
+        model.addAttribute("server", server);
+        return "subPage/report";
+    }
+
+    @ResponseBody
+    @PostMapping("/server/{id}/report/send")
+    public Response reportServer(@PathVariable("id") Long id, @RequestBody StringDto stringDto){
+        return serverService.reportServer(id, stringDto.getText());
     }
 
     @ResponseBody
