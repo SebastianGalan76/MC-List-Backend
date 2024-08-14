@@ -47,6 +47,14 @@ header {
 
     }
 
+    #user-section{
+        display: flex;
+        
+        @media (max-width: 750px){
+            display: none;
+        }
+    }
+
     .user-logged-in{
         font-weight: 800;
     }

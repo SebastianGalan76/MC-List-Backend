@@ -30,13 +30,15 @@
                 </nav>
             </div>
             <div class="right-panel">
-                <div class="user-logged-in" th:if="${user!=null}">
-                    <span th:text="${user.login}"></span>
-                </div>
-                <div class="user-not-logged-in">
-                    <a href="/auth/signIn" class="sign-in" th:if="${user==null}">
-                        Logowanie
-                    </a>
+                <div id="user-section">
+                    <div class="user-logged-in" th:if="${user!=null}">
+                        <span th:text="${user.login}"></span>
+                    </div>
+                    <div class="user-not-logged-in">
+                        <a href="/auth/signIn" class="sign-in" th:if="${user==null}">
+                            Logowanie
+                        </a>
+                    </div>
                 </div>
                 <div id="menu-button" onclick="toggleMenu()">
                     <i class="fa-solid fa-bars"></i>

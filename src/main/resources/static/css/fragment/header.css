@@ -35,6 +35,14 @@ header .button-container ul li:hover {
     display: none;
   }
 }
+header #user-section {
+  display: flex;
+}
+@media (max-width: 750px) {
+  header #user-section {
+    display: none;
+  }
+}
 header .user-logged-in {
   font-weight: 800;
 }

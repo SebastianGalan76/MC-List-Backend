@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,4 +54,7 @@ public interface ServerRepository extends JpaRepository<Server, Long> {
     @Transactional
     @Query("UPDATE Server s SET s.promotionPoints = s.promotionPoints - 1 WHERE s.promotionPoints > 0")
     void decreasePromotionPoints();
+
+    @Query("SELECT s FROM Server s WHERE s.nextRefreshAt <= :now")
+    List<Server> findServersToRefresh(LocalDateTime now);
 }

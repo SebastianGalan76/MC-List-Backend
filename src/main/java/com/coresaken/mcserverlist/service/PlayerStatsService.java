@@ -34,28 +34,6 @@ public class PlayerStatsService {
 
     final ServerStatusService serverStatusService;
 
-    ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(5);
-
-    @PostConstruct
-    public void init() {
-        scheduleAllServers();
-    }
-
-    public void scheduleServer(Server server) {
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime nextExecutionTime = calculateNextRefreshTime(server.getNextRefreshAt());
-
-        long delay = ChronoUnit.MILLIS.between(now, nextExecutionTime);
-        scheduler.schedule(() -> refreshServer(server.getId()), delay, TimeUnit.MILLISECONDS);
-    }
-
-    private void scheduleAllServers() {
-        List<Server> servers = serverRepository.findAllServersWithNextRefreshAtNotNull();
-        for (Server server : servers) {
-            scheduleServer(server);
-        }
-    }
-
     @Transactional
     private void savePlayerStatistic(Server server, int playerCount) {
         LocalDateTime now = LocalDateTime.now();
@@ -86,8 +64,7 @@ public class PlayerStatsService {
         hourlyPlayerCountRepository.save(hourlyPlayerCount);
     }
 
-    private void refreshServer(Long serverId) {
-        Server server = serverRepository.findById(serverId).orElse(null);
+    public void refreshServer(Server server) {
         if(server==null){
             return;
         }
@@ -108,16 +85,5 @@ public class PlayerStatsService {
 
         serverDetailRepository.save(serverDetail);
         serverRepository.save(server);
-        scheduleServer(server);
-    }
-
-    private LocalDateTime calculateNextRefreshTime(LocalDateTime currentNextRefreshTime){
-        LocalDateTime now = LocalDateTime.now();
-        if (!currentNextRefreshTime.isAfter(now)) {
-            while (currentNextRefreshTime.isBefore(now)) {
-                currentNextRefreshTime = currentNextRefreshTime.plusMinutes(REFRESH_INTERVAL_MINUTE);
-            }
-        }
-        return currentNextRefreshTime;
     }
 }

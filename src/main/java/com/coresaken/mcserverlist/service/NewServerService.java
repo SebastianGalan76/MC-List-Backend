@@ -94,8 +94,7 @@ public class NewServerService {
         }
 
         server.setNextRefreshAt(LocalDateTime.now().plusMinutes(PlayerStatsService.REFRESH_INTERVAL_MINUTE));
-        server = serverRepository.save(server);
-        playerStatsService.scheduleServer(server);
+        serverRepository.save(server);
 
         return Response.builder().status(HttpStatus.PERMANENT_REDIRECT).redirect("/server/"+server.getIp()).build();
     }
