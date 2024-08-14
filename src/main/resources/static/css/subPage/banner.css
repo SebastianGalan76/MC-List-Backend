@@ -32,7 +32,8 @@
 }
 
 #banner-container-big {
-  width: 1800px;
+  width: 1600px;
+  height: 350px;
   background-color: rgba(0, 0, 0, 0.2588235294);
   position: relative;
 }
@@ -74,7 +75,7 @@
   -o-object-fit: cover;
      object-fit: cover;
 }
-@media (max-width: 1800px) {
+@media (max-width: 1600px) {
   #banner-container-big {
     width: 100%;
   }

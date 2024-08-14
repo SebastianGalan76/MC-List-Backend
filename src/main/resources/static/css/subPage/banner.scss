@@ -39,7 +39,8 @@
 }
 
 #banner-container-big {
-    width: 1800px;
+    width: 1600px;
+    height: 350px;
 
     background-color: $color-dark;
     position: relative;
@@ -90,7 +91,7 @@
         }
     }
 
-    @media (max-width: 1800px) {
+    @media (max-width: 1600px) {
         width: 100%;
     }
 }
