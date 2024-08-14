@@ -1,7 +1,6 @@
 package com.coresaken.mcserverlist.service.server;
 
 import com.coresaken.mcserverlist.data.dto.SearchServerDto;
-import com.coresaken.mcserverlist.data.dto.ServerStatusDto;
 import com.coresaken.mcserverlist.data.payment.PromotionPoints;
 import com.coresaken.mcserverlist.data.response.Response;
 import com.coresaken.mcserverlist.database.model.User;
@@ -205,5 +204,10 @@ public class ServerService {
         report.setServer(server);
         reportRepository.save(report);
         return Response.builder().status(HttpStatus.OK).message("Zgłoszenie zostało wysłane do administracji").build();
+    }
+
+    public String getRandomServerIp() {
+        Server server = serverRepository.findRandomServer().orElse(null);
+        return server == null ? null : server.getIp();
     }
 }

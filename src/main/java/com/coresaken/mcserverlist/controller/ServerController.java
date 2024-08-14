@@ -133,4 +133,10 @@ public class ServerController {
 
         return serverService.searchServer(searchServerDto, pageable);
     }
+
+    @ResponseBody
+    @GetMapping("/random")
+    public String getRandomServerIp(){
+        return serverService.getRandomServerIp();
+    }
 }

@@ -57,4 +57,7 @@ public interface ServerRepository extends JpaRepository<Server, Long> {
 
     @Query("SELECT s FROM Server s WHERE s.nextRefreshAt <= :now")
     List<Server> findServersToRefresh(LocalDateTime now);
+
+    @Query("SELECT s FROM Server s ORDER BY RANDOM() LIMIT 1")
+    Optional<Server> findRandomServer();
 }

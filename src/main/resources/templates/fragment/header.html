@@ -25,6 +25,7 @@
                         <a href="/banners">
                             <li class="buy-banner-button">Zakup Baner</li>
                         </a>
+                        <li onclick="showRandomServer()">Losuj serwer</li>
                         <li>Nowe Edycje</li>
                     </ul>
                 </nav>
@@ -94,6 +95,27 @@
 
             function toggleMenu() {
                 rightPanelMenu.classList.toggle('active');
+            }
+        </script>
+
+        <script>
+            async function showRandomServer() {
+                try {
+                    const response = await fetch('/random', {
+                        method: 'GET'
+                    });
+
+                    if (!response.ok) {
+                        const errorResponse = await response.json();
+                        throw new Error(`Error: ${errorResponse.message}`);
+                    }
+                    else {
+                        const serverIp = await response.text();
+                        window.location.href = '/server/' + serverIp;
+                    }
+                } catch (error) {
+                    console.log(error.message);
+                }
             }
         </script>
     </header>
