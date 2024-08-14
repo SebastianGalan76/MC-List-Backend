@@ -2,6 +2,7 @@ package com.coresaken.mcserverlist.service.server;
 
 import com.coresaken.mcserverlist.data.dto.SearchServerDto;
 import com.coresaken.mcserverlist.data.dto.ServerStatusDto;
+import com.coresaken.mcserverlist.data.payment.PromotionPoints;
 import com.coresaken.mcserverlist.data.response.Response;
 import com.coresaken.mcserverlist.database.model.User;
 import com.coresaken.mcserverlist.database.model.server.Server;
@@ -21,6 +22,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -170,5 +172,15 @@ public class ServerService {
         }
 
         return Response.builder().status(HttpStatus.BAD_REQUEST).message("Błędna weryfikacja. Jesteś pewien, że zresetowałeś serwer po zmianie MOTD serwera? Serwer musi być włączony. Obecny motd serwera: "+motd).build();
+    }
+
+    @Transactional
+    public void addPromotionPoints(PromotionPoints promotionPoints) {
+        Server server = serverRepository.findById(promotionPoints.getServerId()).orElse(null);
+        if(server == null){
+            return;
+        }
+
+        server.setPromotionPoints(server.getPromotionPoints() + promotionPoints.getPromotionPoints());
     }
 }

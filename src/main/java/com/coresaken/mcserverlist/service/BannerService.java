@@ -124,12 +124,7 @@ public class BannerService {
         return Response.builder().status(HttpStatus.OK).message("Baner został odrzucony").build();
     }
 
-    public Response publishBanner(Long bannerId){
-        Banner banner = bannerRepository.findById(bannerId).orElse(null);
-        if(banner == null){
-            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Wystąpił błąd #8725. Brak baneru o podanym ID").build();
-        }
-
+    public void publishBanner(Banner banner){
         banner.changeStatus(Banner.Status.PUBLISHED, null);
 
         LocalDateTime now = LocalDateTime.now();
@@ -145,7 +140,6 @@ public class BannerService {
         }
 
         bannerRepository.save(banner);
-        return Response.builder().status(HttpStatus.OK).build();
     }
 
     public Response editBanner(Long id, MultipartFile file, String link) {
@@ -213,5 +207,14 @@ public class BannerService {
             banners.addAll(bannerRepository.findByStatus(status));
         }
         return banners;
+    }
+
+    public void active(com.coresaken.mcserverlist.data.payment.Banner bannerDto) {
+        Banner banner = bannerRepository.findById(bannerDto.getBannerId()).orElse(null);
+        if(banner==null){
+            return;
+        }
+
+        publishBanner(banner);
     }
 }
