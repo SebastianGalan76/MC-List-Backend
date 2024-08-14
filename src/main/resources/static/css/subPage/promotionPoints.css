@@ -18,63 +18,28 @@
   text-align: center;
   padding: 30px 0;
 }
-#page-wrapper #container #main-container #option-container {
+#page-wrapper #container #main-container #form-container {
+  margin-top: 50px;
+  width: 500px;
+}
+#page-wrapper #container #main-container #form-container .footer {
+  margin-top: 25px;
   display: flex;
-  gap: 20px;
+  flex-direction: column;
+  gap: 10px;
 }
-#page-wrapper #container #main-container #option-container .option {
-  width: calc(50% - 10px);
-  flex-shrink: 0;
-  background-color: rgba(0, 0, 0, 0.2588235294);
-  padding: 20px;
-  border-radius: 20px;
-}
-#page-wrapper #container #main-container #option-container .option .number {
-  padding: 50px;
-  background-color: rgba(0, 0, 0, 0.2588235294);
-  width: -moz-fit-content;
-  width: fit-content;
-  font-size: 3em;
-  border-radius: 20px;
-  border: 2px solid #f5f5f5;
-}
-#page-wrapper #container #main-container #option-container .option .title {
-  font-weight: 500;
-  text-align: center;
-  margin-top: 10px;
-  font-size: 1.3em;
-}
-#page-wrapper #container #main-container #option-container .option .info {
-  margin-top: 20px;
-  line-height: 30px;
-}
-#page-wrapper #container #main-container #option-container .option .info .key {
-  background-color: rgba(0, 0, 0, 0.2588235294);
-  padding: 3px 10px;
-  margin: 5px 0;
-  display: block;
-  border: 1px solid #f5f5f5;
-}
-#page-wrapper #container #main-container #option-container .option .info .button {
+#page-wrapper #container #main-container #form-container .footer .submit-button {
+  width: 100%;
   background-color: #e2a258;
-  padding: 10px 30px;
-  width: -moz-fit-content;
-  width: fit-content;
-  margin-top: 20px;
-  border-radius: 5px;
-  font-weight: 800;
+  padding: 15px 0;
+  text-align: center;
+  border-radius: 20px;
+  font-size: 1.3em;
+  font-weight: 600;
 }
-#page-wrapper #container #main-container #option-container .option .info .button:hover {
-  cursor: pointer;
+#page-wrapper #container #main-container #form-container .footer .submit-button:hover {
   background-color: #ce8e45;
-}
-@media (max-width: 800px) {
-  #page-wrapper #container #main-container #option-container {
-    flex-direction: column;
-  }
-  #page-wrapper #container #main-container #option-container .option {
-    width: 100%;
-  }
+  cursor: pointer;
 }
 #page-wrapper #container #main-container .response {
   margin-top: 20px;

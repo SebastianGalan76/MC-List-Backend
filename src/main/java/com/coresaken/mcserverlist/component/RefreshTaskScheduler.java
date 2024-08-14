@@ -27,20 +27,22 @@ public class RefreshTaskScheduler {
         executorService.submit(() -> {
             try {
                 while (true) {
+                    System.out.println("EX");
                     Server server = taskQueue.takeTask();
                     if(server == null){
                         continue;
                     }
-
+                    System.out.println("EX2");
                     LocalDateTime now = LocalDateTime.now();
                     if(server.getNextRefreshAt().isAfter(now.minusMinutes(1))){
                         playerStatsService.refreshServer(server);
+                        System.out.println("R "+server.getIp());
                     }
                     else{
                         LocalDateTime time = server.getNextRefreshAt();
                         long minutesDifference = java.time.Duration.between(time, now).toMinutes();
                         long increments = (minutesDifference / 30) + 1;
-
+                        System.out.println("SKIP "+server.getIp());
                         server.setNextRefreshAt(time.plusMinutes(increments * 30));
                         serverRepository.save(server);
                     }
@@ -57,6 +59,7 @@ public class RefreshTaskScheduler {
     public void scheduleTasks() {
         LocalDateTime now = LocalDateTime.now();
         List<Server> serversToRefresh = serverRepository.findServersToRefresh(now);
+        System.out.println("TR "+serversToRefresh.size());
         for (Server server : serversToRefresh) {
             taskQueue.addTask(server);
         }

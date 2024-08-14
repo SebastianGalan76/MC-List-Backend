@@ -9,14 +9,15 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- <base href="http://localhost:8080/"> -->
+    <base href="http://localhost:8080/">
 
     <!-- Styles -->
-    <link rel="stylesheet" href="../../static/css/global.css">
-    <link rel="stylesheet" href="../../static/css/subPage/promotionPoints.css">
-    <link rel="stylesheet" href="../../static/css/fragment/header.css">
-    <link rel="stylesheet" href="../../static/css/fragment/footer.css">
-    <link rel="stylesheet" href="../../static/css/fragment/serverPreview.css">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/formElement.css">
+    <link rel="stylesheet" href="/css/subPage/promotionPoints.css">
+    <link rel="stylesheet" href="/css/fragment/header.css">
+    <link rel="stylesheet" href="/css/fragment/footer.css">
+    <link rel="stylesheet" href="/css/fragment/serverPreview.css">
 
     <!-- Font Roboto -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,8 +28,6 @@
 
     <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/2282473dfd.js" crossorigin="anonymous"></script>
-
-    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 </head>
 
 <body>
@@ -102,9 +101,11 @@
                 <div class="header">Promowanie serwera</div>
 
                 <br>
-                <span class="center" style="text-align: center;">MC-List.pl to najnowocześniejsza lista serwerów Minecraft. Dzięki promowaniu swojego serwera możesz dotrzeć do większej liczby graczy.
+                <span class="center" style="text-align: center;">MC-List.pl to najnowocześniejsza lista serwerów
+                    Minecraft. Dzięki promowaniu swojego serwera możesz dotrzeć do większej liczby graczy.
                     <br><br>
-                    Promowane serwery wyświetlają się na samej górze listy. Im więcej serwer posiada punktów promowania, tym wyżej jest na liście. Serwery z zakupionym promowaniem posiadają wyróżniający styl.</span>
+                    Promowane serwery wyświetlają się na samej górze listy. Im więcej serwer posiada punktów promowania,
+                    tym wyżej jest na liście. Serwery z zakupionym promowaniem posiadają wyróżniający styl.</span>
                 <br>
 
                 <br>
@@ -114,80 +115,58 @@
                 </span>
                 <br>
 
-                
+                <div id="form-container" class="center">
+                    Ilość punktów:
+                    <div class="input-area">
+                        <input id="promotion-points-input" type="number" placeholder="Ilość punktów" maxlength="60"
+                            value="10">
+                        <span class="required">*</span>
+                        <div class="icon" style="padding-bottom: 10px;">
+                            <span>👑</span>
+                        </div>
+                    </div>
 
-                <div class="response">
-                    <lottie-player id="loading-animation" class="center" src="/animation/loading.json"
-                        background="transparent" speed="1" style="width: 100px; height: 100px; display: none;" loop
-                        autoplay></lottie-player>
+                    <span>Cena: <span id="price-value">20</span>zł</span>
+
+                    <div class="footer">
+                        <div id="error-message" class="error"></div>
+                        <div class="submit-button" onclick="buyPoints()">Zakup</div>
+                    </div>
                 </div>
-                <div id="response-error" class="error"></div>
             </div>
         </section>
     </div>
     <div th:replace="~{fragment/footer :: footerFragment}"></div>
 </body>
 <script th:inline="javascript" type="module" defer>
-    const user = /*[[${user}]]*/ null;
-
     import { loadServerPreview } from './js/server/serverPreviewLoader.js';
     var server = /*[[${server}]]*/ null;
     loadServerPreview(server);
 </script>
 
 <script th:inline="javascript">
-    const responseError = document.getElementById('response-error');
-    const loadingAnimation = document.getElementById('loading-animation');
+    const responseError = document.getElementById('error-message');
+    const priceValue = document.getElementById('price-value');
+    const promotionPointsInput = document.getElementById('promotion-points-input');
 
-    var isFunctionLocked = false;
+    promotionPointsInput.addEventListener('input', () => {
+        priceValue.innerHTML = promotionPointsInput.value * 2;
+    });
 
-    async function takeOver() {
-        var serverId = /*[[${server.id}]]*/ 0;
-        loadingAnimation.style.display = "block";
+    async function buyPoints() {
+        var serverIp = /*[[${server.ip}]]*/ 0;
+        var promotionPoints = promotionPointsInput.value;
 
-        if (isFunctionLocked) {
-            setTimeout(() => {
-                takeOver();
-            }, 10000);
-
+        if(promotionPoints < 10){
+            responseError.innerHTML = "Minimalna ilość to 10"
+            return;
+        }
+        if(promotionPoints > 365){
+            responseError.innerHTML = "Maksymalna liczba to 365"
             return;
         }
 
-        isFunctionLocked = true;
-        setTimeout(() => {
-            isFunctionLocked = false;
-        }, 10000);
-
-        try {
-            const response = await fetch('/take-over/' + serverId, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-            loadingAnimation.style.display = "none";
-
-            if (!response.ok) {
-                const errorResponse = await response.json();
-                throw new Error(`Error: ${errorResponse.message}`);
-            }
-            else {
-                const responseJson = await response.json();
-
-                responseError.innerHTML = responseJson.message;
-            }
-        } catch (error) {
-            responseError.innerHTML = error;
-        }
-    }
-
-    function showVotePopup() {
-        votePopup.classList.add('active');
-        voteError.innerHTML = null;
-    }
-
-    function hideVotePopup() {
-        votePopup.classList.remove('active');
+        window.location.href = '/server/payment/' + serverIp + '/' + promotionPoints;
     }
 </script>
 

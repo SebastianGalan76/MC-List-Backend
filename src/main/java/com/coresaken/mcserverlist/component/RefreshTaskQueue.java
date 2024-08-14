@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class RefreshTaskQueue {
@@ -16,6 +17,6 @@ public class RefreshTaskQueue {
     }
 
     public Server takeTask() throws InterruptedException {
-        return queue.take();
+        return queue.poll(1, TimeUnit.SECONDS);
     }
 }

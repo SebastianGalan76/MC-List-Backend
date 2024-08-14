@@ -181,7 +181,9 @@
 
             <div id="button-panel" class="panel action-buttons-container">
                 <div class="button vote" onclick="showVotePopup()">Zagłosuj</div>
-                <div class="button promote">Promuj</div>
+                <a th:href="'/server/'+ ${server.ip} +'/promote'">
+                    <div class="button promote">Promuj</div>
+                </a>
                 <a th:href="'/server/' + ${server.id} + '/manage'" th:if="${role != null}">
                     <div class="button manage">Zarządzaj</div>
                 </a>
@@ -387,7 +389,9 @@
             </div>
             <div class="panel action-buttons-container" id="button-panel-aside">
                 <div class="button vote" onclick="showVotePopup()">Zagłosuj</div>
-                <div class="button promote">Promuj</div>
+                <a th:href="'/server/'+ ${server.ip} +'/promote'">
+                    <div class="button promote">Promuj</div>
+                </a>
                 <a th:href="'/server/' + ${server.id} + '/manage'" th:if="${role != null}">
                     <div class="button manage">Zarządzaj</div>
                 </a>
