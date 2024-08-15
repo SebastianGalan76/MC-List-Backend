@@ -28,7 +28,26 @@ public class SecurityConfiguration {
                     "/js/**",
                     "/auth/**",
                             "/",
-                    "/**")
+                    "/banners",
+                            "/dont-sleep-buddy",
+                            "/rules",
+                            "/privacy-policy",
+                            "/mode/listAll",
+                            "/version/listAll",
+                            "/add-new-server",
+                            "/add-new-server/post",
+                            "/server/payment/**",
+                            "/banner/payment/",
+                            "/payment-notification",
+                            "/server/list/**",
+                            "/server/*",
+                            "/server/*/promote",
+                            "/server/search/*",
+                            "/random",
+                            "/uploads/banners/*",
+                            "/vote",
+                            "/api/vote/check/**",
+                            "/api/vote/confirm/**")
                     .permitAll()
                     .anyRequest().authenticated();
         });

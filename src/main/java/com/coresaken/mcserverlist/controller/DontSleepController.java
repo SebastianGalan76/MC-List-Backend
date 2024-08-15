@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class DontSleepController {
     @PostMapping("/dont-sleep-buddy")
     public void receiveTestMessage(@RequestBody String message) {
-        System.out.println("Received message: " + message);
+
     }
 }
