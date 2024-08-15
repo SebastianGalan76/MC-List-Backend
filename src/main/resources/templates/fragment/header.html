@@ -33,7 +33,7 @@
             <div class="right-panel">
                 <div id="user-section">
                     <div class="user-logged-in" th:if="${user!=null}">
-                        <span th:text="${user.login}"></span>
+                        <a href="/user/profile"><span th:text="${user.login}"></span><i class="fa-solid fa-bars"></i></a>
                     </div>
                     <div class="user-not-logged-in">
                         <a href="/auth/signIn" class="sign-in" th:if="${user==null}">

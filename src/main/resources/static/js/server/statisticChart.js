@@ -33,21 +33,38 @@ export function loadData(hourlyPlayerCount, dailyPlayerCount) {
     Chart.register(gradient);
 
     // Tworzenie wykresu za pomocą Chart.js
-    createOnlinePlayerChart('online-player-chart', hourlyPlayerCount.slice(-48), plugin, true);
-    createOnlinePlayerChart('daily-player-chart-7', hourlyPlayerCount, plugin, true);
-    createOnlinePlayerChart('daily-player-chart-30', dailyPlayerCount.slice(-30), plugin, false);
-    createOnlinePlayerChart('daily-player-chart-365', dailyPlayerCount.slice(-365), plugin, false);
+    createOnlinePlayerChart('online-player-chart', hourlyPlayerCount.slice(-48), plugin, true, false);
+    createOnlinePlayerChart('daily-player-chart-7', hourlyPlayerCount, plugin, true, false);
+    createOnlinePlayerChart('daily-player-chart-30', dailyPlayerCount.slice(-30), plugin, false, true);
+    createOnlinePlayerChart('daily-player-chart-365', dailyPlayerCount.slice(-365), plugin, false, true);
 
-    createOnlinePlayerChart('online-player-chart-down-panel', hourlyPlayerCount.slice(-48), plugin, true);
+    createOnlinePlayerChart('online-player-chart-down-panel', hourlyPlayerCount.slice(-48), plugin, true, false);
 }
 
-function createOnlinePlayerChart(id, data, plugin, beginAtZero) {
-    var labels = data.map(function (entry) {
-        // Konwersja daty na obiekt JavaScript
-        var date = new Date(entry.time);
-        // Formatowanie czasu do "hh:mm"
-        return ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
-    });
+function createOnlinePlayerChart(id, data, plugin, beginAtZero, labelsWithDay) {
+    var labels;
+
+    if(labelsWithDay){
+        labels = data.map(function (entry) {
+            var date = new Date(entry.time);
+        
+            var time = ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
+            
+            var day = ('0' + date.getDate()).slice(-2);
+            var month = ('0' + (date.getMonth() + 1)).slice(-2);
+            var year = date.getFullYear();
+            var formattedDate = day + '.' + month + '.' + year;
+        
+            return formattedDate + ' ' + time;
+        });
+    }
+    else{
+        labels = data.map(function (entry) {
+            
+            var date = new Date(entry.time);
+            return ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
+        });
+    }
 
     var playerCounts = data.map(function (entry) {
         return entry.playerCount;

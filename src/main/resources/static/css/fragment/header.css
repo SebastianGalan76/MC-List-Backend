@@ -46,6 +46,10 @@ header #user-section {
 header .user-logged-in {
   font-weight: 800;
 }
+header .user-logged-in a {
+  display: flex;
+  gap: 10px;
+}
 header .user-not-logged-in .sign-in {
   display: block;
   background-color: #e2a258;
