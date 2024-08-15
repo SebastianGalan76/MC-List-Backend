@@ -70,20 +70,22 @@ public class PlayerStatsService {
         }
 
         ServerStatusDto serverResponse = serverStatusService.getServerStatus(server.getIp(), server.getPort());
+        boolean online = serverResponse.online();
+        server.setOnline(online);
+        if(online){
+            server.setOnlinePlayers(serverResponse.players().online());
 
-        server.setOnline(serverResponse.online());
-        server.setOnlinePlayers(serverResponse.players().online());
+            ServerDetail serverDetail = server.getDetail();
+            serverDetail.setIcon(serverResponse.icon());
+            serverDetail.setMotdHtml(serverResponse.motd().html());
+            serverDetail.setMotdClean(serverResponse.motd().clean());
+            server.setDetail(serverDetail);
 
-        ServerDetail serverDetail = server.getDetail();
-        serverDetail.setIcon(serverResponse.icon());
-        serverDetail.setMotdHtml(serverResponse.motd().html());
-        serverDetail.setMotdClean(serverResponse.motd().clean());
-        server.setDetail(serverDetail);
+            savePlayerStatistic(server, serverResponse.players().online());
+            serverDetailRepository.save(serverDetail);
+        }
 
         server.setNextRefreshAt(LocalDateTime.now().plusMinutes(REFRESH_INTERVAL_MINUTE));
-        savePlayerStatistic(server, serverResponse.players().online());
-
-        serverDetailRepository.save(serverDetail);
         serverRepository.save(server);
     }
 }

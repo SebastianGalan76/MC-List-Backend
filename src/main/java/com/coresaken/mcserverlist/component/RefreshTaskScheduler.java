@@ -24,31 +24,51 @@ public class RefreshTaskScheduler {
 
     @PostConstruct
     public void startProcessing() {
+        startProcessingThread();
+    }
+
+    private void startProcessingThread() {
         executorService.submit(() -> {
-            try {
-                while (true) {
+            while (true) {
+                try {
                     Server server = taskQueue.pollTask();
-                    if(server == null){
+                    if (server == null) {
                         continue;
                     }
+
                     LocalDateTime now = LocalDateTime.now();
-                    if(server.getNextRefreshAt().isAfter(now.minusMinutes(1))){
+                    if (server.getNextRefreshAt().isAfter(now.minusMinutes(1))) {
                         playerStatsService.refreshServer(server);
-                    }
-                    else{
+                    } else {
                         LocalDateTime time = server.getNextRefreshAt();
                         long minutesDifference = java.time.Duration.between(time, now).toMinutes();
                         long increments = (minutesDifference / 30) + 1;
+
                         server.setNextRefreshAt(time.plusMinutes(increments * 30));
                         serverRepository.save(server);
                     }
 
                     Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    System.err.println("Wątek został przerwany: " + e.getMessage());
+                    Thread.currentThread().interrupt();
+                    restartProcessingThread();
+                    break;
+                } catch (Exception e) {
+                    System.err.println("Błąd w wątku: " + e.getMessage());
                 }
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
             }
         });
+    }
+
+    private void restartProcessingThread() {
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        System.out.println("Ponowne uruchamianie wątku przetwarzania zadań...");
+        startProcessingThread();
     }
 
     @Scheduled(fixedRate = 60000)

@@ -116,6 +116,9 @@ function createOnlinePlayerChart(id, data, plugin, beginAtZero) {
                     display: false
                 }
             },
+            animation: {
+                duration: 0
+            },
             radius: 0,
         },
         plugins: [plugin]
