@@ -92,8 +92,10 @@ public class NewServerService {
                 }
             }
         }
+        LocalDateTime now = LocalDateTime.now();
+        server.setNextRefreshAt(now.plusMinutes(PlayerStatsService.REFRESH_INTERVAL_MINUTE));
+        server.setCreatedAt(now);
 
-        server.setNextRefreshAt(LocalDateTime.now().plusMinutes(PlayerStatsService.REFRESH_INTERVAL_MINUTE));
         serverRepository.save(server);
 
         return Response.builder().status(HttpStatus.PERMANENT_REDIRECT).redirect("/server/"+server.getIp()).build();
@@ -142,6 +144,10 @@ public class NewServerService {
         }
         else{
             server.setMode(null);
+        }
+
+        if(server.getSubServers().size()>1){
+            server.setMode(modeRepository.getReferenceById(1L));
         }
     }
     public Response checkServerData(BasicServerDto serverDto, Server server){

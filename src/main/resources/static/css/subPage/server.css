@@ -180,6 +180,10 @@
 #page-wrapper #container #main-container #information-main-container .h {
   font-weight: 700;
 }
+#page-wrapper #container #main-container #information-main-container .info-con {
+  margin-top: 10px;
+  display: block;
+}
 #page-wrapper aside {
   width: 300px;
   flex-shrink: 0;

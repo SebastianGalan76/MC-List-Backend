@@ -48,6 +48,8 @@ public class Server {
     int onlinePlayers;
 
     LocalDateTime nextRefreshAt;
+    LocalDateTime createdAt;
+
     int promotionPoints;
 
     @OneToMany(

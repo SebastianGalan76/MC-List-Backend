@@ -214,14 +214,15 @@
                     class="main-container-content" id="information-main-container">
                     <h1 class="content-header">Informacje</h1>
 
-                    <span class="h">Adres: </span><span th:text="${server.name.name}"></span><br>
-                    <span class="h">Port: </span><span th:text="${server.port}"></span> <br>
+                    <span class="info-con"><span class="h">Adres: </span><span th:text="${server.name.name}"></span><br></span>
+                    <span class="info-con" th:if="${server.port > 0}"><span class="h">Port: </span><span th:text="${server.port}"></span>
+                        <br></span>
 
-                    <span>Wersja: 1.16.5-1.19.2</span> <br>
-                    <span>Tryby: Survival, Creative, SkyBlock</span> <br>
-                    <span>Promowany do: 08.05.2023</span> <br>
-                    <span>Zaktualizowano: 08.05.2023</span> <br>
-                    <span>Dodano: 08.05.2023</span> <br>
+                    <span class="info-con" th:if="${server.versions.size() > 0}"><span class="h">Wersja:</span> <span
+                            id="server-versions-info"></span> <br></span>
+                    <span class="info-con" th:if="${server.subServers.size() > 0 or server.mode != null}"><span class="h">Tryby:</span> <span id="server-modes-info"></span><br></span>
+                    <span class="info-con"><span class="h">Zaktualizowano:</span> <span id="server-refresh-time-info"></span><br></span>
+                    <span class="info-con"><span class="h">Dodano:</span> <span id="server-created-time-info"></span><br></span>
                 </div>
 
                 <div th:style="'display:' + (${server.description != null and server.description.length > 0} ? 'block' : 'none')"
@@ -687,6 +688,55 @@
     import { loadRatings } from './js/server/ratingsLoader.js';
     const playerRatings = /*[[${ratings}]]*/[];
     loadRatings(playerRatings, categoriesJson);
+
+    if (server.versions != null && server.versions.length > 0) {
+        const versionInfo = document.getElementById('server-versions-info');
+
+        const sortedArray = server.versions.sort((a, b) => parseFloat(a.id) - parseFloat(b.id));
+
+        const minValue = sortedArray[0];
+        const maxValue = sortedArray[sortedArray.length - 1];
+
+        if (minValue.id == maxValue.id) {
+            versionInfo.innerHTML = minValue.name;
+        }
+        else {
+            versionInfo.innerHTML = minValue.name + " - " + maxValue.name;
+        }
+    }
+
+    import { convertDate } from './js/utils.js';
+
+    const modesInfo = document.getElementById('server-modes-info');
+    if (server.subServers.length > 0) {
+        var modes = new Set();
+
+        server.subServers.forEach(subServer => {
+            if (subServer.mode != null) {
+                modes.add(subServer.mode.name);
+            }
+        })
+        var modesString = "";
+        modes.forEach(modeName => {
+            modesString += modeName + ", ";
+        })
+
+        modesInfo.innerHTML = modesString;
+    }
+    else if (server.mode != null) {
+        modesInfo.innerHTML = server.mode.name;
+    }
+
+
+    const refreshedAt = document.getElementById('server-refresh-time-info');
+    const refreshTime = server.nextRefreshAt;
+    let date = new Date(refreshTime);
+    date.setMinutes(date.getMinutes() - 30);
+    refreshedAt.innerHTML = convertDate(date.toISOString());
+
+    const createdAt = document.getElementById('server-created-time-info');
+    createdAt.innerHTML = convertDate(server.createdAt);
+
 </script>
 
 <script th:inline="javascript">
