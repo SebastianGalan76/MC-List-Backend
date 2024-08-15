@@ -1,5 +1,6 @@
 package com.coresaken.mcserverlist.service.server;
 
+import com.coresaken.mcserverlist.data.response.VoteResponse;
 import com.coresaken.mcserverlist.data.dto.VoteDto;
 import com.coresaken.mcserverlist.data.response.Response;
 import com.coresaken.mcserverlist.database.model.server.Server;
@@ -10,10 +11,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Data
@@ -47,5 +50,52 @@ public class VoteService {
 
         voteRepository.save(vote);
         return Response.builder().status(HttpStatus.OK).message("Głos został oddany").build();
+    }
+
+    public ResponseEntity<VoteResponse> check(Long serverId, String playerNick) {
+        if(serverId == null){
+            return new ResponseEntity<>(new VoteResponse(null, null, "Server's id cannot be null") , HttpStatus.BAD_REQUEST);
+        }
+
+        if(playerNick == null || playerNick.isEmpty()){
+            return new ResponseEntity<>(new VoteResponse(null, null, "Player's nick cannot be null") , HttpStatus.BAD_REQUEST);
+        }
+
+        Optional<Server> server = serverRepository.findById(serverId);
+        if(server.isEmpty()){
+            return new ResponseEntity<>(new VoteResponse(null, null, "No server with the specified ID") , HttpStatus.BAD_REQUEST);
+        }
+
+        Vote vote = voteRepository.findFirstByNickAndServerIdAndReceivedFalse(playerNick, serverId);
+        if(vote!=null){
+            return new ResponseEntity<>(new VoteResponse(vote.getId(), vote.getVotedAt(), null) , HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>(new VoteResponse(null, null, "This player has not voted or has already received his reward") , HttpStatus.NOT_FOUND);
+        }
+    }
+
+    public ResponseEntity<String> confirm(Long voteId, Long serverId) {
+        if(voteId == null){
+            return new ResponseEntity<>("Vote's id cannot be null", HttpStatus.BAD_REQUEST);
+        }
+
+        if(serverId == null){
+            return new ResponseEntity<>("Server's id cannot be null", HttpStatus.BAD_REQUEST);
+        }
+
+        Vote vote = voteRepository.findById(voteId).orElse(null);
+        if(vote!=null){
+            if(vote.getServer().getId().equals(serverId)){
+                vote.setReceived(true);
+                voteRepository.save(vote);
+                return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
+            }
+
+            return new ResponseEntity<>("No vote with the specified server's ID" , HttpStatus.BAD_REQUEST);
+        }
+        else{
+            return new ResponseEntity<>("No vote with the specified ID" , HttpStatus.BAD_REQUEST);
+        }
     }
 }
