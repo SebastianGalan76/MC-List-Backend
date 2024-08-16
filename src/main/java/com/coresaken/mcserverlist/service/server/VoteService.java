@@ -53,37 +53,21 @@ public class VoteService {
     }
 
     public ResponseEntity<VoteResponse> check(Long serverId, String playerNick) {
-        if(serverId == null){
-            return new ResponseEntity<>(new VoteResponse(null, null, "Server's id cannot be null") , HttpStatus.BAD_REQUEST);
-        }
-
-        if(playerNick == null || playerNick.isEmpty()){
-            return new ResponseEntity<>(new VoteResponse(null, null, "Player's nick cannot be null") , HttpStatus.BAD_REQUEST);
-        }
-
         Optional<Server> server = serverRepository.findById(serverId);
         if(server.isEmpty()){
-            return new ResponseEntity<>(new VoteResponse(null, null, "No server with the specified ID") , HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new VoteResponse(null, null, 1, "No server with the specified ID") , HttpStatus.BAD_REQUEST);
         }
 
         Vote vote = voteRepository.findFirstByNickAndServerIdAndReceivedFalse(playerNick, serverId);
         if(vote!=null){
-            return new ResponseEntity<>(new VoteResponse(vote.getId(), vote.getVotedAt(), null) , HttpStatus.OK);
+            return new ResponseEntity<>(new VoteResponse(vote.getId(), vote.getVotedAt(), 0, null) , HttpStatus.OK);
         }
         else{
-            return new ResponseEntity<>(new VoteResponse(null, null, "This player has not voted or has already received his reward") , HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new VoteResponse(null, null, 2, "This player has not voted or has already received his reward") , HttpStatus.BAD_REQUEST);
         }
     }
 
     public ResponseEntity<String> confirm(Long voteId, Long serverId) {
-        if(voteId == null){
-            return new ResponseEntity<>("Vote's id cannot be null", HttpStatus.BAD_REQUEST);
-        }
-
-        if(serverId == null){
-            return new ResponseEntity<>("Server's id cannot be null", HttpStatus.BAD_REQUEST);
-        }
-
         Vote vote = voteRepository.findById(voteId).orElse(null);
         if(vote!=null){
             if(vote.getServer().getId().equals(serverId)){

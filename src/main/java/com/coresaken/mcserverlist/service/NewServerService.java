@@ -146,7 +146,7 @@ public class NewServerService {
             server.setMode(null);
         }
 
-        if(server.getSubServers().size()>1){
+        if(server.getSubServers() != null && server.getSubServers().size()>1){
             server.setMode(modeRepository.getReferenceById(1L));
         }
     }

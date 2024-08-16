@@ -16,17 +16,18 @@ public class VoteResponse {
     Long voteId;
     LocalDate votedAt;
 
-    public VoteResponse(Long voteId, LocalDate votedAt, String errorMessage){
+    public VoteResponse(Long voteId, LocalDate votedAt, int errorId, String errorMessage){
         this.voteId = voteId;
         this.votedAt = votedAt;
         if(errorMessage != null){
-            this.error = new Error(errorMessage);
+            this.error = new Error(errorId, errorMessage);
         }
     }
 
     @Data
     @AllArgsConstructor
     public static class Error{
+        int id;
         String message;
     }
 }

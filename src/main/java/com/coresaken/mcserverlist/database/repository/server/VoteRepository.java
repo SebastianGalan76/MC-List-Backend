@@ -14,7 +14,7 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
     @Query("SELECT v FROM Vote v WHERE (v.ip = :ip OR (:nick IS NOT NULL AND :nick <> '' AND v.nick = :nick)) AND v.votedAt = :votedAt AND v.server.id = :serverId AND v.nick IS NOT NULL")
     List<Vote> findByIpOrNickAndDateAndServerId(@Param("ip") String ip, @Param("nick") String nick, @Param("votedAt") LocalDate votedAt, @Param("serverId") Long serverId);
 
-    @Query("SELECT v FROM Vote v WHERE v.nick = :nick AND v.server.id = :serverId AND v.received = false")
+    @Query(value = "SELECT * FROM Vote v WHERE v.nick = :nick AND v.server_id = :serverId AND v.received = false LIMIT 1", nativeQuery = true)
     Vote findFirstByNickAndServerIdAndReceivedFalse(
             @Param("nick") String nick,
             @Param("serverId") Long serverId

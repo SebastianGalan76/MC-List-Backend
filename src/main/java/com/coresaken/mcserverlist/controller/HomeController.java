@@ -35,4 +35,18 @@ public class HomeController {
 
         return "subPage/privacyPolicy";
     }
+
+    @RequestMapping("/rewards")
+    public String getRewardsPage(Model model){
+        model.addAttribute("user", userService.getLoggedUser());
+
+        return "subPage/rewards";
+    }
+
+    @RequestMapping("/connectionError")
+    public String getConnectionErrorPage(Model model){
+        model.addAttribute("user", userService.getLoggedUser());
+
+        return "subPage/connectionError";
+    }
 }
