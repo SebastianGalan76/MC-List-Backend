@@ -51,14 +51,14 @@
 
 <body>
     <div th:replace="~{fragment/header :: headerFragment}"></div>
-    <h1 class="center" style="margin-top: 10px;">Lista serwerów minecraft</h1>
+    <h1 class="center" style="margin-top: 20px; text-align: center;">Lista serwerów minecraft</h1>
     <div id="banner-container" class="center" th:if="${bigBanner != null}">
         <a class="banner" th:href="${bigBanner.link}" target="_blank">
             <img th:src="${bigBanner.filePath}" alt="Baner reklamowy">
         </a>
     </div>
 
-    <div id="search-container" class="center">
+    <section id="search-container" class="center">
         <div class="row">
             <div class="input-area">
                 <input id="name-input" type="text" placeholder="Nazwa serwera lub motd" maxlength="60">
@@ -133,10 +133,10 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div id="server-container" class="center">
+    </section>
+    <section id="server-container" class="center">
 
-    </div>
+    </section>
     <div id="page-container" class="center">
 
     </div>

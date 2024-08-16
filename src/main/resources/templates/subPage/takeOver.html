@@ -42,22 +42,6 @@
 </head>
 
 <body>
-    <div class="popup" id="rated-successfully-popup">
-        <div class="overlay"></div>
-        <div class="content">
-            <i class="fa-solid fa-circle-check header-icon"></i>
-
-            <span class="text">
-                Dziękujemy za przesłanie swojej oceny naszego serwera.<br>
-                Twoja ocena jest dla nas niezwykle ważna.
-            </span>
-
-            <a th:href="@{/server/{ip}(ip=${server.ip})}">
-                <div class="action-btn">OK</div>
-            </a>
-        </div>
-    </div>
-
     <div th:replace="~{fragment/header :: headerFragment}"></div>
 
     <div id="page-wrapper" class="center">
@@ -125,7 +109,7 @@
             </div>
 
             <div id="main-container" class="panel">
-                <div class="header">Przejmowanie serwera</div>
+                <h1 class="header">Przejmowanie serwera</h1>
 
                 <br>
                 <span class="center">Przejmij serwer, aby móc dodawać opis serwera, linki, administrację, banner i wiele
