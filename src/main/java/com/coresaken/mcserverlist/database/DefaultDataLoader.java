@@ -183,6 +183,7 @@ public class DefaultDataLoader implements CommandLineRunner {
         modes.add(new Mode(41L, "UHC"));
         modes.add(new Mode(42L, "The Bridge"));
         modes.add(new Mode(43L, "PaintBall"));
+        modes.add(new Mode(43L, "SkyWars"));
 
         modeRepository.saveAll(modes);
     }

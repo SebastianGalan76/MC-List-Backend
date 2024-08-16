@@ -3,11 +3,21 @@
 
 <head>
     <title th:text="'Serwer '+ ${server.name.name} + ' | MC-List.pl'"></title>
+    <meta name="description"
+        content="Znajdź najlepsze serwery Minecraft w jednym miejscu! Aktualna lista serwerów Minecraft, podzieloną na kategorie, takie jak tryby gry, liczba graczy, wersje oraz modyfikacje. Odkryj nowe serwery i dołącz do gry już teraz!" />
+    <meta name="keywords"
+        content="Minecraft, serwery Minecraft, lista serwerów Minecraft, najlepsze serwery Minecraft, serwery survival, serwery creative, serwery PvP, serwery multiplayer, serwery premium, serwery non-premium, Minecraft serwery, serwery z modyfikacjami, serwery mini-games, serwery hardcore, serwery roleplay, Minecraft online, serwery z pluginami" />
+
 
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta property="og:image" content="https://mc-list.pl/img/logo3.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="MC-List.pl" />
+    <meta name="robots" content="index, follow">
 
     <base href="http://localhost:8080/">
 
@@ -214,15 +224,20 @@
                     class="main-container-content" id="information-main-container">
                     <h1 class="content-header">Informacje</h1>
 
-                    <span class="info-con"><span class="h">Adres: </span><span th:text="${server.name.name}"></span><br></span>
-                    <span class="info-con" th:if="${server.port > 0}"><span class="h">Port: </span><span th:text="${server.port}"></span>
+                    <span class="info-con"><span class="h">Adres: </span><span
+                            th:text="${server.name.name}"></span><br></span>
+                    <span class="info-con" th:if="${server.port > 0}"><span class="h">Port: </span><span
+                            th:text="${server.port}"></span>
                         <br></span>
 
                     <span class="info-con" th:if="${server.versions.size() > 0}"><span class="h">Wersja:</span> <span
                             id="server-versions-info"></span> <br></span>
-                    <span class="info-con" th:if="${server.subServers.size() > 0 or server.mode != null}"><span class="h">Tryby:</span> <span id="server-modes-info"></span><br></span>
-                    <span class="info-con"><span class="h">Zaktualizowano:</span> <span id="server-refresh-time-info"></span><br></span>
-                    <span class="info-con"><span class="h">Dodano:</span> <span id="server-created-time-info"></span><br></span>
+                    <span class="info-con" th:if="${server.subServers.size() > 0 or server.mode != null}"><span
+                            class="h">Tryby:</span> <span id="server-modes-info"></span><br></span>
+                    <span class="info-con"><span class="h">Zaktualizowano:</span> <span
+                            id="server-refresh-time-info"></span><br></span>
+                    <span class="info-con"><span class="h">Dodano:</span> <span
+                            id="server-created-time-info"></span><br></span>
                 </div>
 
                 <div th:style="'display:' + (${server.description != null and server.description.length > 0} ? 'block' : 'none')"

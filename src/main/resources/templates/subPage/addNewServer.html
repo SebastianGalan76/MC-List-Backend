@@ -2,12 +2,22 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="pl">
 
 <head>
-    <title>Dodawanie nowego serwera - Lista serwerów minecraft | MC-List.pl</title>
+    <title>Dodaj nowy serwer - Lista serwerów minecraft | MC-List.pl</title>
+    <meta name="description"
+        content="Znajdź najlepsze serwery Minecraft w jednym miejscu! Aktualna lista serwerów Minecraft, podzieloną na kategorie, takie jak tryby gry, liczba graczy, wersje oraz modyfikacje. Odkryj nowe serwery i dołącz do gry już teraz!" />
+    <meta name="keywords"
+        content="Minecraft, serwery Minecraft, lista serwerów Minecraft, najlepsze serwery Minecraft, serwery survival, serwery creative, serwery PvP, serwery multiplayer, serwery premium, serwery non-premium, Minecraft serwery, serwery z modyfikacjami, serwery mini-games, serwery hardcore, serwery roleplay, Minecraft online, serwery z pluginami" />
+
 
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta property="og:image" content="https://mc-list.pl/img/logo3.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="MC-List.pl" />
+    <meta name="robots" content="index, follow">
 
     <base href="http://localhost:8080/">
 
@@ -63,7 +73,8 @@
                 </div>
 
                 <div class="input-container">
-                    <input id="mode-input" placeholder="Wybierz tryb serwera" type="text" maxlength="60" autocomplete="off">
+                    <input id="mode-input" placeholder="Wybierz tryb serwera" type="text" maxlength="60"
+                        autocomplete="off">
                     <div class="icon">
                         <i class="fa-solid fa-dice-d6"></i>
                     </div>
@@ -71,7 +82,7 @@
 
                 <div class="selected-item-wrapper scrollable-horizontal scrollable">
                     <div id="selected-mode-container" class="selected-item-container scrollable-container">
-                        
+
                     </div>
                 </div>
             </div>
@@ -86,7 +97,8 @@
                 </div>
 
                 <div class="input-container">
-                    <input id="version-input" placeholder="Wybierz wersje serwera" type="text" maxlength="60" autocomplete="off">
+                    <input id="version-input" placeholder="Wybierz wersje serwera" type="text" maxlength="60"
+                        autocomplete="off">
                     <div class="icon">
                         <i class="fa-solid fa-bars"></i>
                     </div>
@@ -94,20 +106,20 @@
 
                 <div class="selected-item-wrapper scrollable-horizontal scrollable">
                     <div id="selected-version-container" class="selected-item-container scrollable-container">
-                        
+
                     </div>
                 </div>
             </div>
 
             <div id="server-status-response-error" style="display: none;"><span class="red">Nie możemy znaleźć takiego
-                serwera. Czy wpisałeś poprawny adres oraz port serwera?</span><br>
-            <br>
-            Jeśli serwer jest włączony i wciąż występuje błąd z połączeniem, przeczytaj więcej o możliwych
-            przyczynach <a href="/connectionError" class="link">tutaj</a>.
-        </div>
+                    serwera. Czy wpisałeś poprawny adres oraz port serwera?</span><br>
+                <br>
+                Jeśli serwer jest włączony i wciąż występuje błąd z połączeniem, przeczytaj więcej o możliwych
+                przyczynach <a href="/connectionError" class="link">tutaj</a>.
+            </div>
 
-        <lottie-player id="loading-animation" src="/animation/loading.json" background="transparent" speed="1"
-            style="width: 100px; height: 100px; display: none;" loop autoplay></lottie-player>
+            <lottie-player id="loading-animation" src="/animation/loading.json" background="transparent" speed="1"
+                style="width: 100px; height: 100px; display: none;" loop autoplay></lottie-player>
         </div>
 
         <div class="footer">
@@ -117,4 +129,5 @@
     </div>
     <div class="divider-line-vertical"></div>
 </body>
+
 </html>

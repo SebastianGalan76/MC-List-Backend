@@ -2,12 +2,22 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="pl">
 
 <head>
-    <title th:text="'Przejmowanie serwera '+ ${server.name.name} +' | MC-List.pl'"></title>
+    <title th:text="'Promowanie serwera '+ ${server.name.name} +' | MC-List.pl'"></title>
+    <meta name="description"
+        content="Znajdź najlepsze serwery Minecraft w jednym miejscu! Aktualna lista serwerów Minecraft, podzieloną na kategorie, takie jak tryby gry, liczba graczy, wersje oraz modyfikacje. Odkryj nowe serwery i dołącz do gry już teraz!" />
+    <meta name="keywords"
+        content="Minecraft, serwery Minecraft, lista serwerów Minecraft, najlepsze serwery Minecraft, serwery survival, serwery creative, serwery PvP, serwery multiplayer, serwery premium, serwery non-premium, Minecraft serwery, serwery z modyfikacjami, serwery mini-games, serwery hardcore, serwery roleplay, Minecraft online, serwery z pluginami" />
+
 
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta property="og:image" content="https://mc-list.pl/img/logo3.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="MC-List.pl" />
+    <meta name="robots" content="index, follow">
 
     <base href="http://localhost:8080/">
 
@@ -161,11 +171,11 @@
         var serverIp = /*[[${server.ip}]]*/ 0;
         var promotionPoints = promotionPointsInput.value;
 
-        if(promotionPoints < 10){
+        if (promotionPoints < 10) {
             responseError.innerHTML = "Minimalna ilość to 10"
             return;
         }
-        if(promotionPoints > 365){
+        if (promotionPoints > 365) {
             responseError.innerHTML = "Maksymalna liczba to 365"
             return;
         }

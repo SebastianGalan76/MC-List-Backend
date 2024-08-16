@@ -2,12 +2,22 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="pl">
 
 <head>
-    <title>Lista serwerów minecraft</title>
+    <title>Zarządzaj uprawnieniami | MC-List.pl</title>
+    <meta name="description"
+        content="Znajdź najlepsze serwery Minecraft w jednym miejscu! Aktualna lista serwerów Minecraft, podzieloną na kategorie, takie jak tryby gry, liczba graczy, wersje oraz modyfikacje. Odkryj nowe serwery i dołącz do gry już teraz!" />
+    <meta name="keywords"
+        content="Minecraft, serwery Minecraft, lista serwerów Minecraft, najlepsze serwery Minecraft, serwery survival, serwery creative, serwery PvP, serwery multiplayer, serwery premium, serwery non-premium, Minecraft serwery, serwery z modyfikacjami, serwery mini-games, serwery hardcore, serwery roleplay, Minecraft online, serwery z pluginami" />
+
 
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta property="og:image" content="https://mc-list.pl/img/logo3.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="MC-List.pl" />
+    <meta name="robots" content="index, follow">
 
     <base href="http://localhost:8080/">
 
@@ -61,7 +71,9 @@
                 <div class="header">
                     Role serwera
                 </div>
-                <div class="info">Jest to miejsce, gdzie możesz nadać innym użytkownikom uprawnienia do edycji różnych sekcji serwera na naszej stronie. Dzięki temu możesz przedzielić poszczególnym osobom zadanie aktualizowania m.in. informacji o serwerze, linków, administracji itp.</div>
+                <div class="info">Jest to miejsce, gdzie możesz nadać innym użytkownikom uprawnienia do edycji różnych
+                    sekcji serwera na naszej stronie. Dzięki temu możesz przedzielić poszczególnym osobom zadanie
+                    aktualizowania m.in. informacji o serwerze, linków, administracji itp.</div>
 
                 <div id="role-description">
                     <div class="role">
@@ -86,7 +98,7 @@
                                 <li>Edycja podstawowych informacji</li>
                                 <li>Edycja linków</li>
                                 <li>Edycja banneru</li>
-                                <li>Edycja trybów</li> 
+                                <li>Edycja trybów</li>
                             </ul>
                         </div>
                     </div>
@@ -102,7 +114,7 @@
                                 <li>Edycja podstawowych informacji</li>
                                 <li>Edycja linków</li>
                                 <li>Edycja banneru</li>
-                                <li>Edycja trybów</li> 
+                                <li>Edycja trybów</li>
                                 <br>
                                 <li>Edycja uprawnień</li>
                             </ul>
@@ -114,8 +126,8 @@
                     <div class="title">Tworzenie nowej roli</div>
                     <div class="form-container center">
                         <div class="input-area">
-                            <input id="user-email-input" type="text" placeholder="E-mail lub login użytkownika" maxlength="60"
-                                autocomplete="off">
+                            <input id="user-email-input" type="text" placeholder="E-mail lub login użytkownika"
+                                maxlength="60" autocomplete="off">
                             <div class="icon">
                                 <i class="fa-solid fa-person"></i>
                             </div>
@@ -198,9 +210,9 @@
                 const responseJson = await response.json();
 
                 if (responseJson.status == "BAD_REQUEST") {
-                   responseError.innerHTML = responseJson.message;
+                    responseError.innerHTML = responseJson.message;
                 }
-                else if (responseJson.status == "OK"){
+                else if (responseJson.status == "OK") {
                     responseError.innerHTML = "Zmiany zostały zapisane";
                 }
             }
