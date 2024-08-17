@@ -1,6 +1,5 @@
 package com.coresaken.mcserverlist.controller;
 
-import com.coresaken.mcserverlist.data.dto.SearchServerDto;
 import com.coresaken.mcserverlist.data.response.Response;
 import com.coresaken.mcserverlist.database.model.server.Server;
 import com.coresaken.mcserverlist.database.repository.PlayerRatingRepository;
@@ -10,8 +9,6 @@ import com.coresaken.mcserverlist.service.server.ServerService;
 import com.coresaken.mcserverlist.util.PermissionChecker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -57,7 +54,7 @@ public class ServerController {
             return Response.builder().status(HttpStatus.BAD_REQUEST).message("Wystąpił nieoczekiwany błąd #8741. Możesz zgłosić go do Administracji strony.").build();
         }
 
-        return serverService.deleteServer(server);
+        return serverService.delete(server);
     }
 
     @ResponseBody

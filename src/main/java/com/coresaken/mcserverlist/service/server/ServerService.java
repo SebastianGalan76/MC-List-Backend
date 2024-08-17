@@ -1,32 +1,20 @@
 package com.coresaken.mcserverlist.service.server;
 
-import com.coresaken.mcserverlist.data.dto.SearchServerDto;
-import com.coresaken.mcserverlist.data.payment.PromotionPoints;
 import com.coresaken.mcserverlist.data.response.Response;
-import com.coresaken.mcserverlist.database.model.User;
-import com.coresaken.mcserverlist.database.model.server.Report;
 import com.coresaken.mcserverlist.database.model.server.Server;
 import com.coresaken.mcserverlist.database.model.server.ServerUserRole;
-import com.coresaken.mcserverlist.database.model.server.ratings.PlayerRating;
-import com.coresaken.mcserverlist.database.repository.PlayerRatingRepository;
 import com.coresaken.mcserverlist.database.repository.ServerRepository;
 import com.coresaken.mcserverlist.database.repository.SubServerRepository;
-import com.coresaken.mcserverlist.database.repository.server.ReportRepository;
 import com.coresaken.mcserverlist.service.ServerStatusService;
 import com.coresaken.mcserverlist.service.UserService;
 import com.coresaken.mcserverlist.util.PermissionChecker;
 import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -52,15 +40,7 @@ public class ServerService {
         return serverRepository.findByIp(serverIp).orElse(null);
     }
 
-    public Response deleteServer(Server server){
-        if(!PermissionChecker.hasPermissionForServer(userService.getLoggedUser(), server, ServerUserRole.Role.OWNER)){
-            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Nie posiadasz wymaganych uprawnień, aby to zrobić!").build();
-        }
-
-        serverRepository.delete(server);
-        return Response.builder().status(HttpStatus.OK).build();
-    }
-
+    @Nullable
     public String getRandomServerIp() {
         Server server = serverRepository.findRandomServer().orElse(null);
         return server == null ? null : server.getIp();
@@ -68,5 +48,14 @@ public class ServerService {
 
     public void save(Server server){
         serverRepository.save(server);
+    }
+
+    public Response delete(Server server){
+        if(!PermissionChecker.hasPermissionForServer(userService.getLoggedUser(), server, ServerUserRole.Role.OWNER)){
+            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Nie posiadasz wymaganych uprawnień, aby to zrobić!").build();
+        }
+
+        serverRepository.delete(server);
+        return Response.builder().status(HttpStatus.OK).build();
     }
 }
