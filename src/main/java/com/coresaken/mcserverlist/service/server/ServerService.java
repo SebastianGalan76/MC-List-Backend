@@ -36,9 +36,6 @@ public class ServerService {
 
     final ServerRepository serverRepository;
     final SubServerRepository subServerRepository;
-    final ReportRepository reportRepository;
-
-    final PlayerRatingRepository playerRatingRepository;
 
     public Page<Server> getServers(int page){
         Pageable pageable = PageRequest.of(page - 1, 30);
@@ -110,26 +107,6 @@ public class ServerService {
         }
 
         server.setPromotionPoints(server.getPromotionPoints() + promotionPoints.getPromotionPoints());
-    }
-
-    public Response reportServer(Long id, String reason) {
-        Server server = getServerById(id);
-
-        if(server==null){
-            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Wystąpił nieoczekiwany błąd #323245").build();
-        }
-
-        User user = userService.getLoggedUser();
-        if(user == null){
-            return Response.builder().status(HttpStatus.UNAUTHORIZED).message("Twoja sesja wygasła. Musisz się zalogować ponownie").build();
-        }
-
-        Report report = new Report();
-        report.setReason(reason);
-        report.setUser(user);
-        report.setServer(server);
-        reportRepository.save(report);
-        return Response.builder().status(HttpStatus.OK).message("Zgłoszenie zostało wysłane do administracji").build();
     }
 
     public String getRandomServerIp() {

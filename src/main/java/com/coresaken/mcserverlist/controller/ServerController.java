@@ -64,25 +64,6 @@ public class ServerController {
         return "subPage/promotionPoints";
     }
 
-    @RequestMapping("/server/{id}/report")
-    public String getServerReportPage(@PathVariable("id") Long id, Model model){
-        Server server = serverService.getServerById(id);
-
-        if(server==null){
-            return "error/404";
-        }
-
-        model.addAttribute("user", userService.getLoggedUser());
-        model.addAttribute("server", server);
-        return "subPage/report";
-    }
-
-    @ResponseBody
-    @PostMapping("/server/{id}/report/send")
-    public Response reportServer(@PathVariable("id") Long id, @RequestBody StringDto stringDto){
-        return serverService.reportServer(id, stringDto.getText());
-    }
-
     @ResponseBody
     @DeleteMapping("/server/{id}")
     public Response deleteServer(@PathVariable("id") Long id){
