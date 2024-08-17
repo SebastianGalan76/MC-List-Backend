@@ -9,6 +9,7 @@ import com.coresaken.mcserverlist.database.model.server.Server;
 import com.coresaken.mcserverlist.database.repository.PaymentRepository;
 import com.coresaken.mcserverlist.service.BannerService;
 import com.coresaken.mcserverlist.service.PaymentService;
+import com.coresaken.mcserverlist.service.PromotionPointService;
 import com.coresaken.mcserverlist.service.server.ServerService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -28,6 +29,8 @@ public class PaymentController {
 
     final ServerService serverService;
     final BannerService bannerService;
+
+    final PromotionPointService promotionPointService;
 
     @Value("${hotpay.secret}")
     String secret;
@@ -172,7 +175,7 @@ public class PaymentController {
                 ObjectMapper mapper = new ObjectMapper();
                 PromotionPoints promotionPoints = mapper.readValue(payment.getSuccessAction(), PromotionPoints.class);
 
-                serverService.addPromotionPoints(promotionPoints);
+                promotionPointService.addPromotionPoints(promotionPoints);
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }

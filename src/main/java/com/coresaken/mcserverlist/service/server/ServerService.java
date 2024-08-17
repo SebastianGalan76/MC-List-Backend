@@ -61,54 +61,6 @@ public class ServerService {
         return Response.builder().status(HttpStatus.OK).build();
     }
 
-    public Page<Server> searchServer(SearchServerDto searchServerDto, Pageable pageable){
-        Set<Server> serversByName = new HashSet<>();
-        if(searchServerDto.getName() != null && !searchServerDto.getName().isEmpty()){
-            serversByName.addAll(serverRepository.searchByIp(searchServerDto.getName()));
-            serversByName.addAll(serverRepository.searchByMotd(searchServerDto.getName()));
-        }
-        else{
-            serversByName.addAll(serverRepository.findAll());
-        }
-
-        Long versionId = searchServerDto.getVersion() != null ? searchServerDto.getVersion().getId() : 0;
-        Set<Server> serversByModeAndVersions = new HashSet<>(serverRepository.findServersByModeAndVersionRange(searchServerDto.getMode(), versionId));
-        serversByModeAndVersions.addAll(subServerRepository.findServersByModeAndVersion(searchServerDto.getMode(), versionId));
-
-        Set<Server> commonServers = new HashSet<>(serversByName);
-        if (searchServerDto.getMode() != null || searchServerDto.getVersion() != null) {
-            commonServers.retainAll(serversByModeAndVersions);
-        }
-        if (searchServerDto.isPremium()) {
-            commonServers.retainAll(serverRepository.findAllPremiumServers());
-        }
-        if(searchServerDto.isMods()){
-            commonServers.retainAll(serverRepository.findAllServersWithMods());
-        }
-
-        List<Server> resultList = new ArrayList<>(commonServers);
-        resultList = resultList.stream()
-                .sorted(Comparator
-                        .comparingInt(Server::getPromotionPoints)
-                        .thenComparingInt(s -> s.getVotes().size()).reversed())
-                .collect(Collectors.toList());
-
-        int start = (int) pageable.getOffset();
-        int end = Math.min((start + pageable.getPageSize()), resultList.size());
-
-        return new PageImpl<>(resultList.subList(start, end), pageable, resultList.size());
-    }
-
-    @Transactional
-    public void addPromotionPoints(PromotionPoints promotionPoints) {
-        Server server = serverRepository.findById(promotionPoints.getServerId()).orElse(null);
-        if(server == null){
-            return;
-        }
-
-        server.setPromotionPoints(server.getPromotionPoints() + promotionPoints.getPromotionPoints());
-    }
-
     public String getRandomServerIp() {
         Server server = serverRepository.findRandomServer().orElse(null);
         return server == null ? null : server.getIp();
