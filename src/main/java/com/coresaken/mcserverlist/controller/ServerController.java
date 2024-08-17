@@ -51,18 +51,6 @@ public class ServerController {
         model.addAttribute("role", PermissionChecker.getRoleForServer(userService.getLoggedUser(), server));
         return "subPage/server";
     }
-    @RequestMapping("/server/{ip}/promote")
-    public String getServerPromotePage(@PathVariable("ip") String ip, Model model){
-        Server server = serverService.getServerByIp(ip);
-
-        if(server==null){
-            return "error/404";
-        }
-
-        model.addAttribute("user", userService.getLoggedUser());
-        model.addAttribute("server", server);
-        return "subPage/promotionPoints";
-    }
 
     @ResponseBody
     @DeleteMapping("/server/{id}")
