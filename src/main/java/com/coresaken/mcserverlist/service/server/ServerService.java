@@ -102,38 +102,6 @@ public class ServerService {
         return new PageImpl<>(resultList.subList(start, end), pageable, resultList.size());
     }
 
-    public Response takeOver(Long serverId){
-        User user = userService.getLoggedUser();
-        if(user == null){
-            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Twoja sesja wygasła. Zaloguj się ponownie").build();
-        }
-
-        Server server = serverRepository.findById(serverId).orElse(null);
-        if(server == null){
-            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Wystąpił nieoczekiwany błąd #9928").build();
-        }
-        for (ServerUserRole sur:server.getServerUserRoles()){
-            if(sur.getRole()== ServerUserRole.Role.OWNER){
-                return Response.builder().status(HttpStatus.BAD_REQUEST).message("Serwer posiada już właściciela. Jeśli ktoś przejął Twój serwer, skontaktuj się z nami").build();
-            }
-        }
-
-        String motd = serverStatusService.getServerStatus(server.getIp(), server.getPort()).motd().clean();
-
-        if(motd.contains(user.getUuid())){
-            ServerUserRole sur = new ServerUserRole();
-            sur.setRole(ServerUserRole.Role.OWNER);
-            sur.setUser(user);
-            sur.setServer(server);
-
-            server.getServerUserRoles().add(sur);
-            serverRepository.save(server);
-            return Response.builder().status(HttpStatus.OK).message("Serwer został prawidłowo przejęty").build();
-        }
-
-        return Response.builder().status(HttpStatus.BAD_REQUEST).message("Błędna weryfikacja. Jesteś pewien, że zresetowałeś serwer po zmianie MOTD serwera? Serwer musi być włączony. Obecny motd serwera: "+motd).build();
-    }
-
     @Transactional
     public void addPromotionPoints(PromotionPoints promotionPoints) {
         Server server = serverRepository.findById(promotionPoints.getServerId()).orElse(null);
@@ -167,5 +135,9 @@ public class ServerService {
     public String getRandomServerIp() {
         Server server = serverRepository.findRandomServer().orElse(null);
         return server == null ? null : server.getIp();
+    }
+
+    public void save(Server server){
+        serverRepository.save(server);
     }
 }
