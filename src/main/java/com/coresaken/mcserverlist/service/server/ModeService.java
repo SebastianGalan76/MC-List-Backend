@@ -28,8 +28,4 @@ public class ModeService implements CommandLineRunner {
                 .filter(mode -> mode.getId() == 1)
                 .findFirst().orElse(null);
     }
-
-    public Mode getServerNetworkMode(){
-        return networkMode;
-    }
 }

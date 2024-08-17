@@ -103,18 +103,6 @@ public class ServerController {
     }
 
     @ResponseBody
-    @PostMapping("/server/{ip}/rate/save")
-    public Response getServerRatePage(@PathVariable("ip") String ip, @RequestBody List<PlayerRating> playerRatings){
-        Server server = serverService.getServerByIp(ip);
-
-        if(server==null){
-            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Wystąpił nieoczekiwany błąd #8741. Możesz zgłosić go do Administracji strony.").build();
-        }
-
-        return serverService.rateServer(server, playerRatings);
-    }
-
-    @ResponseBody
     @DeleteMapping("/server/{id}")
     public Response deleteServer(@PathVariable("id") Long id){
         Server server = serverService.getServerById(id);

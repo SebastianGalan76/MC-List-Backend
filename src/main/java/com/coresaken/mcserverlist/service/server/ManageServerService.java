@@ -21,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -155,6 +154,7 @@ public class ManageServerService {
                 server.getServerUserRoles().add(serverUserRole);
                 savedIds.add(user.getId());
             }catch (IllegalArgumentException e){
+                continue;
             }
         }
 
@@ -163,14 +163,14 @@ public class ManageServerService {
     }
 
     @Transactional
-    public Response saveSubServers(Server server, ListDto<SubServerDto> subServersDto) {
+    public Response saveSubServers(Server server, ListDto<SubServerDto> listDto) {
         server.getSubServers().clear();
 
-        List<SubServerDto> subServerDtos = subServersDto.getData();
-        if(!subServerDtos.isEmpty()){
+        List<SubServerDto> subServerDTO = listDto.getData();
+        if(!subServerDTO.isEmpty()){
             server.setMode(modeService.getNetworkMode());
 
-            for(SubServerDto subServerDto:subServerDtos){
+            for(SubServerDto subServerDto:subServerDTO){
                 SubServer subServer = new SubServer();
                 subServer.setIndex(subServerDto.getIndex());
 

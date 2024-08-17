@@ -55,48 +55,6 @@ public class ServerService {
         return serverRepository.findByIp(serverIp).orElse(null);
     }
 
-    public Response rateServer(Server server, List<PlayerRating> playerRatings){
-        User user = userService.getLoggedUser();
-
-        if(user==null){
-            return Response.builder().status(HttpStatus.UNAUTHORIZED).message("Twoja sesja wygasła. Zaloguj się ponownie, aby ocenić serwer!").build();
-        }
-        if(server==null){
-            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Wystąpił nieoczekiwany błąd. Kod błędu #3251. Zgłoś go do Administratora strony!").build();
-        }
-
-        //Remove ratings if all ratings are equal to 1
-        boolean antiKid = false;
-        for(PlayerRating pr:playerRatings){
-            if (pr.getRate() > 1) {
-                antiKid = true;
-                break;
-            }
-        }
-        if(!antiKid){
-            return Response.builder().status(HttpStatus.OK).build();
-        }
-
-        for(PlayerRating pr:playerRatings){
-            if(pr.getRate() == 0){
-                continue;
-            }
-
-            Optional<PlayerRating> existingRating = playerRatingRepository.findByUserAndServerAndCategory(user, server, pr.getCategory());
-            if (existingRating.isPresent()) {
-                PlayerRating playerRating = existingRating.get();
-                playerRating.setRate(pr.getRate());
-                playerRatingRepository.save(playerRating);
-            } else {
-                pr.setUser(user);
-                pr.setServer(server);
-                playerRatingRepository.save(pr);
-            }
-        }
-
-        return Response.builder().status(HttpStatus.OK).build();
-    }
-
     public Response deleteServer(Server server){
         if(!PermissionChecker.hasPermissionForServer(userService.getLoggedUser(), server, ServerUserRole.Role.OWNER)){
             return Response.builder().status(HttpStatus.BAD_REQUEST).message("Nie posiadasz wymaganych uprawnień, aby to zrobić!").build();
