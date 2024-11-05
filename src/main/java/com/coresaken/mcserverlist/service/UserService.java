@@ -1,6 +1,5 @@
 package com.coresaken.mcserverlist.service;
 
-import com.coresaken.mcserverlist.auth.dto.response.AuthenticationResponse;
 import com.coresaken.mcserverlist.data.dto.ChangePasswordDto;
 import com.coresaken.mcserverlist.data.response.Response;
 import com.coresaken.mcserverlist.database.model.User;
