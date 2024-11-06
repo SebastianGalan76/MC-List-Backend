@@ -10,6 +10,7 @@ import com.coresaken.mcserverlist.util.PermissionChecker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -47,11 +48,11 @@ public class ServerController {
 
     @ResponseBody
     @DeleteMapping("/server/{id}")
-    public Response deleteServer(@PathVariable("id") Long id){
+    public ResponseEntity<Response> deleteServer(@PathVariable("id") Long id){
         Server server = serverService.getServerById(id);
 
         if(server==null){
-            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Wystąpił nieoczekiwany błąd #8741. Możesz zgłosić go do Administracji strony.").build();
+            return Response.badRequest(1, "Wystąpił nieoczekiwany błąd. Serwer o podanym ID nie istnieje");
         }
 
         return serverService.delete(server);

@@ -16,6 +16,7 @@ import com.coresaken.mcserverlist.service.UserService;
 import com.coresaken.mcserverlist.util.LinkChecker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,23 +39,23 @@ public class ManageServerService {
     final NameRepository nameRepository;
 
     @Transactional
-    public Response saveServerInfo(Server server, BasicServerDto serverDto) {
-        Response response = newServerService.checkServerData(serverDto, server);
-        if(response.getStatus() != HttpStatus.OK){
+    public ResponseEntity<Response> saveServerInfo(Server server, BasicServerDto serverDto) {
+        ResponseEntity<Response> response = newServerService.checkServerData(serverDto, server);
+        if(response.getStatusCode() != HttpStatus.OK){
             return response;
         }
 
         ServerStatusDto serverStatusDto = serverStatusService.getServerStatus(serverDto.getIp(), serverDto.getPort());
         if(!serverStatusDto.online()){
-            return Response.builder().status(HttpStatus.NOT_FOUND).build();
+            return Response.badRequest(1, "");
         }
 
         newServerService.saveBasicInformation(server, serverDto, serverStatusDto);
         serverRepository.save(server);
-        return Response.builder().status(HttpStatus.OK).message("Zmiany zostały zapisane prawidłowo").build();
+        return Response.ok("Zmiany zostały zapisane prawidłowo");
     }
 
-    public Response saveServerStaff(Server server, StaffDto staffDto){
+    public ResponseEntity<Response> saveServerStaff(Server server, StaffDto staffDto){
         if (server.getStaff() == null) {
             server.setStaff(new ArrayList<>());
         }
@@ -76,25 +77,25 @@ public class ManageServerService {
         server.getStaff().addAll(staffDto.getRankList());
         serverRepository.save(server);
 
-        return Response.builder().status(HttpStatus.OK).build();
+        return Response.ok("Zapisano prawidłowo Administrację serwera.");
     }
 
 
-    public Response saveServerDescription(Server server, StringDto stringDto) {
+    public ResponseEntity<Response> saveServerDescription(Server server, StringDto stringDto) {
         server.setDescription(stringDto.getText());
         serverRepository.save(server);
 
-        return Response.builder().status(HttpStatus.OK).build();
+        return Response.ok("Zapisano prawidłowo opis serwera.");
     }
 
-    public Response saveServerLinks(Server server, List<Link> links) {
+    public ResponseEntity<Response> saveServerLinks(Server server, List<Link> links) {
         server.getLinks().clear();
         server.getLinks().addAll(links);
         serverRepository.save(server);
-        return Response.builder().status(HttpStatus.OK).build();
+        return Response.ok("Zapisano prawidłowo linki serwera.");
     }
 
-    public Response saveServerBanner(Server server, MultipartFile file, String url) {
+    public ResponseEntity<Response> saveServerBanner(Server server, MultipartFile file, String url) {
         if(server.getBanner() != null){
             if(!LinkChecker.isLink(server.getBanner())){
                 BannerFileService.remove(server.getBanner());
@@ -110,11 +111,11 @@ public class ManageServerService {
         }
         else{
             if(file != null){
-                Response uploadResponse = BannerFileService.upload(file);
-                if(uploadResponse.getStatus() != HttpStatus.OK){
+                ResponseEntity<Response> uploadResponse = BannerFileService.upload(file);
+                if(uploadResponse.getStatusCode() != HttpStatus.OK){
                     return uploadResponse;
                 }
-                server.setBanner("/uploads/banners/" + uploadResponse.getMessage());
+                server.setBanner("/uploads/banners/" + uploadResponse.getBody().getMessage());
             }
             else{
                 server.setBanner(null);
@@ -122,11 +123,11 @@ public class ManageServerService {
         }
 
         serverRepository.save(server);
-        return Response.builder().status(HttpStatus.OK).message("Ustawiłeś prawidłowo swój banner").build();
+        return Response.ok("Ustawiłeś prawidłowo swój banner");
     }
 
     @Transactional
-    public Response saveServerRoles(Server server, ServerRoleDto serverRoleDto) {
+    public ResponseEntity<Response> saveServerRoles(Server server, ServerRoleDto serverRoleDto) {
         Set<ServerUserRole> ownerRole = server.getServerUserRoles().stream()
                 .filter(role -> role.getRole() == ServerUserRole.Role.OWNER)
                 .collect(Collectors.toSet());
@@ -134,7 +135,7 @@ public class ManageServerService {
         server.getServerUserRoles().clear();
         server.getServerUserRoles().addAll(ownerRole);
         if(serverRoleDto.getRoles() == null){
-            return Response.builder().status(HttpStatus.OK).build();
+            return Response.ok(null);
         }
 
         Set<Long> savedIds = ownerRole.stream().map(sur -> sur.getUser().getId()).collect(Collectors.toSet());
@@ -159,11 +160,11 @@ public class ManageServerService {
         }
 
         serverRepository.save(server);
-        return Response.builder().status(HttpStatus.OK).build();
+        return Response.ok("Zapisano prawidłowo uprawnienia.");
     }
 
     @Transactional
-    public Response saveSubServers(Server server, ListDto<SubServerDto> listDto) {
+    public ResponseEntity<Response> saveSubServers(Server server, ListDto<SubServerDto> listDto) {
         server.getSubServers().clear();
 
         List<SubServerDto> subServerDTO = listDto.getData();
@@ -184,6 +185,6 @@ public class ManageServerService {
         }
 
         serverRepository.save(server);
-        return Response.builder().status(HttpStatus.OK).build();
+        return Response.ok("Zapisano prawidłowo informacje o podserwerach.");
     }
 }

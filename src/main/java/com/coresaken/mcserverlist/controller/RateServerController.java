@@ -7,6 +7,7 @@ import com.coresaken.mcserverlist.service.server.RateServerService;
 import com.coresaken.mcserverlist.service.server.ServerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,11 +20,11 @@ public class RateServerController {
     final ServerService serverService;
 
     @PostMapping("/server/{ip}/rate/save")
-    public Response getServerRatePage(@PathVariable("ip") String ip, @RequestBody List<PlayerRating> playerRatings){
+    public ResponseEntity<Response> getServerRatePage(@PathVariable("ip") String ip, @RequestBody List<PlayerRating> playerRatings){
         Server server = serverService.getServerByIp(ip);
 
         if(server==null){
-            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Wystąpił nieoczekiwany błąd #8741. Możesz zgłosić go do Administracji strony.").build();
+            return Response.badRequest(1, "Wystąpił nieoczekiwany błąd. Serwer o podanym IP nie istnieje");
         }
 
         return rateServerService.rateServer(server, playerRatings);

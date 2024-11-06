@@ -1,13 +1,9 @@
 package com.coresaken.mcserverlist.auth.dto.response;
 
 import com.coresaken.mcserverlist.data.response.Response;
-import lombok.Builder;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.http.ResponseEntity;
 
-@Data
-@Builder
 @EqualsAndHashCode(callSuper = true)
 public class TokenResponse extends Response {
     String token;

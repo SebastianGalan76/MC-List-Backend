@@ -7,6 +7,7 @@ import com.coresaken.mcserverlist.database.repository.UserRepository;
 import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -34,64 +35,65 @@ public class UserService {
     }
 
 
-    public Response changePassword(ChangePasswordDto changePasswordDto) {
+    public ResponseEntity<Response> changePassword(ChangePasswordDto changePasswordDto) {
         if(changePasswordDto.getNewPassword().length()<4){
-            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Hasło jest zbyt krótkie").build();
+            return Response.badRequest(1, "Hasło jest zbyt krótkie");
         }
 
         User user = getLoggedUser();
         if(user == null){
-            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Twoja sesja wygasła. Zaloguj się ponownie").build();
+            return Response.badRequest(2, "Twoja sesja wygasła. Zaloguj się ponownie");
         }
 
-        if(passwordEncoder.matches(changePasswordDto.getCurrentPassword(), user.getPassword())){
+        if(!passwordEncoder.matches(changePasswordDto.getCurrentPassword(), user.getPassword())){
             user.setPassword(passwordEncoder.encode(changePasswordDto.getNewPassword()));
             userRepository.save(user);
-            return Response.builder().status(HttpStatus.OK).message("Hasło zostało prawidłowo zmienione").build();
+            return Response.badRequest(3, "Twoje obecne hasło jest niepoprawne.");
         }
-        return Response.builder().status(HttpStatus.BAD_REQUEST).message("Twoje obecne hasło jest niepoprawne.").build();
+
+        return Response.ok("Hasło zostało prawidłowo zmienione");
     }
 
-    public Response changeLogin(String newLogin){
+    public ResponseEntity<Response> changeLogin(String newLogin){
         if(newLogin.length()>30){
-            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Login jest zbyt długi").build();
+            return Response.badRequest(1, "Login jest zbyt długi");
         }
         if(newLogin.length()<4){
-            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Login jest zbyt krótki").build();
+            return Response.badRequest(2, "Login jest zbyt krótki");
         }
 
         User user = getLoggedUser();
         if(user == null){
-            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Twoja sesja wygasła. Zaloguj się ponownie").build();
+            return Response.badRequest(3, "Twoja sesja wygasła. Zaloguj się ponownie");
         }
 
         Optional<User> userWithLogin = userRepository.findByLogin(newLogin);
         if(userWithLogin.isPresent()){
-            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Login jest już zajęty").build();
+            return Response.badRequest(4, "Login jest już zajęty");
         }
 
         user.setLogin(newLogin);
         userRepository.save(user);
-        return Response.builder().status(HttpStatus.OK).message("Login został prawidłowo zmieniony").build();
+        return Response.ok("Login został prawidłowo zmieniony");
     }
 
-    public Response changeEmail(String newEmail) {
+    public ResponseEntity<Response> changeEmail(String newEmail) {
         if(newEmail.length()>60){
-            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Email jest zbyt długi").build();
+            return Response.badRequest(1, "Email jest zbyt długi");
         }
 
         User user = getLoggedUser();
         if(user == null){
-            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Twoja sesja wygasła. Zaloguj się ponownie").build();
+            return Response.badRequest(2, "Twoja sesja wygasła. Zaloguj się ponownie");
         }
 
         Optional<User> userWithEmail = userRepository.findByEmail(newEmail);
         if(userWithEmail.isPresent()){
-            return Response.builder().status(HttpStatus.BAD_REQUEST).message("E-mail jest już zajęty").build();
+            return Response.badRequest(3, "E-mail jest już zajęty");
         }
 
         user.setEmail(newEmail);
         userRepository.save(user);
-        return Response.builder().status(HttpStatus.OK).message("E-mail został prawidłowo zmieniony").build();
+        return Response.ok("E-mail został prawidłowo zmieniony");
     }
 }

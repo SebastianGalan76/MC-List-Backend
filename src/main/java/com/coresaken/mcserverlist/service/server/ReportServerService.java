@@ -8,6 +8,7 @@ import com.coresaken.mcserverlist.database.repository.server.ReportRepository;
 import com.coresaken.mcserverlist.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,16 +19,16 @@ public class ReportServerService {
 
     final ReportRepository reportRepository;
 
-    public Response reportServer(Long id, String reason) {
+    public ResponseEntity<Response> reportServer(Long id, String reason) {
         Server server = serverService.getServerById(id);
 
         if(server==null){
-            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Wystąpił nieoczekiwany błąd #323245").build();
+            return Response.badRequest(1, "Serwer o podanym ID nie istnieje");
         }
 
         User user = userService.getLoggedUser();
         if(user == null){
-            return Response.builder().status(HttpStatus.UNAUTHORIZED).message("Twoja sesja wygasła. Musisz się zalogować ponownie").build();
+            return Response.badRequest(2, "Twoja sesja wygasła. Musisz się zalogować ponownie");
         }
 
         Report report = new Report();
@@ -35,6 +36,6 @@ public class ReportServerService {
         report.setUser(user);
         report.setServer(server);
         reportRepository.save(report);
-        return Response.builder().status(HttpStatus.OK).message("Zgłoszenie zostało wysłane do administracji").build();
+        return Response.ok("Zgłoszenie zostało wysłane do administracji");
     }
 }

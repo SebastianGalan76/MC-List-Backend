@@ -7,6 +7,7 @@ import com.coresaken.mcserverlist.service.UserService;
 import com.coresaken.mcserverlist.service.server.ReportServerService;
 import com.coresaken.mcserverlist.service.server.ServerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +34,7 @@ public class ReportServerController {
 
     @ResponseBody
     @PostMapping("/server/{id}/report/send")
-    public Response reportServer(@PathVariable("id") Long id, @RequestBody StringDto stringDto){
+    public ResponseEntity<Response> reportServer(@PathVariable("id") Long id, @RequestBody StringDto stringDto){
         return reportServerService.reportServer(id, stringDto.getText());
     }
 }

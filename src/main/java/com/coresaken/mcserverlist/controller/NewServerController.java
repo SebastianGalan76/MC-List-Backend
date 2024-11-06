@@ -4,6 +4,7 @@ import com.coresaken.mcserverlist.data.dto.BasicServerDto;
 import com.coresaken.mcserverlist.data.response.Response;
 import com.coresaken.mcserverlist.service.NewServerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +23,7 @@ public class NewServerController {
 
     @ResponseBody
     @PostMapping("/add-new-server/post")
-    public Response addNewServer(@RequestBody BasicServerDto basicServerDto){
+    public ResponseEntity<Response> addNewServer(@RequestBody BasicServerDto basicServerDto){
         return newServerService.addNewServer(basicServerDto);
     }
 }

@@ -10,6 +10,7 @@ import com.coresaken.mcserverlist.database.repository.server.ServerUserRoleRepos
 import com.coresaken.mcserverlist.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,14 +26,14 @@ public class UserController {
 
     @ResponseBody
     @GetMapping("/user/find")
-    public Response findUserByLoginOrEmail(@RequestParam("identifier") String identifier){
+    public ResponseEntity<Response> findUserByLoginOrEmail(@RequestParam("identifier") String identifier){
         User user = userService.getUserByEmailOrLogin(identifier);
 
         if(user!=null){
-            return Response.builder().status(HttpStatus.OK).build();
+            return Response.ok("Użytkownik istnieje");
         }
 
-        return Response.builder().status(HttpStatus.BAD_REQUEST).message("Nie ma takiego użytkownika o podanym adresie e-mail lub login").build();
+        return Response.badRequest(1, "Nie ma takiego użytkownika o podanym adresie e-mail lub login");
     }
 
     @RequestMapping("/user/profile")
@@ -74,19 +75,19 @@ public class UserController {
 
     @ResponseBody
     @PostMapping("/user/change-password")
-    public Response updateUserPassword(@RequestBody ChangePasswordDto changePasswordDto){
+    public ResponseEntity<Response> updateUserPassword(@RequestBody ChangePasswordDto changePasswordDto){
         return  userService.changePassword(changePasswordDto);
     }
 
     @ResponseBody
     @PostMapping("/user/change-login")
-    public Response updateUserLogin(@RequestBody String login){
+    public ResponseEntity<Response> updateUserLogin(@RequestBody String login){
         return  userService.changeLogin(login.trim());
     }
 
     @ResponseBody
     @PostMapping("/user/change-email")
-    public Response updateUserEmail(@RequestBody String email){
+    public ResponseEntity<Response> updateUserEmail(@RequestBody String email){
         return  userService.changeEmail(email.trim());
     }
 }

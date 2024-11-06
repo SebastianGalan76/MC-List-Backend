@@ -12,6 +12,7 @@ import com.coresaken.mcserverlist.util.PermissionChecker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -65,14 +66,14 @@ public class ManageServerController {
 
     @ResponseBody
     @PostMapping("/server/{id}/manage/info/save")
-    public Response saveServerInfo(@PathVariable("id") Long serverId, @RequestBody BasicServerDto serverDto){
+    public ResponseEntity<Response> saveServerInfo(@PathVariable("id") Long serverId, @RequestBody BasicServerDto serverDto){
         Server server = serverService.getServerById(serverId);
 
         if(server==null){
-            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Wystąpił nieoczekiwany błąd #4121. Możesz zgłosić go do Administracji strony.").build();
+            return Response.badRequest(1,"Wystąpił nieoczekiwany błąd #4121. Możesz zgłosić go do Administracji strony.");
         }
         if(!PermissionChecker.hasPermissionForServer(userService.getLoggedUser(), server, ServerUserRole.Role.MODERATOR)){
-            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Nie posiadasz wymaganych uprawnień, aby to zrobić!").build();
+            return Response.badRequest(2,"Nie posiadasz wymaganych uprawnień, aby to zrobić!");
         }
 
         return manageServerService.saveServerInfo(server, serverDto);
@@ -99,14 +100,14 @@ public class ManageServerController {
 
     @ResponseBody
     @PostMapping("/server/{id}/manage/staff/save")
-    public Response saveServerStaff(@PathVariable("id") Long serverId, @RequestBody StaffDto staffDto){
+    public ResponseEntity<Response> saveServerStaff(@PathVariable("id") Long serverId, @RequestBody StaffDto staffDto){
         Server server = serverService.getServerById(serverId);
 
         if(server==null){
-            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Wystąpił nieoczekiwany błąd #4121. Możesz zgłosić go do Administracji strony.").build();
+            return Response.badRequest(1, "Wystąpił nieoczekiwany błąd #4121. Możesz zgłosić go do Administracji strony.");
         }
         if(!PermissionChecker.hasPermissionForServer(userService.getLoggedUser(), server, ServerUserRole.Role.HELPER)){
-            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Nie posiadasz wymaganych uprawnień, aby to zrobić!").build();
+            return Response.badRequest(2, "Nie posiadasz wymaganych uprawnień, aby to zrobić!");
         }
 
         return manageServerService.saveServerStaff(server, staffDto);
@@ -133,14 +134,14 @@ public class ManageServerController {
 
     @ResponseBody
     @PostMapping("/server/{id}/manage/description/save")
-    public Response saveServerDescription(@PathVariable("id") Long serverId, @RequestBody StringDto stringDto){
+    public ResponseEntity<Response> saveServerDescription(@PathVariable("id") Long serverId, @RequestBody StringDto stringDto){
         Server server = serverService.getServerById(serverId);
 
         if(server==null){
-            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Wystąpił nieoczekiwany błąd #4121. Możesz zgłosić go do Administracji strony.").build();
+            return Response.badRequest(1, "Wystąpił nieoczekiwany błąd. Serwer o podanym ID nie istnieje");
         }
         if(!PermissionChecker.hasPermissionForServer(userService.getLoggedUser(), server, ServerUserRole.Role.HELPER)){
-            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Nie posiadasz wymaganych uprawnień, aby to zrobić!").build();
+            return Response.badRequest(2, "Nie posiadasz wymaganych uprawnień, aby to zrobić!");
         }
 
         return manageServerService.saveServerDescription(server, stringDto);
@@ -167,14 +168,14 @@ public class ManageServerController {
 
     @ResponseBody
     @PostMapping("/server/{id}/manage/link/save")
-    public Response saveServerLinks(@PathVariable("id") Long serverId, @RequestBody LinkDto linkDto){
+    public ResponseEntity<Response> saveServerLinks(@PathVariable("id") Long serverId, @RequestBody LinkDto linkDto){
         Server server = serverService.getServerById(serverId);
 
         if(server==null){
-            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Wystąpił nieoczekiwany błąd #4121. Możesz zgłosić go do Administracji strony.").build();
+            return Response.badRequest(1, "Wystąpił nieoczekiwany błąd. Serwer o podanym ID nie istnieje");
         }
         if(!PermissionChecker.hasPermissionForServer(userService.getLoggedUser(), server, ServerUserRole.Role.MODERATOR)){
-            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Nie posiadasz wymaganych uprawnień, aby to zrobić!").build();
+            return Response.badRequest(2, "Nie posiadasz wymaganych uprawnień, aby to zrobić!");
         }
 
         return manageServerService.saveServerLinks(server, linkDto.getLinks());
@@ -201,14 +202,14 @@ public class ManageServerController {
 
     @ResponseBody
     @PostMapping("/server/{id}/manage/banner/save")
-    public Response saveServerBanner(@PathVariable("id") Long serverId, @Param("file") MultipartFile file, @Param("url") String url){
+    public ResponseEntity<Response> saveServerBanner(@PathVariable("id") Long serverId, @Param("file") MultipartFile file, @Param("url") String url){
         Server server = serverService.getServerById(serverId);
 
         if(server==null){
-            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Wystąpił nieoczekiwany błąd #4121. Możesz zgłosić go do Administracji strony.").build();
+            return Response.badRequest(1, "Wystąpił nieoczekiwany błąd. Serwer o podanym ID nie istnieje.");
         }
         if(!PermissionChecker.hasPermissionForServer(userService.getLoggedUser(), server, ServerUserRole.Role.MODERATOR)){
-            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Nie posiadasz wymaganych uprawnień, aby to zrobić!").build();
+            return Response.badRequest(2, "Nie posiadasz wymaganych uprawnień, aby to zrobić!");
         }
 
         return manageServerService.saveServerBanner(server, file, url);
@@ -235,14 +236,14 @@ public class ManageServerController {
 
     @ResponseBody
     @PostMapping("/server/{id}/manage/role/save")
-    public Response saveServerRoles(@PathVariable("id") Long serverId, @RequestBody ServerRoleDto serverRoleDto){
+    public ResponseEntity<Response> saveServerRoles(@PathVariable("id") Long serverId, @RequestBody ServerRoleDto serverRoleDto){
         Server server = serverService.getServerById(serverId);
 
         if(server==null){
-            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Wystąpił nieoczekiwany błąd #4262. Możesz zgłosić go do Administracji strony.").build();
+            return Response.badRequest(1, "Wystąpił nieoczekiwany błąd. Serwer o podanym ID nie istnieje.");
         }
         if(!PermissionChecker.hasPermissionForServer(userService.getLoggedUser(), server, ServerUserRole.Role.ADMINISTRATOR)){
-            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Nie posiadasz wymaganych uprawnień, aby to zrobić!").build();
+            return Response.badRequest(2, "Nie posiadasz wymaganych uprawnień, aby to zrobić!");
         }
 
         return manageServerService.saveServerRoles(server, serverRoleDto);
@@ -269,14 +270,14 @@ public class ManageServerController {
 
     @ResponseBody
     @PostMapping("/server/{id}/manage/subserver/save")
-    public Response saveSubServers(@PathVariable("id") Long serverId, @RequestBody ListDto<SubServerDto> subServersDto){
+    public ResponseEntity<Response> saveSubServers(@PathVariable("id") Long serverId, @RequestBody ListDto<SubServerDto> subServersDto){
         Server server = serverService.getServerById(serverId);
 
         if(server==null){
-            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Wystąpił nieoczekiwany błąd #4262. Możesz zgłosić go do Administracji strony.").build();
+            return Response.badRequest(1, "Wystąpił nieoczekiwany błąd. Serwer o podanym ID nie istnieje.");
         }
         if(!PermissionChecker.hasPermissionForServer(userService.getLoggedUser(), server, ServerUserRole.Role.MODERATOR)){
-            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Nie posiadasz wymaganych uprawnień, aby to zrobić!").build();
+            return Response.badRequest(2, "Nie posiadasz wymaganych uprawnień, aby to zrobić!");
         }
 
         return manageServerService.saveSubServers(server, subServersDto);

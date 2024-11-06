@@ -8,6 +8,7 @@ import com.coresaken.mcserverlist.database.repository.PlayerRatingRepository;
 import com.coresaken.mcserverlist.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,14 +20,14 @@ public class RateServerService {
     final UserService userService;
     final PlayerRatingRepository playerRatingRepository;
 
-    public Response rateServer(Server server, List<PlayerRating> playerRatings){
+    public ResponseEntity<Response> rateServer(Server server, List<PlayerRating> playerRatings){
         User user = userService.getLoggedUser();
 
         if(user==null){
-            return Response.builder().status(HttpStatus.UNAUTHORIZED).message("Twoja sesja wygasła. Zaloguj się ponownie, aby ocenić serwer!").build();
+            return Response.badRequest(1,"Twoja sesja wygasła. Zaloguj się ponownie, aby ocenić serwer!");
         }
         if(server==null){
-            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Wystąpił nieoczekiwany błąd. Kod błędu #3251. Zgłoś go do Administratora strony!").build();
+            return Response.badRequest(2, "Wystąpił nieoczekiwany błąd. Serwer o podanym ID nie istnieje!");
         }
 
         //Remove ratings if all ratings are equal to 1
@@ -38,7 +39,7 @@ public class RateServerService {
             }
         }
         if(!antiKid){
-            return Response.builder().status(HttpStatus.OK).build();
+            return Response.ok("Oceniono prawidłowo serwer");
         }
 
         for(PlayerRating pr:playerRatings){
@@ -58,7 +59,7 @@ public class RateServerService {
             }
         }
 
-        return Response.builder().status(HttpStatus.OK).build();
+        return Response.ok("Oceniono prawidłowo serwer");
     }
 
 }

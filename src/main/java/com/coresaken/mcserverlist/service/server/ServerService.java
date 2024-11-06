@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -50,12 +51,12 @@ public class ServerService {
         serverRepository.save(server);
     }
 
-    public Response delete(Server server){
+    public ResponseEntity<Response> delete(Server server){
         if(!PermissionChecker.hasPermissionForServer(userService.getLoggedUser(), server, ServerUserRole.Role.OWNER)){
-            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Nie posiadasz wymaganych uprawnień, aby to zrobić!").build();
+            return Response.badRequest(1, "Nie posiadasz wymaganych uprawnień, aby to zrobić!");
         }
 
         serverRepository.delete(server);
-        return Response.builder().status(HttpStatus.OK).build();
+        return Response.ok("Usunięto prawidłowo serwer");
     }
 }

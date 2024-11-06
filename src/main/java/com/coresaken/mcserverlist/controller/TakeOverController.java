@@ -6,6 +6,7 @@ import com.coresaken.mcserverlist.service.UserService;
 import com.coresaken.mcserverlist.service.server.ServerService;
 import com.coresaken.mcserverlist.service.server.TakeOverService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,7 +36,7 @@ public class TakeOverController {
 
     @ResponseBody
     @GetMapping("/take-over/{id}")
-    public Response takeOverServer(@PathVariable("id") Long id){
+    public ResponseEntity<Response> takeOverServer(@PathVariable("id") Long id){
         return takeOverService.takeOver(id);
     }
 }

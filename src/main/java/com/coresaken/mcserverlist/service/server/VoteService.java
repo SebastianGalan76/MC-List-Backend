@@ -25,18 +25,18 @@ public class VoteService {
     final VoteRepository voteRepository;
     final ServerRepository serverRepository;
 
-    public Response vote(VoteDto voteDto, HttpServletRequest request){
+    public ResponseEntity<Response> vote(VoteDto voteDto, HttpServletRequest request){
         LocalDate today = LocalDate.now();
         String ip = request.getRemoteAddr();
 
         Optional<Server> server = serverRepository.findById(voteDto.getServerId());
         if(server.isEmpty()){
-            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Wystąpił nieoczekiwany błąd. Spróbuj ponownie później").build();
+            return Response.badRequest(1, "Wystąpił nieoczekiwany błąd. Spróbuj ponownie później");
         }
 
         List<Vote> votes = voteRepository.findByIpOrNickAndDateAndServerId(ip, voteDto.getNick(), today, voteDto.getServerId());
         if(votes != null && !votes.isEmpty()){
-            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Głosowałeś/aś już dzisiaj na serwer").build();
+            return Response.badRequest(2, "Głosowałeś/aś już dzisiaj na serwer");
         }
 
         Vote vote = new Vote();
@@ -48,7 +48,7 @@ public class VoteService {
         vote.setNick(voteDto.getNick());
 
         voteRepository.save(vote);
-        return Response.builder().status(HttpStatus.OK).message("Głos został oddany").build();
+        return Response.ok("Głos został oddany");
     }
 
     public ResponseEntity<VoteResponse> check(Long serverId, String playerNick) {

@@ -10,6 +10,7 @@ import com.coresaken.mcserverlist.database.repository.server.ModeRepository;
 import com.coresaken.mcserverlist.util.UnicodeConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,15 +37,15 @@ public class NewServerService {
     final PlayerStatsService playerStatsService;
 
     @Transactional
-    public Response addNewServer(BasicServerDto basicServerDto){
-        Response response = checkServerData(basicServerDto, null);
-        if(response.getStatus() != HttpStatus.OK){
+    public ResponseEntity<Response> addNewServer(BasicServerDto basicServerDto){
+        ResponseEntity<Response> response = checkServerData(basicServerDto, null);
+        if(response.getStatusCode() != HttpStatus.OK){
             return response;
         }
 
         ServerStatusDto serverStatusDto = serverStatusService.getServerStatus(basicServerDto.getIp(), basicServerDto.getPort());
         if(!serverStatusDto.online()){
-            return Response.builder().status(HttpStatus.NOT_FOUND).build();
+            return Response.badRequest(1, "Nie znaleziono serwera!");
         }
 
         Server server = new Server();
@@ -98,7 +99,7 @@ public class NewServerService {
 
         serverRepository.save(server);
 
-        return Response.builder().status(HttpStatus.PERMANENT_REDIRECT).redirect("/server/"+server.getIp()).build();
+        return Response.ok("Serwer został prawidłowo dodany.");
     }
 
     public void saveBasicInformation(Server server, BasicServerDto basicServerDto, ServerStatusDto serverStatusDto){
@@ -150,32 +151,33 @@ public class NewServerService {
             server.setMode(modeRepository.getReferenceById(1L));
         }
     }
-    public Response checkServerData(BasicServerDto serverDto, Server server){
+    public ResponseEntity<Response> checkServerData(BasicServerDto serverDto, Server server){
         if(serverDto.getIp().contains("aternos.me")){
-            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Nie możesz dodawać serwera aternos!").build();
+            return Response.badRequest(1, "Nie możesz dodawać serwera aternos!");
         }
 
         BlockedServer blockedServer = blockedServerRepository.findByIp(serverDto.getIp()).orElse(null);
         if(blockedServer!=null){
             if(blockedServer.getServer()!=null){
-                return Response.builder().status(HttpStatus.PERMANENT_REDIRECT).redirect("/server/"+ serverDto.getIp()).build();
+                //return Response.builder().status(HttpStatus.PERMANENT_REDIRECT).redirect("/server/"+ serverDto.getIp()).build();
+                return Response.badRequest(2, "Ten adres IP jest obecnie zablokowany! Jeśli uważasz to za błąd, skontaktuj się z nami.");
             }
             else {
-                return Response.builder().status(HttpStatus.BAD_REQUEST).message("Ten adres IP jest obecnie zablokowany! Jeśli uważasz to za błąd, skontaktuj się z nami.").build();
+                return Response.badRequest(2, "Ten adres IP jest obecnie zablokowany! Jeśli uważasz to za błąd, skontaktuj się z nami.");
             }
         }
 
         if(serverRepository.findByIp(serverDto.getIp()).isPresent()){
             if(server == null){
-                return Response.builder().status(HttpStatus.BAD_REQUEST).message("Serwer znajduje się już na liście.").build();
+                return Response.badRequest(3, "Serwer znajduje się już na liście.");
             }
             else{
                 if(!server.getIp().equalsIgnoreCase(serverDto.getIp())){
-                    return Response.builder().status(HttpStatus.BAD_REQUEST).message("Serwer znajduje się już na liście.").build();
+                    return Response.badRequest(4, "Serwer znajduje się już na liście.");
                 }
             }
         }
 
-        return Response.builder().status(HttpStatus.OK).build();
+        return Response.ok(null);
     }
 }

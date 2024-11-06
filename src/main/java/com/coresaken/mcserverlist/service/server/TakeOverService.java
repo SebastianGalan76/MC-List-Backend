@@ -8,6 +8,7 @@ import com.coresaken.mcserverlist.service.ServerStatusService;
 import com.coresaken.mcserverlist.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,19 +18,19 @@ public class TakeOverService {
     final ServerService serverService;
     final ServerStatusService serverStatusService;
 
-    public Response takeOver(Long serverId){
+    public ResponseEntity<Response> takeOver(Long serverId){
         User user = userService.getLoggedUser();
         if(user == null){
-            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Twoja sesja wygasła. Zaloguj się ponownie").build();
+            return Response.badRequest(1, "Twoja sesja wygasła. Zaloguj się ponownie");
         }
 
         Server server = serverService.getServerById(serverId);
         if(server == null){
-            return Response.builder().status(HttpStatus.BAD_REQUEST).message("Wystąpił nieoczekiwany błąd #9928").build();
+            return Response.badRequest(2, "Wystąpił nieoczekiwany błąd #9928");
         }
         for (ServerUserRole sur:server.getServerUserRoles()){
             if(sur.getRole()== ServerUserRole.Role.OWNER){
-                return Response.builder().status(HttpStatus.BAD_REQUEST).message("Serwer posiada już właściciela. Jeśli ktoś przejął Twój serwer, skontaktuj się z nami").build();
+                return Response.badRequest(3, "Serwer posiada już właściciela. Jeśli ktoś przejął Twój serwer, skontaktuj się z nami");
             }
         }
 
@@ -43,10 +44,10 @@ public class TakeOverService {
 
             server.getServerUserRoles().add(sur);
             serverService.save(server);
-            return Response.builder().status(HttpStatus.OK).message("Serwer został prawidłowo przejęty").build();
+            return Response.ok("Serwer został prawidłowo przejęty");
         }
 
-        return Response.builder().status(HttpStatus.BAD_REQUEST).message("Błędna weryfikacja. Jesteś pewien, że zresetowałeś serwer po zmianie MOTD serwera? Serwer musi być włączony. Obecny motd serwera: "+motd).build();
+        return Response.badRequest(4, "Błędna weryfikacja. Jesteś pewien, że zresetowałeś serwer po zmianie MOTD serwera? Serwer musi być włączony. Obecny motd serwera: "+motd);
     }
 
 }
