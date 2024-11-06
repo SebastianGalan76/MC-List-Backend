@@ -56,7 +56,7 @@ public class SignUpService {
                 .build();
 
         try{
-            user = userRepository.save(user);
+            userRepository.save(user);
         }catch (DataIntegrityViolationException e){
             return TokenResponse.badRequest(5,"Login lub email jest już zajęty!");
         }
