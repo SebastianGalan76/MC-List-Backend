@@ -28,7 +28,7 @@ public class ResetPasswordService {
     public ResponseEntity<Response> resetPassword(String email){
         User user = userRepository.findByEmail(email).orElse(null);
         if(user==null){
-            return Response.badRequest(1, "Użytkownik z podanym adresie e-mail nie istnieje.");
+            return Response.badRequest(1, "Użytkownik z podanym adresem e-mail nie istnieje.");
         }
 
         String token = UUID.randomUUID().toString();
@@ -37,7 +37,6 @@ public class ResetPasswordService {
                 .orElse(null);
         if(resetToken!=null){
             resetToken.setToken(token);
-            resetToken.setExpiredAt(LocalDateTime.now().plusMinutes(10));
         }
         else{
             resetToken = new ResetPasswordToken(user, token);
@@ -56,14 +55,18 @@ public class ResetPasswordService {
         return Response.ok("Link resetujący hasło wysłaliśmy na podany adres e-mail");
     }
 
-    public ResponseEntity<Response> handleResetPassword(@RequestParam String token, @RequestParam String newPassword) {
+    public ResponseEntity<Response> changePassword(@RequestParam String token, @RequestParam String newPassword) {
+        if(newPassword.length()<4){
+            return Response.badRequest(3,"Hasło jest zbyt krótkie");
+        }
+
         ResetPasswordToken resetToken = resetPasswordTokenRepository.findByToken(token).orElse(null);
         if(resetToken==null || resetToken.getExpiredAt().isBefore(LocalDateTime.now())){
             if(resetToken!=null){
                 resetPasswordTokenRepository.delete(resetToken);
             }
 
-            return Response.badRequest(1, "Twój token wygasł. Zresetuj hasło ponownie!");
+            return Response.badRequest(2, "Twój token wygasł. Zresetuj hasło ponownie!");
         }
 
         User user = resetToken.getUser();
@@ -71,6 +74,6 @@ public class ResetPasswordService {
         userRepository.save(user);
 
         resetPasswordTokenRepository.delete(resetToken);
-        return Response.ok("Hasło zostało prawidłowo zresetowane");
+        return Response.ok("Hasło zostało prawidłowo zmienione");
     }
 }

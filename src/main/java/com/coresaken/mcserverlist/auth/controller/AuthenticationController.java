@@ -1,6 +1,6 @@
 package com.coresaken.mcserverlist.auth.controller;
 
-import com.coresaken.mcserverlist.auth.dto.request.ResetPasswordDto;
+import com.coresaken.mcserverlist.auth.dto.request.ChangePasswordDto;
 import com.coresaken.mcserverlist.auth.dto.request.SignInRequestDto;
 import com.coresaken.mcserverlist.auth.dto.request.SignUpRequestDto;
 import com.coresaken.mcserverlist.auth.dto.response.TokenResponse;
@@ -22,7 +22,7 @@ public class AuthenticationController {
     private final ActiveAccountService activeAccountService;
     private final ResetPasswordService resetPasswordService;
 
-    @PostMapping("/signIn")
+    @PostMapping("/signIne")
     public ResponseEntity<TokenResponse> signIn(@RequestBody SignInRequestDto request){
         return signInService.signIn(request);
     }
@@ -47,8 +47,8 @@ public class AuthenticationController {
         return resetPasswordService.resetPassword(email);
     }
 
-    @PostMapping("/resetPasswordHandle")
-    public ResponseEntity<Response> handleResetPassword(@RequestBody ResetPasswordDto resetPasswordDto) {
-        return resetPasswordService.handleResetPassword(resetPasswordDto.token(), resetPasswordDto.newPassword());
+    @PostMapping("/changePassword")
+    public ResponseEntity<Response> changePassword(@RequestBody ChangePasswordDto changePasswordDto) {
+        return resetPasswordService.changePassword(changePasswordDto.token(), changePasswordDto.newPassword());
     }
 }

@@ -13,6 +13,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Table(name = "reset_password_token")
 public class ResetPasswordToken {
+    @Transient
+    int TOKEN_EXPIRATION_TIME = 10;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
@@ -30,6 +33,11 @@ public class ResetPasswordToken {
         this.user = user;
         this.token = token;
 
-        expiredAt = LocalDateTime.now().plusMinutes(10);
+        expiredAt = LocalDateTime.now().plusMinutes(TOKEN_EXPIRATION_TIME);
+    }
+
+    public void setToken(String token){
+        this.token = token;
+        expiredAt = LocalDateTime.now().plusMinutes(TOKEN_EXPIRATION_TIME);
     }
 }
