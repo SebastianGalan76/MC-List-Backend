@@ -15,7 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class ServerController {
     final ServerService serverService;
@@ -24,7 +24,7 @@ public class ServerController {
 
     final UserService userService;
 
-    @RequestMapping("/server/{ip}")
+    /*@RequestMapping("/server/{ip}")
     public String getServerPage(@PathVariable("ip") String ip, Model model){
         Server server = serverService.getServerByIp(ip);
 
@@ -38,6 +38,11 @@ public class ServerController {
         model.addAttribute("categories", ratingCategoryRepository.findAll());
         model.addAttribute("role", PermissionChecker.getRoleForServer(userService.getLoggedUser(), server));
         return "subPage/server";
+    }*/
+
+    @GetMapping("/server/{ip}")
+    public ResponseEntity<Server> getServer(@PathVariable("ip") String ip){
+        return new ResponseEntity<>(serverService.getServerByIp(ip), HttpStatus.OK);
     }
 
     @ResponseBody

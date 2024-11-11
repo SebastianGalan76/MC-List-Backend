@@ -30,6 +30,8 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ManageServerService {
+    final ServerService serverService;
+
     final ServerRepository serverRepository;
 
     final NewServerService newServerService;
@@ -41,7 +43,7 @@ public class ManageServerService {
 
     @Transactional
     public ResponseEntity<RedirectResponse> saveServerInfo(Server server, BasicServerDto serverDto) {
-        ResponseEntity<RedirectResponse> response = newServerService.checkServerInformation(serverDto, server);
+        ResponseEntity<RedirectResponse> response = serverService.checkServerInformation(serverDto, server);
         if(response.getStatusCode() != HttpStatus.OK){
             return response;
         }
@@ -51,7 +53,7 @@ public class ManageServerService {
             return RedirectResponse.badRequest(1, "", null);
         }
 
-        newServerService.saveBasicInformation(server, serverDto, serverStatusDto);
+        serverService.saveBasicInformation(server, serverDto, serverStatusDto);
         serverRepository.save(server);
         return RedirectResponse.ok("Zmiany zostały zapisane prawidłowo", null);
     }
