@@ -2,6 +2,8 @@ package com.coresaken.mcserverlist.service;
 
 import com.coresaken.mcserverlist.data.dto.ServerStatusDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.annotation.Nullable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 
@@ -17,6 +19,7 @@ public class ServerStatusService {
     final HttpClient client = HttpClient.newHttpClient();
     final ObjectMapper objectMapper = new ObjectMapper();
 
+    @Nullable
     public ServerStatusDto getServerStatus(String address) {
         String url = "https://api.mcstatus.io/v2/status/java/" + address;
         HttpRequest request = HttpRequest.newBuilder()
@@ -26,7 +29,10 @@ public class ServerStatusService {
 
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            return objectMapper.readValue(response.body(), ServerStatusDto.class);
+            if(response.statusCode() == 200){
+                return objectMapper.readValue(response.body(), ServerStatusDto.class);
+            }
+            return null;
         } catch (HttpClientErrorException e) {
             return null;
         } catch (IOException | InterruptedException e) {
@@ -34,6 +40,7 @@ public class ServerStatusService {
         }
     }
 
+    @Nullable
     public ServerStatusDto getServerStatus(String ip, int port) {
         StringBuilder finalAddress = new StringBuilder();
         finalAddress.append(ip);

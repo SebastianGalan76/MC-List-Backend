@@ -20,27 +20,29 @@ public class SearchServerService {
     final SubServerRepository subServerRepository;
 
     public Page<Server> searchServer(SearchServerDto searchServerDto, Pageable pageable){
+        //Finding servers by name, ip or motd
         Set<Server> serversByName = new HashSet<>();
-        if(searchServerDto.getName() != null && !searchServerDto.getName().isEmpty()){
-            serversByName.addAll(serverRepository.searchByIp(searchServerDto.getName()));
-            serversByName.addAll(serverRepository.searchByMotd(searchServerDto.getName()));
+        if(searchServerDto.name() != null && !searchServerDto.name().isEmpty()){
+            serversByName.addAll(serverRepository.searchByIp(searchServerDto.name()));
+            serversByName.addAll(serverRepository.searchByMotd(searchServerDto.name()));
         }
         else{
             serversByName.addAll(serverRepository.findAll());
         }
 
-        Long versionId = searchServerDto.getVersion() != null ? searchServerDto.getVersion().getId() : 0;
-        Set<Server> serversByModeAndVersions = new HashSet<>(serverRepository.findServersByModeAndVersionRange(searchServerDto.getMode(), versionId));
-        serversByModeAndVersions.addAll(subServerRepository.findServersByModeAndVersion(searchServerDto.getMode(), versionId));
+        //Finding servers and subServers by mode and version
+        Long versionId = searchServerDto.version() != null ? searchServerDto.version().getId() : 0;
+        Set<Server> serversByModeAndVersions = new HashSet<>(serverRepository.findServersByModeAndVersionRange(searchServerDto.mode(), versionId));
+        serversByModeAndVersions.addAll(subServerRepository.findServersByModeAndVersion(searchServerDto.mode(), versionId));
 
         Set<Server> commonServers = new HashSet<>(serversByName);
-        if (searchServerDto.getMode() != null || searchServerDto.getVersion() != null) {
+        if (searchServerDto.mode() != null || searchServerDto.version() != null) {
             commonServers.retainAll(serversByModeAndVersions);
         }
-        if (searchServerDto.isPremium()) {
+        if (searchServerDto.premium()) {
             commonServers.retainAll(serverRepository.findAllPremiumServers());
         }
-        if(searchServerDto.isMods()){
+        if(searchServerDto.mods()){
             commonServers.retainAll(serverRepository.findAllServersWithMods());
         }
 

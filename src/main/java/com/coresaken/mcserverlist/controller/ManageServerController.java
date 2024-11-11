@@ -1,6 +1,7 @@
 package com.coresaken.mcserverlist.controller;
 
 import com.coresaken.mcserverlist.data.dto.*;
+import com.coresaken.mcserverlist.data.response.RedirectResponse;
 import com.coresaken.mcserverlist.data.response.Response;
 import com.coresaken.mcserverlist.database.model.User;
 import com.coresaken.mcserverlist.database.model.server.Server;
@@ -66,14 +67,14 @@ public class ManageServerController {
 
     @ResponseBody
     @PostMapping("/server/{id}/manage/info/save")
-    public ResponseEntity<Response> saveServerInfo(@PathVariable("id") Long serverId, @RequestBody BasicServerDto serverDto){
+    public ResponseEntity<RedirectResponse> saveServerInfo(@PathVariable("id") Long serverId, @RequestBody BasicServerDto serverDto){
         Server server = serverService.getServerById(serverId);
 
         if(server==null){
-            return Response.badRequest(1,"Wystąpił nieoczekiwany błąd #4121. Możesz zgłosić go do Administracji strony.");
+            return RedirectResponse.badRequest(1,"Wystąpił nieoczekiwany błąd #4121. Możesz zgłosić go do Administracji strony.", null);
         }
         if(!PermissionChecker.hasPermissionForServer(userService.getLoggedUser(), server, ServerUserRole.Role.MODERATOR)){
-            return Response.badRequest(2,"Nie posiadasz wymaganych uprawnień, aby to zrobić!");
+            return RedirectResponse.badRequest(2,"Nie posiadasz wymaganych uprawnień, aby to zrobić!", null);
         }
 
         return manageServerService.saveServerInfo(server, serverDto);

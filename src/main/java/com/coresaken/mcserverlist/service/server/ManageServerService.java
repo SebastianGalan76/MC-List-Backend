@@ -1,6 +1,7 @@
 package com.coresaken.mcserverlist.service.server;
 
 import com.coresaken.mcserverlist.data.dto.*;
+import com.coresaken.mcserverlist.data.response.RedirectResponse;
 import com.coresaken.mcserverlist.data.response.Response;
 import com.coresaken.mcserverlist.data.dto.ServerStatusDto;
 import com.coresaken.mcserverlist.database.model.User;
@@ -39,20 +40,20 @@ public class ManageServerService {
     final NameRepository nameRepository;
 
     @Transactional
-    public ResponseEntity<Response> saveServerInfo(Server server, BasicServerDto serverDto) {
-        ResponseEntity<Response> response = newServerService.checkServerData(serverDto, server);
+    public ResponseEntity<RedirectResponse> saveServerInfo(Server server, BasicServerDto serverDto) {
+        ResponseEntity<RedirectResponse> response = newServerService.checkServerInformation(serverDto, server);
         if(response.getStatusCode() != HttpStatus.OK){
             return response;
         }
 
-        ServerStatusDto serverStatusDto = serverStatusService.getServerStatus(serverDto.getIp(), serverDto.getPort());
+        ServerStatusDto serverStatusDto = serverStatusService.getServerStatus(serverDto.ip(), serverDto.port());
         if(!serverStatusDto.online()){
-            return Response.badRequest(1, "");
+            return RedirectResponse.badRequest(1, "", null);
         }
 
         newServerService.saveBasicInformation(server, serverDto, serverStatusDto);
         serverRepository.save(server);
-        return Response.ok("Zmiany zostały zapisane prawidłowo");
+        return RedirectResponse.ok("Zmiany zostały zapisane prawidłowo", null);
     }
 
     public ResponseEntity<Response> saveServerStaff(Server server, StaffDto staffDto){

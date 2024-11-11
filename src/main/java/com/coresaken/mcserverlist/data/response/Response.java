@@ -11,6 +11,12 @@ public class Response {
     protected final String message;
     protected final int errorCode;
 
+    public Response(){
+        success = false;
+        message = null;
+        errorCode = 0;
+    }
+
     public static ResponseEntity<Response> ok(String message){
         return ResponseEntity.ok(new Response(true, message, -1));
     }
