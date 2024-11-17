@@ -4,6 +4,7 @@ import com.coresaken.mcserverlist.data.dto.*;
 import com.coresaken.mcserverlist.data.response.RedirectResponse;
 import com.coresaken.mcserverlist.data.response.Response;
 import com.coresaken.mcserverlist.database.model.User;
+import com.coresaken.mcserverlist.database.model.server.Link;
 import com.coresaken.mcserverlist.database.model.server.Server;
 import com.coresaken.mcserverlist.database.model.server.ServerUserRole;
 import com.coresaken.mcserverlist.service.UserService;
@@ -19,7 +20,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-@Controller
+import java.util.List;
+
+@RestController
 @RequiredArgsConstructor
 public class ManageServerController {
     final ManageServerService manageServerService;
@@ -65,19 +68,9 @@ public class ManageServerController {
         return "manage/manageInfo";
     }
 
-    @ResponseBody
-    @PostMapping("/server/{id}/manage/info/save")
+    @PostMapping("/server/{id}/manage/info")
     public ResponseEntity<RedirectResponse> saveServerInfo(@PathVariable("id") Long serverId, @RequestBody BasicServerDto serverDto){
-        Server server = serverService.getServerById(serverId);
-
-        if(server==null){
-            return RedirectResponse.badRequest(1,"Wystąpił nieoczekiwany błąd #4121. Możesz zgłosić go do Administracji strony.", null);
-        }
-        if(!PermissionChecker.hasPermissionForServer(userService.getLoggedUser(), server, ServerUserRole.Role.MODERATOR)){
-            return RedirectResponse.badRequest(2,"Nie posiadasz wymaganych uprawnień, aby to zrobić!", null);
-        }
-
-        return manageServerService.saveServerInfo(server, serverDto);
+        return manageServerService.saveServerInfo(serverId, serverDto);
     }
 
     @RequestMapping("/server/{id}/manage/staff")
@@ -133,53 +126,9 @@ public class ManageServerController {
         return "manage/manageDescription";
     }
 
-    @ResponseBody
-    @PostMapping("/server/{id}/manage/description/save")
-    public ResponseEntity<Response> saveServerDescription(@PathVariable("id") Long serverId, @RequestBody StringDto stringDto){
-        Server server = serverService.getServerById(serverId);
-
-        if(server==null){
-            return Response.badRequest(1, "Wystąpił nieoczekiwany błąd. Serwer o podanym ID nie istnieje");
-        }
-        if(!PermissionChecker.hasPermissionForServer(userService.getLoggedUser(), server, ServerUserRole.Role.HELPER)){
-            return Response.badRequest(2, "Nie posiadasz wymaganych uprawnień, aby to zrobić!");
-        }
-
-        return manageServerService.saveServerDescription(server, stringDto);
-    }
-
-    @RequestMapping("/server/{id}/manage/link")
-    public String getManageLinkPage(@PathVariable("id") Long serverId, Model model){
-        Server server = serverService.getServerById(serverId);
-        User user = userService.getLoggedUser();
-
-        if(server==null){
-            return "error/404";
-        }
-        if(!PermissionChecker.hasPermissionForServer(user, server, ServerUserRole.Role.MODERATOR)){
-            return "error/403";
-        }
-
-        model.addAttribute("user", user);
-        model.addAttribute("server", server);
-        model.addAttribute("role", PermissionChecker.getRoleForServer(user, server));
-
-        return "manage/manageLink";
-    }
-
-    @ResponseBody
-    @PostMapping("/server/{id}/manage/link/save")
-    public ResponseEntity<Response> saveServerLinks(@PathVariable("id") Long serverId, @RequestBody LinkDto linkDto){
-        Server server = serverService.getServerById(serverId);
-
-        if(server==null){
-            return Response.badRequest(1, "Wystąpił nieoczekiwany błąd. Serwer o podanym ID nie istnieje");
-        }
-        if(!PermissionChecker.hasPermissionForServer(userService.getLoggedUser(), server, ServerUserRole.Role.MODERATOR)){
-            return Response.badRequest(2, "Nie posiadasz wymaganych uprawnień, aby to zrobić!");
-        }
-
-        return manageServerService.saveServerLinks(server, linkDto.getLinks());
+    @PostMapping("/server/{id}/manage/description")
+    public ResponseEntity<Response> saveServerDescription(@PathVariable("id") Long serverId, @RequestBody String description){
+        return manageServerService.saveServerDescription(serverId, description);
     }
 
     @RequestMapping("/server/{id}/manage/banner")
@@ -201,19 +150,9 @@ public class ManageServerController {
         return "manage/manageBanner";
     }
 
-    @ResponseBody
-    @PostMapping("/server/{id}/manage/banner/save")
+    @PostMapping("/server/{id}/manage/banner")
     public ResponseEntity<Response> saveServerBanner(@PathVariable("id") Long serverId, @Param("file") MultipartFile file, @Param("url") String url){
-        Server server = serverService.getServerById(serverId);
-
-        if(server==null){
-            return Response.badRequest(1, "Wystąpił nieoczekiwany błąd. Serwer o podanym ID nie istnieje.");
-        }
-        if(!PermissionChecker.hasPermissionForServer(userService.getLoggedUser(), server, ServerUserRole.Role.MODERATOR)){
-            return Response.badRequest(2, "Nie posiadasz wymaganych uprawnień, aby to zrobić!");
-        }
-
-        return manageServerService.saveServerBanner(server, file, url);
+        return manageServerService.saveServerBanner(serverId, file, url);
     }
 
     @RequestMapping("/server/{id}/manage/role")

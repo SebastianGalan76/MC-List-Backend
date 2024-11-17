@@ -15,6 +15,7 @@ import com.coresaken.mcserverlist.service.NewServerService;
 import com.coresaken.mcserverlist.service.ServerStatusService;
 import com.coresaken.mcserverlist.service.UserService;
 import com.coresaken.mcserverlist.util.LinkChecker;
+import com.coresaken.mcserverlist.util.PermissionChecker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,20 +43,29 @@ public class ManageServerService {
     final NameRepository nameRepository;
 
     @Transactional
-    public ResponseEntity<RedirectResponse> saveServerInfo(Server server, BasicServerDto serverDto) {
+    public ResponseEntity<RedirectResponse> saveServerInfo(Long serverId, BasicServerDto serverDto) {
+        Server server = serverService.getServerById(serverId);
+
+        if(server==null){
+            return RedirectResponse.badRequest(6,"Wystąpił nieoczekiwany błąd. Serwer o podanym ID nie istnieje!", null);
+        }
+        if(!PermissionChecker.hasPermissionForServer(userService.getLoggedUser(), server, ServerUserRole.Role.MODERATOR)){
+            return RedirectResponse.badRequest(7,"Nie posiadasz wymaganych uprawnień, aby to zrobić!", null);
+        }
+
         ResponseEntity<RedirectResponse> response = serverService.checkServerInformation(serverDto, server);
         if(response.getStatusCode() != HttpStatus.OK){
             return response;
         }
 
         ServerStatusDto serverStatusDto = serverStatusService.getServerStatus(serverDto.ip(), serverDto.port());
-        if(!serverStatusDto.online()){
-            return RedirectResponse.badRequest(1, "", null);
+        if(serverStatusDto == null || !serverStatusDto.online()){
+            return RedirectResponse.badRequest(8, "Nie możemy nawiązać połączenie z Twoim serwerem!", null);
         }
 
         serverService.saveBasicInformation(server, serverDto, serverStatusDto);
         serverRepository.save(server);
-        return RedirectResponse.ok("Zmiany zostały zapisane prawidłowo", null);
+        return RedirectResponse.ok("Zmiany zostały prawidłowo zapisane.", null);
     }
 
     public ResponseEntity<Response> saveServerStaff(Server server, StaffDto staffDto){
@@ -84,21 +94,31 @@ public class ManageServerService {
     }
 
 
-    public ResponseEntity<Response> saveServerDescription(Server server, StringDto stringDto) {
-        server.setDescription(stringDto.getText());
-        serverRepository.save(server);
+    public ResponseEntity<Response> saveServerDescription(Long serverId, String description) {
+        Server server = serverService.getServerById(serverId);
 
-        return Response.ok("Zapisano prawidłowo opis serwera.");
+        if(server==null){
+            return Response.badRequest(1, "Wystąpił nieoczekiwany błąd. Serwer o podanym ID nie istnieje!");
+        }
+        if(!PermissionChecker.hasPermissionForServer(userService.getLoggedUser(), server, ServerUserRole.Role.HELPER)){
+            return Response.badRequest(2, "Nie posiadasz wymaganych uprawnień, aby to zrobić!");
+        }
+
+        server.setDescription(description);
+        serverRepository.save(server);
+        return Response.ok("Opis serwera został prawidłowo zapisany.");
     }
 
-    public ResponseEntity<Response> saveServerLinks(Server server, List<Link> links) {
-        server.getLinks().clear();
-        server.getLinks().addAll(links);
-        serverRepository.save(server);
-        return Response.ok("Zapisano prawidłowo linki serwera.");
-    }
+    public ResponseEntity<Response> saveServerBanner(Long serverId, MultipartFile file, String url) {
+        Server server = serverService.getServerById(serverId);
 
-    public ResponseEntity<Response> saveServerBanner(Server server, MultipartFile file, String url) {
+        if(server==null){
+            return Response.badRequest(1, "Wystąpił nieoczekiwany błąd. Serwer o podanym ID nie istnieje.");
+        }
+        if(!PermissionChecker.hasPermissionForServer(userService.getLoggedUser(), server, ServerUserRole.Role.MODERATOR)){
+            return Response.badRequest(2, "Nie posiadasz wymaganych uprawnień, aby to zrobić!");
+        }
+
         if(server.getBanner() != null){
             if(!LinkChecker.isLink(server.getBanner())){
                 BannerFileService.remove(server.getBanner());
@@ -118,7 +138,7 @@ public class ManageServerService {
                 if(uploadResponse.getStatusCode() != HttpStatus.OK){
                     return uploadResponse;
                 }
-                server.setBanner("/uploads/banners/" + uploadResponse.getBody().getMessage());
+                server.setBanner(uploadResponse.getBody().getMessage());
             }
             else{
                 server.setBanner(null);

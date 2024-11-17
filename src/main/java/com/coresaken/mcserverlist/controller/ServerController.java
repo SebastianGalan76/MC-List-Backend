@@ -45,22 +45,14 @@ public class ServerController {
         return new ResponseEntity<>(serverService.getServerByIp(ip), HttpStatus.OK);
     }
 
-    @ResponseBody
     @GetMapping("/server/list/{page}")
     public Page<Server> getServers(@PathVariable("page") int page){
         return serverService.getServers(page);
     }
 
-    @ResponseBody
     @DeleteMapping("/server/{id}")
     public ResponseEntity<Response> deleteServer(@PathVariable("id") Long id){
-        Server server = serverService.getServerById(id);
-
-        if(server==null){
-            return Response.badRequest(1, "Wystąpił nieoczekiwany błąd. Serwer o podanym ID nie istnieje");
-        }
-
-        return serverService.delete(server);
+        return serverService.delete(id);
     }
 
     @ResponseBody

@@ -20,7 +20,9 @@ public class Server {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
+    @Column(unique = true)
     String ip;
+
     int port;
 
     @ManyToOne
@@ -80,7 +82,8 @@ public class Server {
 
     @OneToMany(
             cascade = CascadeType.ALL,
-            orphanRemoval = true)
+            orphanRemoval = true,
+            mappedBy = "server")
     @OrderBy("index ASC")
     List<Link> links = new ArrayList<>();
 

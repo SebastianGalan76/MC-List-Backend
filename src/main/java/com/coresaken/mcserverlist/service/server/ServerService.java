@@ -62,9 +62,15 @@ public class ServerService {
         serverRepository.save(server);
     }
 
-    public ResponseEntity<Response> delete(Server server){
+    public ResponseEntity<Response> delete(Long id){
+        Server server = getServerById(id);
+
+        if(server==null){
+            return Response.badRequest(1, "Wystąpił nieoczekiwany błąd. Serwer nie istnieje");
+        }
+
         if(!PermissionChecker.hasPermissionForServer(userService.getLoggedUser(), server, ServerUserRole.Role.OWNER)){
-            return Response.badRequest(1, "Nie posiadasz wymaganych uprawnień, aby to zrobić!");
+            return Response.badRequest(2, "Nie posiadasz wymaganych uprawnień, aby to zrobić!");
         }
 
         serverRepository.delete(server);
