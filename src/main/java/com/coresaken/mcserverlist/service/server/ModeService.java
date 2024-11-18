@@ -2,6 +2,7 @@ package com.coresaken.mcserverlist.service.server;
 
 import com.coresaken.mcserverlist.database.model.server.Mode;
 import com.coresaken.mcserverlist.database.repository.server.ModeRepository;
+import jakarta.annotation.Nullable;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
@@ -27,5 +28,10 @@ public class ModeService implements CommandLineRunner {
         networkMode = modeList.stream()
                 .filter(mode -> mode.getId() == 1)
                 .findFirst().orElse(null);
+    }
+
+    @Nullable
+    public Mode getModeById(Long id){
+        return modeList.stream().filter(mode -> mode.getId().equals(id)).findFirst().orElse(null);
     }
 }

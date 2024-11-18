@@ -60,11 +60,11 @@ public class Server {
             orphanRemoval = true
     )
     @OrderBy("index ASC")
-    List<SubServer> subServers;
+    List<SubServer> subServers = new ArrayList<>();
 
     @OneToMany(mappedBy = "server", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("index ASC")
-    List<Rank> staff;
+    List<Rank> staff = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(

@@ -189,7 +189,7 @@ public class ManageServerController {
         return manageServerService.saveServerRoles(server, serverRoleDto);
     }
 
-    @RequestMapping("/server/{id}/manage/subserver")
+    /*@RequestMapping("/server/{id}/manage/subserver")
     public String getManageSubServerPage(@PathVariable("id") Long serverId, Model model){
         Server server = serverService.getServerById(serverId);
         User user = userService.getLoggedUser();
@@ -221,25 +221,5 @@ public class ManageServerController {
         }
 
         return manageServerService.saveSubServers(server, subServersDto);
-    }
-
-    @RequestMapping("/server/{id}/manage/delete")
-    public String getManageDeletePage(@PathVariable("id") Long serverId, Model model){
-        Server server = serverService.getServerById(serverId);
-        User user = userService.getLoggedUser();
-
-        if(server==null){
-            return "error/404";
-        }
-        if(!PermissionChecker.hasPermissionForServer(user, server, ServerUserRole.Role.OWNER)){
-            return "error/403";
-        }
-
-        model.addAttribute("user", user);
-        model.addAttribute("server", server);
-        model.addAttribute("role", PermissionChecker.getRoleForServer(user, server));
-
-        return "manage/manageDelete";
-    }
-
+    }*/
 }

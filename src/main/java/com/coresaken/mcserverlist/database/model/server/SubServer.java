@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Data
@@ -39,4 +40,17 @@ public class SubServer {
             inverseJoinColumns = @JoinColumn(name = "version_id")
     )
     List<Version> versions;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SubServer subServer = (SubServer) o;
+        return Objects.equals(id, subServer.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

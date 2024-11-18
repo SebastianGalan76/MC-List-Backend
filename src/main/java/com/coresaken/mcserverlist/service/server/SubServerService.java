@@ -1,11 +1,11 @@
 package com.coresaken.mcserverlist.service.server;
 
+import com.coresaken.mcserverlist.data.dto.SubServerDto;
 import com.coresaken.mcserverlist.data.response.ObjectResponse;
 import com.coresaken.mcserverlist.data.response.Response;
-import com.coresaken.mcserverlist.database.model.server.Link;
-import com.coresaken.mcserverlist.database.model.server.Server;
-import com.coresaken.mcserverlist.database.model.server.ServerUserRole;
-import com.coresaken.mcserverlist.database.repository.server.LinkRepository;
+import com.coresaken.mcserverlist.database.model.server.*;
+import com.coresaken.mcserverlist.database.repository.NameRepository;
+import com.coresaken.mcserverlist.database.repository.SubServerRepository;
 import com.coresaken.mcserverlist.service.UserService;
 import com.coresaken.mcserverlist.util.LinkChecker;
 import com.coresaken.mcserverlist.util.PermissionChecker;
@@ -21,13 +21,15 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @RequiredArgsConstructor
-public class ServerLinkService {
+public class SubServerService {
     final ServerService serverService;
     final UserService userService;
+    final ModeService modeService;
 
-    final LinkRepository linkRepository;
+    final SubServerRepository subServerRepository;
+    final NameRepository nameRepository;
 
-    public ResponseEntity<Response> saveAllLinks(Long serverId, List<Link> links) {
+    public ResponseEntity<Response> saveAllSubServers(Long serverId, List<SubServer> subServers) {
         Server server = serverService.getServerById(serverId);
 
         ResponseEntity<Response> permissionResponse = checkPermission(server);
@@ -38,22 +40,21 @@ public class ServerLinkService {
         assert server != null;
 
         AtomicInteger index = new AtomicInteger(0);
-        List<Link> validatedLink = links.stream()
-                .filter(link -> validateLink(link).getStatusCode() == HttpStatus.OK && server.getLinks().contains(link))
+        List<SubServer> validatedSubServer = subServers.stream()
                 .peek(link -> {
                     link.setIndex(index.getAndIncrement());
                     link.setServer(server);
                 })
                 .toList();
 
-        server.getLinks().clear();
-        server.getLinks().addAll(validatedLink);
+        server.getSubServers().clear();
+        server.getSubServers().addAll(validatedSubServer);
         serverService.save(server);
+
         return Response.ok("Zmiany zostały zapisane.");
     }
 
-    @Transactional
-    public ResponseEntity<ObjectResponse<Link>> createLink(Long serverId, Link link) {
+    public ResponseEntity<ObjectResponse<SubServer>> createSubServer(Long serverId, SubServerDto subServerDto) {
         Server server = serverService.getServerById(serverId);
 
         ResponseEntity<Response> permissionResponse = checkPermission(server);
@@ -61,19 +62,27 @@ public class ServerLinkService {
             return ObjectResponse.convertFromResponse(permissionResponse);
         }
 
-        ResponseEntity<Response> validateLinkResponse = validateLink(link);
-        if(validateLinkResponse.getStatusCode() != HttpStatus.OK){
-            return ObjectResponse.convertFromResponse(validateLinkResponse);
+        ResponseEntity<Response> validateSubServerResponse = validateSubServer(subServerDto);
+        if(validateSubServerResponse.getStatusCode() != HttpStatus.OK){
+            return ObjectResponse.convertFromResponse(validateSubServerResponse);
         }
 
+        SubServer subServer = new SubServer();
+        subServer.setName(nameRepository.save(new Name(subServerDto.getName(), subServerDto.getColor())));
+        subServer.setMode(subServerDto.getMode());
+        subServer.setVersions(subServerDto.getVersions());
+        subServer.setIndex(subServerDto.getIndex());
+        subServer.setServer(server);
+
         assert server != null;
-        link.setServer(server);
-        Link savedLink = linkRepository.save(link);
-        server.getLinks().add(savedLink);
-        return ObjectResponse.ok("Link został prawidłowo stworzony.", savedLink);
+        server.getSubServers().add(subServer);
+        serverService.save(server);
+
+        return ObjectResponse.ok("Tryb został prawidłowo stworzony", subServer);
     }
 
-    public ResponseEntity<Response> editLink(Long serverId, Link link) {
+    @Transactional
+    public ResponseEntity<Response> editSubServer(Long serverId, SubServerDto subServerDto) {
         Server server = serverService.getServerById(serverId);
 
         ResponseEntity<Response> permissionResponse = checkPermission(server);
@@ -81,26 +90,29 @@ public class ServerLinkService {
             return permissionResponse;
         }
 
-        ResponseEntity<Response> validateLinkResponse = validateLink(link);
+        ResponseEntity<Response> validateLinkResponse = validateSubServer(subServerDto);
         if(validateLinkResponse.getStatusCode() != HttpStatus.OK){
             return validateLinkResponse;
         }
 
         try{
-            Link savedLink = linkRepository.getReferenceById(link.getId());
-            savedLink.setName(link.getName());
-            savedLink.setUrl(link.getUrl());
+            SubServer savedSubServer = subServerRepository.getReferenceById(subServerDto.getId());
+            Name name = savedSubServer.getName();
+            name.setName(subServerDto.getName());
+            name.setColor(subServerDto.getColor());
 
-            linkRepository.save(savedLink);
+            savedSubServer.setMode(subServerDto.getMode());
+            savedSubServer.setVersions(subServerDto.getVersions());
+
+            subServerRepository.save(savedSubServer);
         }catch (EntityNotFoundException e){
-            return Response.badRequest(3, "Link nie istnieje. Prawdopodobnie został usunięty!");
+            return Response.badRequest(3, "Tryb nie istnieje. Prawdopodobnie został usunięty!");
         }
 
-        return Response.ok("Link został prawidłowo edytowany.");
+        return Response.ok("Tryb został prawidłowo edytowany.");
     }
 
-    @Transactional
-    public ResponseEntity<Response> deleteLink(Long serverId, Link link) {
+    public ResponseEntity<Response> deleteSubServer(Long serverId, SubServer subServer) {
         Server server = serverService.getServerById(serverId);
 
         ResponseEntity<Response> permissionResponse = checkPermission(server);
@@ -109,10 +121,11 @@ public class ServerLinkService {
         }
 
         assert server != null;
-        if(!server.getLinks().contains(link)){
+        if(!server.getSubServers().contains(subServer)){
             return Response.badRequest(3, "Nie posiadasz wymaganych uprawnień, aby to zrobić!");
         }
-        server.getLinks().remove(link);
+
+        server.getSubServers().remove(subServer);
         serverService.save(server);
         return Response.ok("Link został prawidłowo usunięty.");
     }
@@ -128,13 +141,16 @@ public class ServerLinkService {
         return Response.ok("Sukces");
     }
 
-    private ResponseEntity<Response> validateLink(Link link){
-        link.setName(link.getName().trim());
-        if(link.getName().isEmpty()){
-            return Response.badRequest(4, "Wprowadź nazwę linku.");
+    private ResponseEntity<Response> validateSubServer(SubServerDto subServer){
+        subServer.setName(subServer.getName().trim());
+        if(subServer.getName().isEmpty()){
+            return Response.badRequest(4, "Wprowadź nazwę trybu.");
         }
-        if(!LinkChecker.isLink(link.getUrl())){
-            return Response.badRequest(5, "Wprowadź poprawny adres URL.");
+        if(subServer.getMode() == null){
+            return Response.badRequest(5, "Wybierz tryb serwera.");
+        }
+        if(modeService.getModeById(subServer.getMode().getId())==null){
+            return Response.badRequest(6, "Wybierz tryb serwera.");
         }
 
         return Response.ok("Sukces");
