@@ -150,43 +150,6 @@ public class ManageServerService {
     }
 
     @Transactional
-    public ResponseEntity<Response> saveServerRoles(Server server, ServerRoleDto serverRoleDto) {
-        Set<ServerUserRole> ownerRole = server.getServerUserRoles().stream()
-                .filter(role -> role.getRole() == ServerUserRole.Role.OWNER)
-                .collect(Collectors.toSet());
-
-        server.getServerUserRoles().clear();
-        server.getServerUserRoles().addAll(ownerRole);
-        if(serverRoleDto.getRoles() == null){
-            return Response.ok(null);
-        }
-
-        Set<Long> savedIds = ownerRole.stream().map(sur -> sur.getUser().getId()).collect(Collectors.toSet());
-
-        for(ServerRoleDto.RoleDto roleDto: serverRoleDto.getRoles()){
-            User user = userService.getUserByEmailOrLogin(roleDto.getUser().getLogin());
-            if(user == null || savedIds.contains(user.getId())){
-                continue;
-            }
-
-            try{
-                ServerUserRole.Role role = ServerUserRole.Role.valueOf(roleDto.getRole());
-                ServerUserRole serverUserRole = new ServerUserRole();
-                serverUserRole.setUser(user);
-                serverUserRole.setServer(server);
-                serverUserRole.setRole(role);
-                server.getServerUserRoles().add(serverUserRole);
-                savedIds.add(user.getId());
-            }catch (IllegalArgumentException e){
-                continue;
-            }
-        }
-
-        serverRepository.save(server);
-        return Response.ok("Zapisano prawidłowo uprawnienia.");
-    }
-
-    @Transactional
     public ResponseEntity<Response> saveSubServers(Server server, ListDto<SubServerDto> listDto) {
         server.getSubServers().clear();
 

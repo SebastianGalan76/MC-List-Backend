@@ -1,5 +1,6 @@
 package com.coresaken.mcserverlist.controller;
 
+import com.coresaken.mcserverlist.data.dto.ServerDto;
 import com.coresaken.mcserverlist.data.response.Response;
 import com.coresaken.mcserverlist.database.model.server.Server;
 import com.coresaken.mcserverlist.database.repository.PlayerRatingRepository;
@@ -41,8 +42,8 @@ public class ServerController {
     }*/
 
     @GetMapping("/server/{ip}")
-    public ResponseEntity<Server> getServer(@PathVariable("ip") String ip){
-        return new ResponseEntity<>(serverService.getServerByIp(ip), HttpStatus.OK);
+    public ResponseEntity<ServerDto> getServer(@PathVariable("ip") String ip){
+        return new ResponseEntity<>(serverService.getServer(ip), HttpStatus.OK);
     }
 
     @GetMapping("/server/list/{page}")

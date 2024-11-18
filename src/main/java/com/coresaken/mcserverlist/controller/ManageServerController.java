@@ -174,7 +174,7 @@ public class ManageServerController {
         return "manage/manageRole";
     }
 
-    @ResponseBody
+    /*@ResponseBody
     @PostMapping("/server/{id}/manage/role/save")
     public ResponseEntity<Response> saveServerRoles(@PathVariable("id") Long serverId, @RequestBody ServerRoleDto serverRoleDto){
         Server server = serverService.getServerById(serverId);
@@ -189,7 +189,7 @@ public class ManageServerController {
         return manageServerService.saveServerRoles(server, serverRoleDto);
     }
 
-    /*@RequestMapping("/server/{id}/manage/subserver")
+    @RequestMapping("/server/{id}/manage/subserver")
     public String getManageSubServerPage(@PathVariable("id") Long serverId, Model model){
         Server server = serverService.getServerById(serverId);
         User user = userService.getLoggedUser();

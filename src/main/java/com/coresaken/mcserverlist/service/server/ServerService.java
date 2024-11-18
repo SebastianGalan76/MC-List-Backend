@@ -1,7 +1,9 @@
 package com.coresaken.mcserverlist.service.server;
 
 import com.coresaken.mcserverlist.data.dto.BasicServerDto;
+import com.coresaken.mcserverlist.data.dto.ServerDto;
 import com.coresaken.mcserverlist.data.dto.ServerStatusDto;
+import com.coresaken.mcserverlist.data.mapper.ServerMapper;
 import com.coresaken.mcserverlist.data.response.RedirectResponse;
 import com.coresaken.mcserverlist.data.response.Response;
 import com.coresaken.mcserverlist.database.model.server.*;
@@ -36,6 +38,10 @@ public class ServerService {
 
     final ServerDetailRepository serverDetailRepository;
     final BlockedServerRepository blockedServerRepository;
+
+    public ServerDto getServer(String serverIp){
+        return ServerMapper.toDTO(serverRepository.findByIp(serverIp).orElse(null), userService.getLoggedUser());
+    }
 
     public Page<Server> getServers(int page){
         Pageable pageable = PageRequest.of(page - 1, 30);
