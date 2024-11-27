@@ -2,7 +2,9 @@ package com.coresaken.mcserverlist.data.dto;
 
 import com.coresaken.mcserverlist.database.model.server.*;
 import com.coresaken.mcserverlist.database.model.server.Version;
+import com.coresaken.mcserverlist.database.model.server.ratings.RatingCategory;
 import com.coresaken.mcserverlist.database.model.server.staff.Rank;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -45,4 +47,15 @@ public class ServerDto {
 
     List<ServerRoleDto> roles;
     ServerUserRole.Role role;
+
+    List<PlayerRatings> ratings = new ArrayList<>();
+
+    @Data
+    @AllArgsConstructor
+    public static class PlayerRatings{
+        Long id;
+        RatingCategory category;
+        Long userId;
+        int rating;
+    }
 }

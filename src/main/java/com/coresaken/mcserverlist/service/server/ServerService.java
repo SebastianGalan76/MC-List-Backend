@@ -39,8 +39,14 @@ public class ServerService {
     final ServerDetailRepository serverDetailRepository;
     final BlockedServerRepository blockedServerRepository;
 
+    final PlayerRatingRepository playerRatingRepository;
+
     public ServerDto getServer(String serverIp){
-        return ServerMapper.toDTO(serverRepository.findByIp(serverIp).orElse(null), userService.getLoggedUser());
+        Server server = serverRepository.findByIp(serverIp).orElse(null);
+        if(server != null){
+            return ServerMapper.toDTO(server, userService.getLoggedUser(), playerRatingRepository.findByServer(server));
+        }
+        return null;
     }
 
     public Page<Server> getServers(int page){

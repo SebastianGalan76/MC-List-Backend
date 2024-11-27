@@ -1,6 +1,5 @@
 package com.coresaken.mcserverlist.service.server;
 
-import com.coresaken.mcserverlist.data.dto.ServerRoleDto;
 import com.coresaken.mcserverlist.data.dto.SubServerDto;
 import com.coresaken.mcserverlist.data.response.ObjectResponse;
 import com.coresaken.mcserverlist.data.response.Response;
@@ -8,7 +7,6 @@ import com.coresaken.mcserverlist.database.model.server.*;
 import com.coresaken.mcserverlist.database.repository.NameRepository;
 import com.coresaken.mcserverlist.database.repository.SubServerRepository;
 import com.coresaken.mcserverlist.service.UserService;
-import com.coresaken.mcserverlist.util.LinkChecker;
 import com.coresaken.mcserverlist.util.PermissionChecker;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +29,7 @@ public class SubServerService {
     final SubServerRepository subServerRepository;
     final NameRepository nameRepository;
 
+    @Transactional
     public ResponseEntity<Response> saveAllSubServers(Long serverId, List<SubServer> subServers) {
         Server server = serverService.getServerById(serverId);
 
@@ -39,19 +39,14 @@ public class SubServerService {
         }
 
         assert server != null;
+        Map<Long, Integer> indexMap = new HashMap<>();
+        for(int i=0;i<subServers.size();i++){
+            indexMap.put(subServers.get(i).getId(), i);
+        }
 
-        AtomicInteger index = new AtomicInteger(0);
-        List<SubServer> validatedSubServer = subServers.stream()
-                .peek(link -> {
-                    link.setIndex(index.getAndIncrement());
-                    link.setServer(server);
-                })
-                .toList();
-
-        server.getSubServers().clear();
-        server.getSubServers().addAll(validatedSubServer);
-        serverService.save(server);
-
+        server.getSubServers().forEach(subServer ->
+            subServer.setIndex(indexMap.getOrDefault(subServer.getId(), -1))
+        );
         return Response.ok("Zmiany zostały zapisane.");
     }
 

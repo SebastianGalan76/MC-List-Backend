@@ -5,9 +5,17 @@ import com.coresaken.mcserverlist.data.dto.ServerRoleDto;
 import com.coresaken.mcserverlist.database.model.User;
 import com.coresaken.mcserverlist.database.model.server.Server;
 import com.coresaken.mcserverlist.database.model.server.ServerUserRole;
+import com.coresaken.mcserverlist.database.model.server.ratings.PlayerRating;
+import com.coresaken.mcserverlist.database.model.server.ratings.RatingCategory;
+import com.coresaken.mcserverlist.database.repository.PlayerRatingRepository;
+import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
+@RequiredArgsConstructor
 public class ServerMapper {
-    public static ServerDto toDTO(Server server, User user){
+
+    public static ServerDto toDTO(Server server, User user, List<PlayerRating> ratings){
         if(server == null){
             return null;
         }
@@ -29,6 +37,8 @@ public class ServerMapper {
         dto.setVersions(server.getVersions());
         dto.setLinks(server.getLinks());
         dto.setSubServers(server.getSubServers());
+        dto.setStaff(server.getStaff());
+        dto.setRatings(ratings.stream().map(r -> new ServerDto.PlayerRatings(r.getId(), r.getCategory(), r.getUser().getId(), r.getRate())).toList());
 
         ServerUserRole serverUserRole = server.getServerUserRoles().stream().filter(role -> role.getUser().equals(user)).findFirst().orElse(null);
         if((serverUserRole != null && serverUserRole.getRole().value >= ServerUserRole.Role.ADMINISTRATOR.value) || (user != null && user.getRole() == User.Role.ADMIN)){
@@ -37,6 +47,9 @@ public class ServerMapper {
                     .toList());
             dto.setRole(serverUserRole == null ? ServerUserRole.Role.OWNER : serverUserRole.getRole());
         }
+
+        dto.setDailyPlayerCounts(server.getDailyPlayerCounts());
+        dto.setHourlyPlayerCounts(server.getHourlyPlayerCounts());
 
         return dto;
     }

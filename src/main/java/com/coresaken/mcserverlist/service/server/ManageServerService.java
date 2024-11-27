@@ -68,7 +68,7 @@ public class ManageServerService {
         return RedirectResponse.ok("Zmiany zostały prawidłowo zapisane.", null);
     }
 
-    public ResponseEntity<Response> saveServerStaff(Server server, StaffDto staffDto){
+    /*public ResponseEntity<Response> saveServerStaff(Server server, StaffDto staffDto){
         if (server.getStaff() == null) {
             server.setStaff(new ArrayList<>());
         }
@@ -91,7 +91,7 @@ public class ManageServerService {
         serverRepository.save(server);
 
         return Response.ok("Zapisano prawidłowo Administrację serwera.");
-    }
+    }*/
 
 
     public ResponseEntity<Response> saveServerDescription(Long serverId, String description) {
