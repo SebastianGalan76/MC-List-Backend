@@ -2,14 +2,16 @@ package com.coresaken.mcserverlist.service.server;
 
 import com.coresaken.mcserverlist.data.dto.BasicServerDto;
 import com.coresaken.mcserverlist.data.dto.ServerDto;
+import com.coresaken.mcserverlist.data.dto.ServerListDto;
 import com.coresaken.mcserverlist.data.dto.ServerStatusDto;
+import com.coresaken.mcserverlist.data.mapper.ServerListMapper;
 import com.coresaken.mcserverlist.data.mapper.ServerMapper;
+import com.coresaken.mcserverlist.data.response.ObjectResponse;
 import com.coresaken.mcserverlist.data.response.RedirectResponse;
 import com.coresaken.mcserverlist.data.response.Response;
 import com.coresaken.mcserverlist.database.model.server.*;
 import com.coresaken.mcserverlist.database.repository.*;
 import com.coresaken.mcserverlist.database.repository.server.ModeRepository;
-import com.coresaken.mcserverlist.service.ServerStatusService;
 import com.coresaken.mcserverlist.service.UserService;
 import com.coresaken.mcserverlist.util.PermissionChecker;
 import com.coresaken.mcserverlist.util.UnicodeConverter;
@@ -18,7 +20,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -28,10 +29,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ServerService {
     final UserService userService;
-    final ServerStatusService serverStatusService;
 
     final ServerRepository serverRepository;
-    final SubServerRepository subServerRepository;
 
     final NameRepository nameRepository;
     final ModeRepository modeRepository;
@@ -49,9 +48,11 @@ public class ServerService {
         return null;
     }
 
-    public Page<Server> getServers(int page){
+    public Page<ServerListDto> getServers(int page){
         Pageable pageable = PageRequest.of(page - 1, 30);
-        return serverRepository.findAllOrderByVotesAndId(pageable);
+
+        Page<Server> servers = serverRepository.findAllOrderByVotesAndId(pageable);
+        return servers.map(ServerListMapper::toDTO);
     }
 
     @Nullable
@@ -64,10 +65,13 @@ public class ServerService {
         return serverRepository.findByIp(serverIp).orElse(null);
     }
 
-    @Nullable
-    public String getRandomServerIp() {
+    public ResponseEntity<ObjectResponse<String>> getRandomServerIp() {
         Server server = serverRepository.findRandomServer().orElse(null);
-        return server == null ? null : server.getIp();
+        if(server == null){
+            return ObjectResponse.badRequest(1, "Brak serwerów na liście");
+        }
+
+        return ObjectResponse.ok(null, server.getIp());
     }
 
     public void save(Server server){

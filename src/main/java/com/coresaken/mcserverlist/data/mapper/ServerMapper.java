@@ -45,7 +45,7 @@ public class ServerMapper {
             dto.setRoles(server.getServerUserRoles().stream()
                     .map(role -> new ServerRoleDto(role.getUser().getEmail(), role.getRole()))
                     .toList());
-            dto.setRole(serverUserRole == null ? ServerUserRole.Role.OWNER : serverUserRole.getRole());
+            dto.setRole(serverUserRole == null || user.getRole() == User.Role.ADMIN ? ServerUserRole.Role.OWNER : serverUserRole.getRole());
         }
 
         dto.setDailyPlayerCounts(server.getDailyPlayerCounts());

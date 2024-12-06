@@ -1,6 +1,8 @@
 package com.coresaken.mcserverlist.service.server;
 
 import com.coresaken.mcserverlist.data.dto.SearchServerDto;
+import com.coresaken.mcserverlist.data.dto.ServerListDto;
+import com.coresaken.mcserverlist.data.mapper.ServerListMapper;
 import com.coresaken.mcserverlist.database.model.server.Server;
 import com.coresaken.mcserverlist.database.repository.ServerRepository;
 import com.coresaken.mcserverlist.database.repository.SubServerRepository;
@@ -19,7 +21,7 @@ public class SearchServerService {
     final ServerRepository serverRepository;
     final SubServerRepository subServerRepository;
 
-    public Page<Server> searchServer(SearchServerDto searchServerDto, Pageable pageable){
+    public Page<ServerListDto> searchServer(SearchServerDto searchServerDto, Pageable pageable){
         //Finding servers by name, ip or motd
         Set<Server> serversByName = new HashSet<>();
         if(searchServerDto.name() != null && !searchServerDto.name().isEmpty()){
@@ -46,11 +48,11 @@ public class SearchServerService {
             commonServers.retainAll(serverRepository.findAllServersWithMods());
         }
 
-        List<Server> resultList = new ArrayList<>(commonServers);
-        resultList = resultList.stream()
+        List<ServerListDto> resultList = commonServers.stream()
                 .sorted(Comparator
                         .comparingInt(Server::getPromotionPoints)
                         .thenComparingInt(s -> s.getVotes().size()).reversed())
+                .map(ServerListMapper::toDTO)
                 .collect(Collectors.toList());
 
         int start = (int) pageable.getOffset();
