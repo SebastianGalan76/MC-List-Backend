@@ -14,4 +14,5 @@ import java.util.Optional;
 public interface PlayerRatingRepository extends JpaRepository<PlayerRating, Long> {
     List<PlayerRating> findByServer(Server server);
     Optional<PlayerRating> findByUserAndServerAndCategory(User user, Server server, RatingCategory category);
+    void deleteByUserAndServerAndCategory(User user, Server server, RatingCategory category);
 }
