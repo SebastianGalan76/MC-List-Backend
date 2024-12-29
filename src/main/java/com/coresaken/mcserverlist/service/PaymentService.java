@@ -113,7 +113,7 @@ public class PaymentService {
         payment.setSuccessAction(successAction);
         payment = paymentRepository.save(payment);
         String price;
-        if(banner.getSize()== com.coresaken.mcserverlist.database.model.Banner.Size.BIG){
+        if(banner.getSize() == com.coresaken.mcserverlist.database.model.Banner.Size.BIG){
             price = "100";
         }
         else {

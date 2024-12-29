@@ -31,12 +31,12 @@ public class VoteService {
 
         Optional<Server> server = serverRepository.findById(voteDto.getServerId());
         if(server.isEmpty()){
-            return Response.badRequest(1, "Wystąpił nieoczekiwany błąd. Spróbuj ponownie później");
+            return Response.badRequest(1, "Wystąpił nieoczekiwany błąd. Spróbuj ponownie później!");
         }
 
         List<Vote> votes = voteRepository.findByIpOrNickAndDateAndServerId(ip, voteDto.getNick(), today, voteDto.getServerId());
         if(votes != null && !votes.isEmpty()){
-            return Response.badRequest(2, "Głosowałeś/aś już dzisiaj na serwer");
+            return Response.badRequest(2, "Głosowałeś/aś już dzisiaj na ten serwer.");
         }
 
         Vote vote = new Vote();
@@ -48,7 +48,7 @@ public class VoteService {
         vote.setNick(voteDto.getNick());
 
         voteRepository.save(vote);
-        return Response.ok("Głos został oddany");
+        return Response.ok("Głos został oddany!");
     }
 
     public ResponseEntity<VoteResponse> check(Long serverId, String playerNick) {

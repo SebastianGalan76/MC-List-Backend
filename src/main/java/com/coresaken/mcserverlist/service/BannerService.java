@@ -1,5 +1,6 @@
 package com.coresaken.mcserverlist.service;
 
+import com.coresaken.mcserverlist.data.response.ObjectResponse;
 import com.coresaken.mcserverlist.data.response.Response;
 import com.coresaken.mcserverlist.database.model.Banner;
 import com.coresaken.mcserverlist.database.model.User;
@@ -59,15 +60,18 @@ public class BannerService {
         return banners;
     }
 
-    public ResponseEntity<Response> createBanner(MultipartFile file, String link, String size) {
+    public ResponseEntity<ObjectResponse<Banner>> createBanner(MultipartFile file, String link, String size) {
         User user = userService.getLoggedUser();
         if(user == null){
-            return Response.badRequest(1, "Twoja sesja wygasła. Zaloguj się ponownie");
+            return ObjectResponse.badRequest(1, "Twoja sesja wygasła. Zaloguj się ponownie");
         }
 
         ResponseEntity<Response> uploadResponse = BannerFileService.upload(file);
         if(uploadResponse.getStatusCode() != HttpStatus.OK){
-            return uploadResponse;
+            Response body = uploadResponse.getBody();
+            if(body != null){
+                return ObjectResponse.badRequest(body.getErrorCode(), body.getMessage());
+            }
         }
 
         Banner banner = new Banner();
@@ -78,13 +82,13 @@ public class BannerService {
         banner.setFilePath(uploadResponse.getBody().getMessage());
         bannerRepository.save(banner);
 
-        return Response.ok("Banner został przesłany do weryfikacji. Przejdź do zakładki \"Moje Banery\", aby wyświetlić status");
+        return ObjectResponse.ok("Banner został przesłany do weryfikacji. Przejdź do zakładki \"Moje Banery\", aby wyświetlić status.", banner);
     }
 
     public ResponseEntity<Response> acceptBanner(Long bannerId){
         Banner banner = bannerRepository.findById(bannerId).orElse(null);
         if(banner == null){
-            return Response.badRequest(1, "Wystąpił nieoczekiwany błąd. Brak baneru o podanym ID");
+            return Response.badRequest(1, "Wystąpił nieoczekiwany błąd. Brak banera o podanym ID");
         }
 
         User user = userService.getLoggedUser();
@@ -113,7 +117,7 @@ public class BannerService {
     public ResponseEntity<Response> rejectBanner(Long bannerId, String reason){
         Banner banner = bannerRepository.findById(bannerId).orElse(null);
         if(banner == null){
-            return Response.badRequest(1, "Wystąpił nieoczekiwany błąd. Brak baneru o podanym ID");
+            return Response.badRequest(1, "Wystąpił nieoczekiwany błąd. Brak banera o podanym ID");
         }
 
         User user = userService.getLoggedUser();
@@ -144,46 +148,58 @@ public class BannerService {
         bannerRepository.save(banner);
     }
 
-    public ResponseEntity<Response> editBanner(Long id, MultipartFile file, String link) {
+    public ResponseEntity<ObjectResponse<Banner>> editBanner(Long id, MultipartFile file, String link) {
         Banner banner = bannerRepository.findById(id).orElse(null);
         if(banner == null){
-            return Response.badRequest(1, "Wystąpił błąd #8725. Brak baneru o podanym ID");
+            return ObjectResponse.badRequest(1, "Wystąpił nieoczekiwany błąd. Brak banera o podanym ID");
         }
 
         User user = userService.getLoggedUser();
         if(user==null || user.getRole() != User.Role.ADMIN || !banner.getOwner().equals(user)){
-            return Response.badRequest(2, "Nie posiadasz wymaganych uprawnień, aby to zrobić");
-        }
-
-        if(banner.getSize() == Banner.Size.BIG){
-            bigBanners.remove(banner);
-        }
-        else if(banner.getSize() == Banner.Size.SMALL){
-            smallBanners.remove(banner);
+            return ObjectResponse.badRequest(2, "Nie posiadasz wymaganych uprawnień, aby to zrobić");
         }
 
         if(file != null){
             ResponseEntity<Response> uploadResponse = BannerFileService.upload(file);
             if(uploadResponse.getStatusCode() != HttpStatus.OK){
-                return uploadResponse;
+                Response body = uploadResponse.getBody();
+                if(body != null){
+                    return ObjectResponse.badRequest(body.getErrorCode(), body.getMessage());
+                }
             }
 
             BannerFileService.remove(banner.getFilePath());
             banner.setFilePath(uploadResponse.getBody().getMessage());
         }
-        banner.setLink(link);
-        banner.changeStatus(Banner.Status.NOT_VERIFIED, null);
-        bannerRepository.save(banner);
-        if(banner.isPaid()){
-            return Response.ok("Zmiany zostały wysłane do weryfikacji. Po weryfikacji baner zostanie automatycznie opublikowany");
+
+        if(banner.getStatus() == Banner.Status.REJECTED){
+            banner.setStatus(Banner.Status.NOT_VERIFIED);
+            banner.setRejectedReason(null);
         }
-        return Response.ok("Zmiany zostały wysłane do weryfikacji");
+
+        banner.setLink(link);
+        bannerRepository.save(banner);
+
+        if(banner.getSize() == Banner.Size.BIG){
+            if(bigBanners.contains(banner)){
+                bigBanners.remove(banner);
+                bigBanners.add(banner);
+            }
+        }
+        else if(banner.getSize() == Banner.Size.SMALL){
+            if(smallBanners.contains(banner)){
+                smallBanners.remove(banner);
+                smallBanners.add(banner);
+            }
+        }
+
+        return ObjectResponse.ok("Zmiany zostały zapisane.", banner);
     }
 
     public ResponseEntity<Response> deleteBanner(Long id) {
         Banner banner = bannerRepository.findById(id).orElse(null);
         if(banner == null){
-            return Response.badRequest(1, "Wystąpił nieoczekiwany błąd. Brak baneru o podanym ID");
+            return Response.badRequest(1, "Wystąpił nieoczekiwany błąd. Brak banera o podanym ID");
         }
 
         if(banner.getSize() == Banner.Size.BIG){
@@ -200,7 +216,7 @@ public class BannerService {
 
         BannerFileService.remove(banner.getFilePath());
         bannerRepository.delete(banner);
-        return Response.ok("Baner został usunięty");
+        return Response.ok("Baner został prawidłowo usunięty");
     }
 
     public List<Banner> getBannersByStatus(Banner.Status[] statuses){

@@ -1,9 +1,8 @@
 package com.coresaken.mcserverlist.database.model.server;
 
-import com.coresaken.mcserverlist.data.dto.ServerRoleDto;
+import com.coresaken.mcserverlist.database.model.server.ratings.PlayerRating;
 import com.coresaken.mcserverlist.database.model.server.staff.Rank;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -85,19 +84,28 @@ public class Server {
     @OneToMany(
             cascade = CascadeType.ALL,
             orphanRemoval = true,
-            mappedBy = "server")
+            mappedBy = "server",
+            fetch = FetchType.LAZY)
     @OrderBy("index ASC")
     List<Link> links = new ArrayList<>();
 
-    @OneToMany(mappedBy = "server", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "server", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @OrderBy("id ASC")
     List<HourlyPlayerCount> hourlyPlayerCounts;
 
-    @OneToMany(mappedBy = "server", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "server", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @OrderBy("id ASC")
     List<DailyPlayerCount> dailyPlayerCounts;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "server", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "server", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     Set<ServerUserRole> serverUserRoles = new HashSet<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "server", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    List<PlayerRating> playerRatings;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "server", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    List<Report> playerReports;
 }

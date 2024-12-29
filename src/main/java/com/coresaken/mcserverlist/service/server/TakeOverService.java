@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class TakeOverService {
@@ -26,28 +28,37 @@ public class TakeOverService {
 
         Server server = serverService.getServerById(serverId);
         if(server == null){
-            return Response.badRequest(2, "Wystąpił nieoczekiwany błąd #9928");
+            return Response.badRequest(2, "Serwer o podanym ID nie istnieje.");
         }
         for (ServerUserRole sur:server.getServerUserRoles()){
-            if(sur.getRole()== ServerUserRole.Role.OWNER){
+            if(sur.getRole() == ServerUserRole.Role.OWNER){
                 return Response.badRequest(3, "Serwer posiada już właściciela. Jeśli ktoś przejął Twój serwer, skontaktuj się z nami");
             }
         }
 
-        String motd = serverStatusService.getServerStatus(server.getIp(), server.getPort()).motd().clean();
+        String motd = serverStatusService.getServerStatus(server.getIp(), server.getPort()).motd().html();
 
         if(motd.contains(user.getUuid())){
-            ServerUserRole sur = new ServerUserRole();
-            sur.setRole(ServerUserRole.Role.OWNER);
-            sur.setUser(user);
-            sur.setServer(server);
+            Optional<ServerUserRole> optionalSUR = server.getServerUserRoles().stream().filter(sur -> sur.getUser().equals(user)).findFirst();
 
-            server.getServerUserRoles().add(sur);
+            if(optionalSUR.isPresent()){
+                ServerUserRole savedSUR = optionalSUR.get();
+                savedSUR.setRole(ServerUserRole.Role.OWNER);
+            }
+            else{
+                ServerUserRole sur = new ServerUserRole();
+                sur.setRole(ServerUserRole.Role.OWNER);
+                sur.setUser(user);
+                sur.setServer(server);
+
+                server.getServerUserRoles().add(sur);
+            }
+
             serverService.save(server);
             return Response.ok("Serwer został prawidłowo przejęty");
         }
 
-        return Response.badRequest(4, "Błędna weryfikacja. Jesteś pewien, że zresetowałeś serwer po zmianie MOTD serwera? Serwer musi być włączony. Obecny motd serwera: "+motd);
+        return Response.badRequest(4, motd);
     }
 
 }

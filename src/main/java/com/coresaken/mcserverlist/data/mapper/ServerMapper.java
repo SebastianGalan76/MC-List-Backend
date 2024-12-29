@@ -38,13 +38,14 @@ public class ServerMapper {
         dto.setLinks(server.getLinks());
         dto.setSubServers(server.getSubServers());
         dto.setStaff(server.getStaff());
+        dto.setVotes(server.getVotes().size());
         dto.setRatings(ratings.stream().map(r -> new ServerDto.PlayerRatings(r.getId(), r.getCategory(), r.getUser().getId(), r.getRate())).toList());
 
         ServerUserRole serverUserRole = server.getServerUserRoles().stream().filter(role -> role.getUser().equals(user)).findFirst().orElse(null);
+        dto.setRoles(server.getServerUserRoles().stream()
+                .map(role -> new ServerRoleDto(role.getUser().getEmail(), role.getRole()))
+                .toList());
         if((serverUserRole != null && serverUserRole.getRole().value >= ServerUserRole.Role.ADMINISTRATOR.value) || (user != null && user.getRole() == User.Role.ADMIN)){
-            dto.setRoles(server.getServerUserRoles().stream()
-                    .map(role -> new ServerRoleDto(role.getUser().getEmail(), role.getRole()))
-                    .toList());
             dto.setRole(serverUserRole == null || user.getRole() == User.Role.ADMIN ? ServerUserRole.Role.OWNER : serverUserRole.getRole());
         }
 

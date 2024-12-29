@@ -1,21 +1,25 @@
 package com.coresaken.mcserverlist.controller;
 
 import com.coresaken.mcserverlist.data.dto.ChangePasswordDto;
+import com.coresaken.mcserverlist.data.dto.ServerListDto;
+import com.coresaken.mcserverlist.data.response.ObjectResponse;
 import com.coresaken.mcserverlist.data.response.Response;
+import com.coresaken.mcserverlist.database.model.Banner;
 import com.coresaken.mcserverlist.database.model.User;
 import com.coresaken.mcserverlist.database.repository.BannerRepository;
-import com.coresaken.mcserverlist.database.repository.server.ServerUserRoleRepository;
 import com.coresaken.mcserverlist.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 public class UserController {
     final UserService userService;
     final BannerRepository bannerRepository;
-    final ServerUserRoleRepository serverUserRoleRepository;
 
     @GetMapping("/user")
     public ResponseEntity<User> getLoggedUser(){
@@ -31,6 +35,16 @@ public class UserController {
         }
 
         return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/user/servers")
+    public Page<ServerListDto> findServersByUser(){
+        return userService.findServersByUser();
+    }
+
+    @GetMapping("/user/banners")
+    public List<Banner> findBannersByUser(){
+        return userService.findBannersByUser();
     }
 
     @PostMapping("/user/change-password")

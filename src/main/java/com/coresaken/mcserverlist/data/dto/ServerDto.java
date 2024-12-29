@@ -33,12 +33,13 @@ public class ServerDto {
     LocalDateTime createdAt;
 
     int promotionPoints;
+    int votes;
+
     List<SubServer> subServers = new ArrayList<>();
 
     List<Rank> staff = new ArrayList<>();
 
     List<Version> versions = new ArrayList<>();
-    List<Vote> votes = new ArrayList<>();
 
     List<Link> links = new ArrayList<>();
 

@@ -1,15 +1,29 @@
 package com.coresaken.mcserverlist.service;
 
+import com.coresaken.mcserverlist.data.dto.ServerListDto;
+import com.coresaken.mcserverlist.data.mapper.ServerListMapper;
+import com.coresaken.mcserverlist.data.response.ObjectResponse;
 import com.coresaken.mcserverlist.data.response.Response;
+import com.coresaken.mcserverlist.database.model.Banner;
 import com.coresaken.mcserverlist.database.model.User;
+import com.coresaken.mcserverlist.database.model.server.Server;
+import com.coresaken.mcserverlist.database.model.server.ServerUserRole;
+import com.coresaken.mcserverlist.database.repository.BannerRepository;
 import com.coresaken.mcserverlist.database.repository.UserRepository;
+import com.coresaken.mcserverlist.database.repository.server.ServerUserRoleRepository;
 import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -17,6 +31,9 @@ import java.util.Optional;
 public class UserService {
     final UserRepository userRepository;
     final PasswordEncoder passwordEncoder;
+
+    final ServerUserRoleRepository serverUserRoleRepository;
+    final BannerRepository bannerRepository;
 
     @Nullable
     public User getLoggedUser(){
@@ -42,11 +59,10 @@ public class UserService {
         }
 
         if(!passwordEncoder.matches(currentPassword, user.getPassword())){
-            user.setPassword(passwordEncoder.encode(newPassword));
-            userRepository.save(user);
-
             return Response.badRequest(3, "Twoje obecne hasło jest niepoprawne.");
         }
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
 
         return Response.ok("Hasło zostało prawidłowo zmienione");
     }
@@ -90,5 +106,32 @@ public class UserService {
         user.setEmail(newEmail);
         userRepository.save(user);
         return Response.ok("E-mail został prawidłowo zmieniony");
+    }
+
+    public Page<ServerListDto> findServersByUser() {
+        User user = getLoggedUser();
+
+        if(user == null){
+            return null;
+        }
+
+        List<ServerUserRole> sur = serverUserRoleRepository.findByUser(user);
+        List<ServerListDto> servers = sur.stream().map(ServerUserRole::getServer).map(ServerListMapper::toDTO).toList();
+
+        Pageable pageable = PageRequest.of(0, 30);
+        return new PageImpl<ServerListDto>(servers, pageable, 0);
+    }
+
+    public List<Banner> findBannersByUser() {
+        User user = getLoggedUser();
+
+        if(user == null){
+            return null;
+        }
+
+        List<Banner> list = bannerRepository.findByOwnerId(user.getId());
+        list.sort(Comparator.comparingLong(Banner::getId));
+
+        return list;
     }
 }

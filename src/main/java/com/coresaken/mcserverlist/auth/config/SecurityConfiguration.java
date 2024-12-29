@@ -34,7 +34,7 @@ public class SecurityConfiguration {
                             "/version/listAll",
                             "/add-new-server",
                             "/server/payment/**",
-                            "/banner/payment/",
+                            "/banner/payment/**",
                             "/payment-notification",
                             "/server/list/**",
                             "/server/*",
