@@ -23,24 +23,20 @@ public class SecurityConfiguration {
         http.csrf(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests(request -> {
             request.requestMatchers(
-                    "/css/**",
-                    "/img/**",
-                    "/js/**",
                     "/auth/**",
-                            "/",
-                    "/banners",
+                            "/user",
                             "/dont-sleep-buddy",
-                            "/rules",
-                            "/privacy-policy",
                             "/mode/listAll",
                             "/version/listAll",
                             "/add-new-server",
-                            "/add-new-server/post",
                             "/server/payment/**",
-                            "/banner/payment/",
+                            "/banner/payment/**",
+                            "/banners",
+                            "/banner",
                             "/payment-notification",
                             "/server/list/**",
                             "/server/*",
+                            "/server/**",
                             "/server/*/promote",
                             "/server/search/*",
                             "/random",
@@ -51,12 +47,11 @@ public class SecurityConfiguration {
                     .permitAll()
                     .anyRequest().authenticated();
         });
-        http.formLogin(formLogin ->
+        /*http.formLogin(formLogin ->
                 formLogin
                         .loginPage("/auth/signIn")
                         .permitAll()
-        );
-
+        );*/
 
         http.sessionManagement(httpSecuritySessionManagementConfigurer ->
                 httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

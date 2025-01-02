@@ -19,7 +19,7 @@ public class ActiveAccountToken {
 
     Long userId;
 
-    @Column(length = 30)
+    @Column(length = 36)
     String token;
 
     @Column(columnDefinition = "TIMESTAMP")

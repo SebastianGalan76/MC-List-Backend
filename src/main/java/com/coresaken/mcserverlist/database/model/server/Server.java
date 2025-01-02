@@ -1,5 +1,6 @@
 package com.coresaken.mcserverlist.database.model.server;
 
+import com.coresaken.mcserverlist.database.model.server.ratings.PlayerRating;
 import com.coresaken.mcserverlist.database.model.server.staff.Rank;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -20,7 +21,9 @@ public class Server {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
+    @Column(unique = true)
     String ip;
+
     int port;
 
     @ManyToOne
@@ -58,11 +61,11 @@ public class Server {
             orphanRemoval = true
     )
     @OrderBy("index ASC")
-    List<SubServer> subServers;
+    List<SubServer> subServers = new ArrayList<>();
 
     @OneToMany(mappedBy = "server", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("index ASC")
-    List<Rank> staff;
+    List<Rank> staff = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(
@@ -80,18 +83,29 @@ public class Server {
 
     @OneToMany(
             cascade = CascadeType.ALL,
-            orphanRemoval = true)
+            orphanRemoval = true,
+            mappedBy = "server",
+            fetch = FetchType.LAZY)
     @OrderBy("index ASC")
     List<Link> links = new ArrayList<>();
 
-    @OneToMany(mappedBy = "server", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "server", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @OrderBy("id ASC")
     List<HourlyPlayerCount> hourlyPlayerCounts;
 
-    @OneToMany(mappedBy = "server", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "server", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @OrderBy("id ASC")
     List<DailyPlayerCount> dailyPlayerCounts;
 
-    @OneToMany(mappedBy = "server", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    @OneToMany(mappedBy = "server", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     Set<ServerUserRole> serverUserRoles = new HashSet<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "server", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    List<PlayerRating> playerRatings;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "server", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    List<Report> playerReports;
 }

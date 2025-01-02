@@ -1,6 +1,7 @@
 package com.coresaken.mcserverlist.service.server;
 
 import com.coresaken.mcserverlist.data.dto.*;
+import com.coresaken.mcserverlist.data.response.RedirectResponse;
 import com.coresaken.mcserverlist.data.response.Response;
 import com.coresaken.mcserverlist.data.dto.ServerStatusDto;
 import com.coresaken.mcserverlist.database.model.User;
@@ -14,8 +15,10 @@ import com.coresaken.mcserverlist.service.NewServerService;
 import com.coresaken.mcserverlist.service.ServerStatusService;
 import com.coresaken.mcserverlist.service.UserService;
 import com.coresaken.mcserverlist.util.LinkChecker;
+import com.coresaken.mcserverlist.util.PermissionChecker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,6 +31,8 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ManageServerService {
+    final ServerService serverService;
+
     final ServerRepository serverRepository;
 
     final NewServerService newServerService;
@@ -38,23 +43,32 @@ public class ManageServerService {
     final NameRepository nameRepository;
 
     @Transactional
-    public Response saveServerInfo(Server server, BasicServerDto serverDto) {
-        Response response = newServerService.checkServerData(serverDto, server);
-        if(response.getStatus() != HttpStatus.OK){
+    public ResponseEntity<RedirectResponse> saveServerInfo(Long serverId, BasicServerDto serverDto) {
+        Server server = serverService.getServerById(serverId);
+
+        if(server==null){
+            return RedirectResponse.badRequest(6,"Wystąpił nieoczekiwany błąd. Serwer o podanym ID nie istnieje!", null);
+        }
+        if(!PermissionChecker.hasPermissionForServer(userService.getLoggedUser(), server, ServerUserRole.Role.MODERATOR)){
+            return RedirectResponse.badRequest(7,"Nie posiadasz wymaganych uprawnień, aby to zrobić!", null);
+        }
+
+        ResponseEntity<RedirectResponse> response = serverService.checkServerInformation(serverDto, server);
+        if(response.getStatusCode() != HttpStatus.OK){
             return response;
         }
 
-        ServerStatusDto serverStatusDto = serverStatusService.getServerStatus(serverDto.getIp(), serverDto.getPort());
-        if(!serverStatusDto.online()){
-            return Response.builder().status(HttpStatus.NOT_FOUND).build();
+        ServerStatusDto serverStatusDto = serverStatusService.getServerStatus(serverDto.ip(), serverDto.port());
+        if(serverStatusDto == null || !serverStatusDto.online()){
+            return RedirectResponse.badRequest(8, "Nie możemy nawiązać połączenie z Twoim serwerem!", null);
         }
 
-        newServerService.saveBasicInformation(server, serverDto, serverStatusDto);
+        serverService.saveBasicInformation(server, serverDto, serverStatusDto);
         serverRepository.save(server);
-        return Response.builder().status(HttpStatus.OK).message("Zmiany zostały zapisane prawidłowo").build();
+        return RedirectResponse.ok("Zmiany zostały prawidłowo zapisane.", null);
     }
 
-    public Response saveServerStaff(Server server, StaffDto staffDto){
+    /*public ResponseEntity<Response> saveServerStaff(Server server, StaffDto staffDto){
         if (server.getStaff() == null) {
             server.setStaff(new ArrayList<>());
         }
@@ -76,25 +90,35 @@ public class ManageServerService {
         server.getStaff().addAll(staffDto.getRankList());
         serverRepository.save(server);
 
-        return Response.builder().status(HttpStatus.OK).build();
-    }
+        return Response.ok("Zapisano prawidłowo Administrację serwera.");
+    }*/
 
 
-    public Response saveServerDescription(Server server, StringDto stringDto) {
-        server.setDescription(stringDto.getText());
+    public ResponseEntity<Response> saveServerDescription(Long serverId, String description) {
+        Server server = serverService.getServerById(serverId);
+
+        if(server==null){
+            return Response.badRequest(1, "Wystąpił nieoczekiwany błąd. Serwer o podanym ID nie istnieje!");
+        }
+        if(!PermissionChecker.hasPermissionForServer(userService.getLoggedUser(), server, ServerUserRole.Role.HELPER)){
+            return Response.badRequest(2, "Nie posiadasz wymaganych uprawnień, aby to zrobić!");
+        }
+
+        server.setDescription(description);
         serverRepository.save(server);
-
-        return Response.builder().status(HttpStatus.OK).build();
+        return Response.ok("Opis serwera został prawidłowo zapisany.");
     }
 
-    public Response saveServerLinks(Server server, List<Link> links) {
-        server.getLinks().clear();
-        server.getLinks().addAll(links);
-        serverRepository.save(server);
-        return Response.builder().status(HttpStatus.OK).build();
-    }
+    public ResponseEntity<Response> saveServerBanner(Long serverId, MultipartFile file, String url) {
+        Server server = serverService.getServerById(serverId);
 
-    public Response saveServerBanner(Server server, MultipartFile file, String url) {
+        if(server==null){
+            return Response.badRequest(1, "Wystąpił nieoczekiwany błąd. Serwer o podanym ID nie istnieje.");
+        }
+        if(!PermissionChecker.hasPermissionForServer(userService.getLoggedUser(), server, ServerUserRole.Role.MODERATOR)){
+            return Response.badRequest(2, "Nie posiadasz wymaganych uprawnień, aby to zrobić!");
+        }
+
         if(server.getBanner() != null){
             if(!LinkChecker.isLink(server.getBanner())){
                 BannerFileService.remove(server.getBanner());
@@ -110,11 +134,11 @@ public class ManageServerService {
         }
         else{
             if(file != null){
-                Response uploadResponse = BannerFileService.upload(file);
-                if(uploadResponse.getStatus() != HttpStatus.OK){
+                ResponseEntity<Response> uploadResponse = BannerFileService.upload(file);
+                if(uploadResponse.getStatusCode() != HttpStatus.OK){
                     return uploadResponse;
                 }
-                server.setBanner("/uploads/banners/" + uploadResponse.getMessage());
+                server.setBanner(uploadResponse.getBody().getMessage());
             }
             else{
                 server.setBanner(null);
@@ -122,48 +146,11 @@ public class ManageServerService {
         }
 
         serverRepository.save(server);
-        return Response.builder().status(HttpStatus.OK).message("Ustawiłeś prawidłowo swój banner").build();
+        return Response.ok("Ustawiłeś prawidłowo swój banner");
     }
 
     @Transactional
-    public Response saveServerRoles(Server server, ServerRoleDto serverRoleDto) {
-        Set<ServerUserRole> ownerRole = server.getServerUserRoles().stream()
-                .filter(role -> role.getRole() == ServerUserRole.Role.OWNER)
-                .collect(Collectors.toSet());
-
-        server.getServerUserRoles().clear();
-        server.getServerUserRoles().addAll(ownerRole);
-        if(serverRoleDto.getRoles() == null){
-            return Response.builder().status(HttpStatus.OK).build();
-        }
-
-        Set<Long> savedIds = ownerRole.stream().map(sur -> sur.getUser().getId()).collect(Collectors.toSet());
-
-        for(ServerRoleDto.RoleDto roleDto: serverRoleDto.getRoles()){
-            User user = userService.getUserByEmailOrLogin(roleDto.getUser().getLogin());
-            if(user == null || savedIds.contains(user.getId())){
-                continue;
-            }
-
-            try{
-                ServerUserRole.Role role = ServerUserRole.Role.valueOf(roleDto.getRole());
-                ServerUserRole serverUserRole = new ServerUserRole();
-                serverUserRole.setUser(user);
-                serverUserRole.setServer(server);
-                serverUserRole.setRole(role);
-                server.getServerUserRoles().add(serverUserRole);
-                savedIds.add(user.getId());
-            }catch (IllegalArgumentException e){
-                continue;
-            }
-        }
-
-        serverRepository.save(server);
-        return Response.builder().status(HttpStatus.OK).build();
-    }
-
-    @Transactional
-    public Response saveSubServers(Server server, ListDto<SubServerDto> listDto) {
+    public ResponseEntity<Response> saveSubServers(Server server, ListDto<SubServerDto> listDto) {
         server.getSubServers().clear();
 
         List<SubServerDto> subServerDTO = listDto.getData();
@@ -184,6 +171,6 @@ public class ManageServerService {
         }
 
         serverRepository.save(server);
-        return Response.builder().status(HttpStatus.OK).build();
+        return Response.ok("Zapisano prawidłowo informacje o podserwerach.");
     }
 }

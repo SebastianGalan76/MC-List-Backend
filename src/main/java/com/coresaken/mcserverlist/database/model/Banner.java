@@ -1,11 +1,13 @@
 package com.coresaken.mcserverlist.database.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Data
@@ -21,6 +23,7 @@ public class Banner {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     User owner;
 
     @Enumerated(EnumType.STRING)
@@ -47,6 +50,19 @@ public class Banner {
     public void changeStatus(Status status, String rejectedReason){
         this.status = status;
         this.rejectedReason = rejectedReason;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Banner banner = (Banner) o;
+        return Objects.equals(id, banner.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
 

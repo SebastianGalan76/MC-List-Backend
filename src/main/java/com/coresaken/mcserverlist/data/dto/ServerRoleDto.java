@@ -1,29 +1,7 @@
 package com.coresaken.mcserverlist.data.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.coresaken.mcserverlist.database.model.server.ServerUserRole;
 
-import java.util.List;
+public record ServerRoleDto (String email, ServerUserRole.Role role) {
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class ServerRoleDto {
-    List<RoleDto> roles;
-
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class RoleDto{
-        UserDto user;
-        String role;
-
-        @Data
-        @AllArgsConstructor
-        @NoArgsConstructor
-        public static class UserDto{
-            String login;
-        }
-    }
 }
