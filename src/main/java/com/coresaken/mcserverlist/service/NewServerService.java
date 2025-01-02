@@ -8,6 +8,7 @@ import com.coresaken.mcserverlist.database.repository.*;
 import com.coresaken.mcserverlist.database.repository.server.DailyPlayerCountRepository;
 import com.coresaken.mcserverlist.database.repository.server.ModeRepository;
 import com.coresaken.mcserverlist.service.server.ServerService;
+import com.coresaken.mcserverlist.service.server.ServerStatusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

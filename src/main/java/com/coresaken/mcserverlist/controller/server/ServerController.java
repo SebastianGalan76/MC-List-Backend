@@ -1,4 +1,4 @@
-package com.coresaken.mcserverlist.controller;
+package com.coresaken.mcserverlist.controller.server;
 
 import com.coresaken.mcserverlist.data.dto.ServerDto;
 import com.coresaken.mcserverlist.data.dto.ServerListDto;

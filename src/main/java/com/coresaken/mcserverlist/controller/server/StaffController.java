@@ -1,12 +1,9 @@
 package com.coresaken.mcserverlist.controller.server;
 
-import com.coresaken.mcserverlist.data.dto.SubServerDto;
 import com.coresaken.mcserverlist.data.response.ObjectResponse;
 import com.coresaken.mcserverlist.data.response.Response;
-import com.coresaken.mcserverlist.database.model.server.SubServer;
 import com.coresaken.mcserverlist.database.model.server.staff.Rank;
 import com.coresaken.mcserverlist.service.server.StaffService;
-import com.coresaken.mcserverlist.service.server.SubServerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

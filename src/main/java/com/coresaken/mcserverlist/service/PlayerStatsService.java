@@ -9,18 +9,14 @@ import com.coresaken.mcserverlist.database.repository.HourlyPlayerCountRepositor
 import com.coresaken.mcserverlist.database.repository.ServerDetailRepository;
 import com.coresaken.mcserverlist.database.repository.ServerRepository;
 import com.coresaken.mcserverlist.database.repository.server.DailyPlayerCountRepository;
-import jakarta.annotation.PostConstruct;
+import com.coresaken.mcserverlist.service.server.ServerStatusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor

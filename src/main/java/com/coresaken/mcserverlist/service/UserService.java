@@ -2,11 +2,9 @@ package com.coresaken.mcserverlist.service;
 
 import com.coresaken.mcserverlist.data.dto.ServerListDto;
 import com.coresaken.mcserverlist.data.mapper.ServerListMapper;
-import com.coresaken.mcserverlist.data.response.ObjectResponse;
 import com.coresaken.mcserverlist.data.response.Response;
 import com.coresaken.mcserverlist.database.model.Banner;
 import com.coresaken.mcserverlist.database.model.User;
-import com.coresaken.mcserverlist.database.model.server.Server;
 import com.coresaken.mcserverlist.database.model.server.ServerUserRole;
 import com.coresaken.mcserverlist.database.repository.BannerRepository;
 import com.coresaken.mcserverlist.database.repository.UserRepository;

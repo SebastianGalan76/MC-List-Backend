@@ -4,10 +4,8 @@ import com.coresaken.mcserverlist.data.response.Response;
 import com.coresaken.mcserverlist.database.model.User;
 import com.coresaken.mcserverlist.database.model.server.Server;
 import com.coresaken.mcserverlist.database.model.server.ServerUserRole;
-import com.coresaken.mcserverlist.service.ServerStatusService;
 import com.coresaken.mcserverlist.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 

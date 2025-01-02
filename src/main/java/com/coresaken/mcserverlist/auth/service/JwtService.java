@@ -19,7 +19,7 @@ public class JwtService {
     @Value("${jwt.secret-key}")
     private String SECRET_KEY;
     @Value("${jwt.validity-duration}")
-    private int TOKEN_VALIDITY_DURATION;
+    private long TOKEN_VALIDITY_DURATION;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);

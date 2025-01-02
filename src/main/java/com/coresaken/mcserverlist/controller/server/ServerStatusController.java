@@ -1,7 +1,7 @@
-package com.coresaken.mcserverlist.controller;
+package com.coresaken.mcserverlist.controller.server;
 
 import com.coresaken.mcserverlist.data.dto.ServerStatusDto;
-import com.coresaken.mcserverlist.service.ServerStatusService;
+import com.coresaken.mcserverlist.service.server.ServerStatusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

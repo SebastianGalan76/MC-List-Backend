@@ -2,7 +2,6 @@ package com.coresaken.mcserverlist.controller;
 
 import com.coresaken.mcserverlist.data.dto.ChangePasswordDto;
 import com.coresaken.mcserverlist.data.dto.ServerListDto;
-import com.coresaken.mcserverlist.data.response.ObjectResponse;
 import com.coresaken.mcserverlist.data.response.Response;
 import com.coresaken.mcserverlist.database.model.Banner;
 import com.coresaken.mcserverlist.database.model.User;

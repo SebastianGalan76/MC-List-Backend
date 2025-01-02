@@ -1,4 +1,4 @@
-package com.coresaken.mcserverlist.service;
+package com.coresaken.mcserverlist.service.server;
 
 import com.coresaken.mcserverlist.data.dto.ServerStatusDto;
 import com.fasterxml.jackson.databind.ObjectMapper;

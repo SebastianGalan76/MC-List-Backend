@@ -1,8 +1,7 @@
-package com.coresaken.mcserverlist.controller;
+package com.coresaken.mcserverlist.controller.server;
 
 import com.coresaken.mcserverlist.data.dto.SearchServerDto;
 import com.coresaken.mcserverlist.data.dto.ServerListDto;
-import com.coresaken.mcserverlist.database.model.server.Server;
 import com.coresaken.mcserverlist.service.server.SearchServerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

@@ -4,15 +4,11 @@ import com.coresaken.mcserverlist.data.dto.*;
 import com.coresaken.mcserverlist.data.response.RedirectResponse;
 import com.coresaken.mcserverlist.data.response.Response;
 import com.coresaken.mcserverlist.data.dto.ServerStatusDto;
-import com.coresaken.mcserverlist.database.model.User;
 import com.coresaken.mcserverlist.database.model.server.*;
-import com.coresaken.mcserverlist.database.model.server.staff.Player;
-import com.coresaken.mcserverlist.database.model.server.staff.Rank;
 import com.coresaken.mcserverlist.database.repository.NameRepository;
 import com.coresaken.mcserverlist.database.repository.ServerRepository;
 import com.coresaken.mcserverlist.service.BannerFileService;
 import com.coresaken.mcserverlist.service.NewServerService;
-import com.coresaken.mcserverlist.service.ServerStatusService;
 import com.coresaken.mcserverlist.service.UserService;
 import com.coresaken.mcserverlist.util.LinkChecker;
 import com.coresaken.mcserverlist.util.PermissionChecker;
@@ -23,10 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
