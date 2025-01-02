@@ -23,18 +23,16 @@ public class SecurityConfiguration {
         http.csrf(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests(request -> {
             request.requestMatchers(
-                    "/css/**",
-                    "/img/**",
-                    "/js/**",
                     "/auth/**",
                             "/user",
-                    "/banners",
                             "/dont-sleep-buddy",
                             "/mode/listAll",
                             "/version/listAll",
                             "/add-new-server",
                             "/server/payment/**",
                             "/banner/payment/**",
+                            "/banners",
+                            "/banner",
                             "/payment-notification",
                             "/server/list/**",
                             "/server/*",

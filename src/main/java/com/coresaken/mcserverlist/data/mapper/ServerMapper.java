@@ -39,6 +39,10 @@ public class ServerMapper {
         dto.setSubServers(server.getSubServers());
         dto.setStaff(server.getStaff());
         dto.setVotes(server.getVotes().size());
+
+        dto.setCreatedAt(server.getCreatedAt());
+        dto.setNextRefreshAt(server.getNextRefreshAt());
+
         dto.setRatings(ratings.stream().map(r -> new ServerDto.PlayerRatings(r.getId(), r.getCategory(), r.getUser().getId(), r.getRate())).toList());
 
         ServerUserRole serverUserRole = server.getServerUserRoles().stream().filter(role -> role.getUser().equals(user)).findFirst().orElse(null);

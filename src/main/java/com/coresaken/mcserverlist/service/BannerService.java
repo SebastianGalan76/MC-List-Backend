@@ -63,7 +63,7 @@ public class BannerService {
     public ResponseEntity<ObjectResponse<Banner>> createBanner(MultipartFile file, String link, String size) {
         User user = userService.getLoggedUser();
         if(user == null){
-            return ObjectResponse.badRequest(1, "Twoja sesja wygasła. Zaloguj się ponownie");
+            return ObjectResponse.badRequest(1, "Musisz się zalogować, aby stworzyć swój baner!");
         }
 
         ResponseEntity<Response> uploadResponse = BannerFileService.upload(file);
@@ -239,5 +239,21 @@ public class BannerService {
     @Nullable
     public Banner getById(Long id) {
         return bannerRepository.findById(id).orElse(null);
+    }
+
+    public ResponseEntity<ObjectResponse<List<Banner>>> getBanners() {
+        List<Banner> banners = new ArrayList<>();
+
+        Banner bigBanner = getBigBanner();
+        if(bigBanner != null){
+            banners.add(bigBanner);
+        }
+
+        List<Banner> smallBanners = getSmallBanners();
+        if (smallBanners != null && !smallBanners.isEmpty()) {
+            banners.addAll(smallBanners);
+        }
+
+        return ObjectResponse.ok(null, banners);
     }
 }

@@ -10,10 +10,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 public class BannerController {
     final BannerService bannerService;
+
+    @GetMapping("/banners")
+    public ResponseEntity<ObjectResponse<List<Banner>>> getBanners(){
+        return bannerService.getBanners();
+    }
 
     @PostMapping("/banner")
     public ResponseEntity<ObjectResponse<Banner>> createBanner(@RequestParam("file") MultipartFile file, @RequestParam("url") String link, @RequestParam("size") String size){
