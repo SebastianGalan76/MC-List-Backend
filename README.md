@@ -26,3 +26,12 @@ Projektem jest lista serwerów, gdzie gracze mogą odkrywać i przeglądać serw
 <li>Możliwość ustawienia własnego banera na stronie serwera.</li>
 <li>Możliwość zarządzania uprawnieniami do edycji informacji o serwerze.</li>
 </ul>
+
+Podgląd:
+![Zrzut ekranu 2025-01-05 170036](https://github.com/user-attachments/assets/1fee23ee-ee35-4021-a2c5-669aac2e10e7)
+![Zrzut ekranu 2024-08-16 090944](https://github.com/user-attachments/assets/c5fe9ccd-9b94-4e9e-a3ea-a7e976a6a6d3)
+![Zrzut ekranu 2024-08-16 091027](https://github.com/user-attachments/assets/db02129b-c01c-4d9a-8962-990f6ced7509)
+![Zrzut ekranu 2024-08-16 091411](https://github.com/user-attachments/assets/8d1780b7-4159-4d11-96f0-0e193e3479b5)
+![Zrzut ekranu 2025-01-05 170202](https://github.com/user-attachments/assets/e338ca38-46b1-4883-b265-793fd6c38ee8)
+![Zrzut ekranu 2025-01-05 170242](https://github.com/user-attachments/assets/726b80cf-5993-49d5-a9b2-3d7c51d6c097)
+![Zrzut ekranu 2024-08-16 091346](https://github.com/user-attachments/assets/9080e420-87d8-41d1-885b-2e897de41c70)
