@@ -16,19 +16,15 @@ public class DontSleepService {
     @Scheduled(fixedRate = 1200000) // 1200000 ms = 20 minut
     public void sendTestMessage() {
         try {
-            String url = "https://mc-list.pl/dont-sleep-buddy";
-
-            String message = "Test";
+            String url = "https://backend.mc-list.pl/dont-sleep-buddy";
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(new URI(url))
                     .header("Content-Type", "text/plain")
-                    .POST(HttpRequest.BodyPublishers.ofString(message, StandardCharsets.UTF_8))
+                    .GET()
                     .build();
-
             httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (Exception e) {
             e.printStackTrace(); // Obsługa błędów
         }
     }
-
 }

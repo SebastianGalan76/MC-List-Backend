@@ -43,7 +43,7 @@ public class BannerController {
     }
 
     @PostMapping("/banner/{id}/reject")
-    public ResponseEntity<Response> rejectBanner(@PathVariable("id") Long id, @Param("reason") String reason){
+    public ResponseEntity<Response> rejectBanner(@PathVariable("id") Long id, @RequestParam("reason") String reason){
         return bannerService.rejectBanner(id, reason);
     }
 }

@@ -64,6 +64,6 @@ public class SignUpService {
         String activeAccountToken = UUID.randomUUID().toString();
         asyncAccountService.processAccountActivation(user.getId(), email, activeAccountToken);
 
-        return Response.ok("Zarejestrowano prawidłowo");
+        return Response.ok("Zarejestrowano prawidłowo. Wejdź na pocztę i aktywuj swoje konto.");
     }
 }

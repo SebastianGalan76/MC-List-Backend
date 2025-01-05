@@ -15,7 +15,6 @@ public class EmailSenderService {
     @Value("${website.address}")
     String websiteAddress;
 
-    //TODO Change emails preview
     public void sendActiveAccountEmail(String to, String activeAccountToken) throws MessagingException{
         String activeAccountLink = websiteAddress+"auth/active/"+activeAccountToken;
 
@@ -24,7 +23,7 @@ public class EmailSenderService {
                 + "    <div id='header' style='background-color: #1f1f7c; width: 100%; height: 250px;'></div>"
                 + "    <div id='panel' style='background-color: white; width: 700px; margin-left: auto; margin-right: auto; margin-top: -100px; border-radius: 5px;'>"
                 + "        <div id='logo' style='width: 250px; padding: 25px; margin-left: auto; margin-right: auto;'>"
-                + "            <img src='https://zapodaj.net/images/f86bc94eb0cbe.png' style='width: 100%; height: auto;'>"
+                + "            <img src='https://mc-list.pl/img/logo-dark.png' style='width: 100%; height: auto;'>"
                 + "        </div>"
                 + "        <div id='container' style='padding: 25px'>"
                 + "            Dziękujemy za zarejestrowanie się na <span style='font-weight: 800;'>MC-List.pl!</span><br><br><br>"
@@ -65,7 +64,7 @@ public class EmailSenderService {
                 + "    <div id='header' style='background-color: #1f1f7c; width: 100%; height: 250px;'></div>"
                 + "    <div id='panel' style='background-color: white; width: 700px; margin-left: auto; margin-right: auto; margin-top: -100px; border-radius: 5px;'>"
                 + "        <div id='logo' style='width: 250px; padding: 25px; margin-left: auto; margin-right: auto;'>"
-                + "            <img src='https://zapodaj.net/images/f86bc94eb0cbe.png' style='width: 100%; height: auto;'>"
+                + "            <img src='https://mc-list.pl/img/logo-dark.png' style='width: 100%; height: auto;'>"
                 + "        </div>"
                 + "        <div id='container' style='padding: 25px'>"
                 + "            Otrzymaliśmy prośbę o zresetowanie hasła do Twojego konta na stronie <span style='font-weight: 800;'>MC-List.pl!</span><br><br><br>"

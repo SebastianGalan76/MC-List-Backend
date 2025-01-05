@@ -47,11 +47,6 @@ public class SecurityConfiguration {
                     .permitAll()
                     .anyRequest().authenticated();
         });
-        /*http.formLogin(formLogin ->
-                formLogin
-                        .loginPage("/auth/signIn")
-                        .permitAll()
-        );*/
 
         http.sessionManagement(httpSecuritySessionManagementConfigurer ->
                 httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

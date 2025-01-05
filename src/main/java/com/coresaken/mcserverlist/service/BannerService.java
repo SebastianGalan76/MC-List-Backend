@@ -155,7 +155,8 @@ public class BannerService {
         }
 
         User user = userService.getLoggedUser();
-        if(user==null || user.getRole() != User.Role.ADMIN || !banner.getOwner().equals(user)){
+        if(user==null || (user.getRole() != User.Role.ADMIN && !banner.getOwner().equals(user))){
+            System.out.println(user.getLogin());
             return ObjectResponse.badRequest(2, "Nie posiadasz wymaganych uprawnień, aby to zrobić");
         }
 

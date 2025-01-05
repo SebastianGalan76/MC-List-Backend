@@ -1,5 +1,6 @@
 package com.coresaken.mcserverlist.service.server;
 
+import com.coresaken.mcserverlist.data.dto.ReportServerDto;
 import com.coresaken.mcserverlist.data.response.Response;
 import com.coresaken.mcserverlist.database.model.User;
 import com.coresaken.mcserverlist.database.model.server.Report;
@@ -10,6 +11,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -37,5 +41,16 @@ public class ReportServerService {
         report.setServer(server);
         reportRepository.save(report);
         return Response.ok("Zgłoszenie zostało wysłane do administracji");
+    }
+
+    public List<ReportServerDto> getReports(){
+        return reportRepository.findAll().stream()
+                .map(report -> new ReportServerDto(
+                        report.getId(),
+                        report.getServer().getId(),
+                        report.getServer().getIp(),
+                        report.getReason()
+                ))
+                .toList();
     }
 }
